@@ -1,7 +1,7 @@
 apiVersion:  operator.victoriametrics.com/v1beta1
 kind:  VMRule
 metadata:
-  name: warning-alert-rules
+  name: RDS_warning-alert-rules
   namespace: monitoring
 spec:
   groups:
