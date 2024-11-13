@@ -1,7 +1,7 @@
 apiVersion:  operator.victoriametrics.com/v1beta1
 kind:  VMRule
 metadata:
-  name: critical-alert-rules
+  name: RDS_critical-alert-rules
   namespace: monitoring
 spec:
   groups:
