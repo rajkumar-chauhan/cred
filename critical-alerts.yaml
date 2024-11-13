@@ -1,0 +1,228 @@
+apiVersion:  operator.victoriametrics.com/v1beta1
+kind:  VMRule
+metadata:
+  name: critical-alert-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: critical-alerts
+    rules:
+    - alert: DatabaseConnectionsCritical
+      expr: (current_connections / max_connections) > 0.9
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Database connection usage critical"
+        description: "Database connections have reached 90-95% of the maximum limit."
+
+    - alert: MaximumUsedTransactionIDsCritical
+      expr: max_used_transaction_ids > 1500000000
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Transaction ID usage critical"
+        description: "Transaction ID usage has reached 1.5 billion."
+
+    - alert: ReadWriteLatencyCritical
+      expr: avg(read_write_latency) > 50
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High read/write latency critical"
+        description: "Read and write latency is greater than 50ms."
+
+    - alert: IOPSCritical
+      expr: (read_iops + write_iops) > (iops_limit * 0.9)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High IOPS critical"
+        description: "Read and Write IOPS is above 90% of the limit."
+
+    - alert: ThroughputCritical
+      expr: (read_throughput + write_throughput) > (throughput_capacity * 0.85)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Throughput usage critical"
+        description: "Throughput is above 80-85% of capacity."
+
+    - alert: TransactionLogsGenerationCritical
+      expr: transaction_log_generation > (baseline * 1.75)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High transaction logs generation critical"
+        description: "Transaction log generation is more than 75-80% above baseline."
+
+    - alert: DBLoadCritical
+      expr: db_load > (instance_capacity * 0.9)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High DB load critical"
+        description: "Database load exceeds 90% of the instance capacity."
+
+    - alert: FreeableMemoryCritical
+      expr: freeable_memory < (total_memory * 0.1)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Low freeable memory critical"
+        description: "Available memory is below 10% of total memory."
+
+    - alert: CPUUtilizationCritical
+      expr: cpu_utilization > 90
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High CPU utilization critical"
+        description: "CPU utilization is above 90%."
+
+    - alert: FreeStorageSpaceCritical
+      expr: free_storage_space < (total_storage * 0.1)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Low storage space critical"
+        description: "Available storage space is below 10% of total storage."
+
+    - alert: SwapMemoryCritical
+      expr: swap_memory_usage > (total_swap * 0.5)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High swap memory usage critical"
+        description: "Swap memory usage is above 50% of available swap."
+
+    - alert: DiskQueueDepthCritical
+      expr: disk_queue_depth > 20
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High disk queue depth critical"
+        description: "Disk queue depth is above 20."
+
+    - alert: TransactionLogsDiskUsageCritical
+      expr: transaction_logs_disk_usage > (allocated_space * 0.9)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High transaction logs disk usage critical"
+        description: "Transaction logs disk usage is above 90% of allocated space."
+
+  - name: replication-critical-alerts
+    rules:
+    - alert: ReplicationSlotDiskUsageCritical
+      expr: replication_slot_disk_usage > (total_disk * 0.9)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Replication Slot Disk Usage Critical"
+        description: "Replication slot disk usage is above 90%, which may cause replication delays or disk exhaustion."
+
+    - alert: OldestReplicationSlotLagCritical
+      expr: oldest_replication_slot_lag > 1 * 1024 * 1024 * 1024
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Oldest Replication Slot Lag Critical"
+        description: "Oldest replication slot lag exceeds 1 GB, potentially causing data consistency issues and storage concerns."
+
+    - alert: ReplicaLagCritical
+      expr: replica_lag > 60
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Replica Lag Critical"
+        description: "Replica lag exceeds 60 seconds, which may impact read replica data freshness and failover reliability."
+
+  - name: network-critical-alerts
+    rules:
+    - alert: NetworkTransmitThroughputCritical
+      expr: network_transmit_throughput > (allocated_bandwidth * 0.9)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Network Transmit Throughput Critical"
+        description: "Network transmit throughput exceeds 90% of allocated bandwidth, which may cause network congestion or service disruptions."
+
+    - alert: NetworkReceiveThroughputCritical
+      expr: network_receive_throughput > (allocated_bandwidth * 0.9)
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Network Receive Throughput Critical"
+        description: "Network receive throughput exceeds 90% of allocated bandwidth, which may lead to network congestion."
