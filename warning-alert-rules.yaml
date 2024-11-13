@@ -1,0 +1,228 @@
+apiVersion:  operator.victoriametrics.com/v1beta1
+kind:  VMRule
+metadata:
+  name: warning-alert-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: warning-alerts
+    rules:
+    - alert: DatabaseConnectionsWarning
+      expr: (current_connections / max_connections) > 0.7
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Database connection usage warning"
+        description: "Database connections have reached 70-75% of the maximum limit."
+
+    - alert: MaximumUsedTransactionIDsWarning
+      expr: max_used_transaction_ids > 1300000000
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Transaction ID usage warning"
+        description: "Transaction ID usage has reached 1.3 billion."
+
+    - alert: ReadWriteLatencyWarning
+      expr: avg(read_write_latency) > 20
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Read/Write latency warning"
+        description: "Read and write latency is greater than 20ms."
+
+    - alert: IOPSWarning
+      expr: (read_iops + write_iops) > (iops_limit * 0.75)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Read/Write IOPS warning"
+        description: "Read and Write IOPS is above 75% of the limit."
+
+    - alert: ThroughputWarning
+      expr: (read_throughput + write_throughput) > (throughput_capacity * 0.7)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Throughput usage warning"
+        description: "Throughput is above 70-75% of capacity."
+
+    - alert: TransactionLogsGenerationWarning
+      expr: transaction_log_generation > (baseline * 1.7)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Transaction logs generation warning"
+        description: "Transaction log generation is more than 70% above baseline."
+
+    - alert: DBLoadWarning
+      expr: db_load > (instance_capacity * 0.75)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "DB load warning"
+        description: "Database load exceeds 75% of the instance capacity."
+
+    - alert: FreeableMemoryWarning
+      expr: freeable_memory < (total_memory * 0.25)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Low freeable memory warning"
+        description: "Available memory is below 25% of total memory."
+
+    - alert: CPUUtilizationWarning
+      expr: cpu_utilization > 70
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High CPU utilization warning"
+        description: "CPU utilization is above 70%."
+
+    - alert: FreeStorageSpaceWarning
+      expr: free_storage_space < (total_storage * 0.2)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Low storage space warning"
+        description: "Available storage space is below 20% of total storage."
+
+    - alert: SwapMemoryWarning
+      expr: swap_memory_usage > (total_swap * 0.3)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High swap memory usage warning"
+        description: "Swap memory usage is above 20-30% of available swap."
+
+    - alert: DiskQueueDepthWarning
+      expr: disk_queue_depth > 10
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High disk queue depth warning"
+        description: "Disk queue depth is above 10."
+
+    - alert: TransactionLogsDiskUsageWarning
+      expr: transaction_logs_disk_usage > (allocated_space * 0.7)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "High transaction logs disk usage warning"
+        description: "Transaction logs disk usage is above 70% of allocated space."
+
+  - name: replication-warning-alerts
+    rules:
+    - alert: ReplicationSlotDiskUsageWarning
+      expr: replication_slot_disk_usage > (total_disk * 0.7)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Replication Slot Disk Usage Warning"
+        description: "Replication slot disk usage is above 70%, indicating potential replication lag or poor slot management."
+
+    - alert: OldestReplicationSlotLagWarning
+      expr: oldest_replication_slot_lag > 500 * 1024 * 1024
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Oldest Replication Slot Lag Warning"
+        description: "Oldest replication slot lag exceeds 500 MB, which could impact replication health."
+
+    - alert: ReplicaLagWarning
+      expr: replica_lag > 30
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Replica Lag Warning"
+        description: "Replica lag exceeds 30 seconds, indicating potential delays in replication synchronization."
+
+  - name: network-warning-alerts
+    rules:
+    - alert: NetworkTransmitThroughputWarning
+      expr: network_transmit_throughput > (allocated_bandwidth * 0.75)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Network Transmit Throughput Warning"
+        description: "Network transmit throughput exceeds 75% of allocated bandwidth, indicating high data transfer activity."
+
+    - alert: NetworkReceiveThroughputWarning
+      expr: network_receive_throughput > (allocated_bandwidth * 0.75)
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+        environment: "production"
+      annotations:
+        summary: "Network Receive Throughput Warning"
+        description: "Network receive throughput exceeds 75% of allocated bandwidth, indicating increased application or replication traffic."
