@@ -1,105 +1,112 @@
+# Warning.yaml 
+
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
 metadata:
-  name: Microservice-warning-alert-rules
+  name: microservice-warning-alert-rules
   namespace: monitoring
 spec:
   groups:
     - name: Microservice-warning-alerts
       rules:
         - alert: HighRequestRateWarning
-          expr: rate(vm_http_requests_total{namespace=~".*"}[5m]) > 0.7 * expected_request_rate
+          expr: rate(vm_http_requests_total{namespace=~".*"}[5m]) > 0.7 * 1000
           for: 5m
           labels:
             severity: warning
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High request rate (Warning)"
-            description: "The request rate exceeded 70% of the expected rate for more than 5 minutes."
+            summary: "High request rate in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "The request rate for pod {{ $labels.pod }} of app {{ $labels.app }} exceeded 70% of the expected rate for more than 5 minutes."
 
         - alert: HighErrorRateWarning
-          expr: rate(vm_request_errors_total{namespace=~".*"}[5m]) > 0.01 * vm_requests_total
+          expr: rate(vm_request_errors_total{namespace=~".*"}[5m]) > 0.01 * rate(vm_requests_total[5m])
           for: 5m
           labels:
             severity: warning
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High error rate (Warning)"
-            description: "The error rate exceeded 1% of total requests for more than 5 minutes."
+            summary: "High error rate in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "The error rate for pod {{ $labels.pod }} of app {{ $labels.app }} exceeded 1% of total requests for more than 5 minutes."
 
         - alert: HighCPUUsageWarning
-          expr: process_cpu_seconds_total{namespace=~".*"} > 0.7 * cpu_limit
+          expr: rate(container_cpu_usage_seconds_total{namespace=~".*"}[5m]) > 0.7 * 4
           for: 5m
           labels:
             severity: warning
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High CPU usage (Warning)"
-            description: "CPU usage exceeded 70% of the limit for more than 5 minutes."
+            summary: "High CPU usage in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "Pod {{ $labels.pod }} of app {{ $labels.app }} has CPU usage exceeding 70% of its limit for more than 5 minutes."
 
         - alert: HighMemoryUsageWarning
-          expr: container_memory_usage_bytes{namespace=~".*"} > 0.7 * memory_limit
+          expr: container_memory_working_set_bytes{namespace=~".*"} > 0.7 * 8e9
           for: 5m
           labels:
             severity: warning
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High memory usage (Warning)"
-            description: "Memory usage exceeded 70% of the limit for more than 5 minutes."
+            summary: "High memory usage in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "Pod {{ $labels.pod }} of app {{ $labels.app }} has memory usage exceeding 70% of its limit for more than 5 minutes."
 
-        # - alert: HighQuotaUtilizationWarning
-        #  expr: resource_quota_utilization{namespace=~".*"} > 0.8
-        #   for: 5m
-        #   labels:
-        #     severity: warning
-        #   annotations:
-        #     summary: "High resource quota utilization (Warning)"
-        #     description: "Resource quota utilization exceeded 80% for more than 5 minutes."
 
----
 
-```yaml
+
+# Critical 
+
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
 metadata:
-  name: Microservice-critical-alert-rules
+  name: microservice-critical-alert-rules
   namespace: monitoring
 spec:
   groups:
-    - name: microservice-critical-alerts
+    - name: Microservice-critical-alerts
       rules:
         - alert: HighRequestRateCritical
-          expr: rate(vm_http_requests_total{namespace=~".*"}[5m]) > 0.9 * expected_request_rate
+          expr: rate(vm_http_requests_total{namespace=~".*"}[5m]) > 0.9 * 1000
           for: 2m
           labels:
             severity: critical
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High request rate (Critical)"
-            description: "The request rate exceeded 90% of the expected rate for more than 2 minutes."
+            summary: "Critical: High request rate in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "The request rate for pod {{ $labels.pod }} of app {{ $labels.app }} exceeded 90% of the expected rate for more than 2 minutes."
 
         - alert: HighErrorRateCritical
-          expr: rate(vm_request_errors_total{namespace=~".*"}[5m]) > 0.05 * total_requests
+          expr: rate(vm_request_errors_total{namespace=~".*"}[5m]) > 0.05 * rate(vm_requests_total[5m])
           for: 2m
           labels:
             severity: critical
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High error rate (Critical)"
-            description: "The error rate exceeded 5% of total requests for more than 2 minutes."
+            summary: "Critical: High error rate in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "The error rate for pod {{ $labels.pod }} of app {{ $labels.app }} exceeded 5% of total requests for more than 2 minutes."
 
         - alert: HighCPUUsageCritical
-          expr: process_cpu_seconds_total{namespace=~".*"} > 0.85 * cpu_limit
+          expr: rate(container_cpu_usage_seconds_total{namespace=~".*"}[5m]) > 0.85 * 4
           for: 2m
           labels:
             severity: critical
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High CPU usage (Critical)"
-            description: "CPU usage exceeded 85% of the limit for more than 2 minutes."
+            summary: "Critical: High CPU usage in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "Pod {{ $labels.pod }} of app {{ $labels.app }} has CPU usage exceeding 85% of its limit for more than 2 minutes."
 
         - alert: HighMemoryUsageCritical
-          expr: container_memory_usage_bytes{namespace=~".*"} > 0.85 * memory_limit
+          expr: container_memory_working_set_bytes{namespace=~".*"} > 0.85 * 8e9
           for: 2m
           labels:
             severity: critical
+            app: "{{ $labels.app }}"
+            pod: "{{ $labels.pod }}"
           annotations:
-            summary: "High memory usage (Critical)"
-            description: "Memory usage exceeded 85% of the limit for more than 2 minutes."
-
-       
-
-
+            summary: "Critical: High memory usage in pod {{ $labels.pod }} of app {{ $labels.app }}"
+            description: "Pod {{ $labels.pod }} of app {{ $labels.app }} has memory usage exceeding 85% of its limit for more than 2 minutes."
