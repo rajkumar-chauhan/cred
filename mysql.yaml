@@ -1,0 +1,205 @@
+apiVersion:  operator.victoriametrics.com/v1beta1
+kind:  VMRule
+metadata:
+  name: RDS_critical-alert-rules
+  namespace: monitoring
+spec:
+  # MySQL Prometheus Alerting Rules
+
+- groups:
+  - name: mysql-resource-usage-alerts
+    rules:
+    - alert: HighBufferPoolUsage
+      expr: mysql_buffer_pool_usage_bytes > 0.9 * mysql_buffer_pool_size_bytes
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Buffer Pool Usage"
+        description: "Buffer pool usage is above 90% for more than 5 minutes."
+
+    - alert: HighBufferPoolPageFlushRate
+      expr: rate(mysql_buffer_pool_page_flushes_total[5m]) > 50
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Buffer Pool Page Flush Rate"
+        description: "Buffer pool page flush rate is greater than 50 per second."
+
+    - alert: HighThreadConnectionUtilization
+      expr: mysql_threads / mysql_max_threads > 0.9
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Thread Connection Utilization"
+        description: "More than 90% of maximum threads are connected."
+
+    - alert: HighDiskUsage
+      expr: mysql_buffer_pool_pages / mysql_total_disk_pages > 0.9
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Disk Usage"
+        description: "Disk usage for MySQL data is above 90%."
+
+    - alert: HighDiskLatency
+      expr: rate(mysql_buffer_pool_page_flushes_total[5m]) / rate(mysql_buffer_pool_operations_total[5m]) > 0.5
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Disk Latency"
+        description: "Disk latency is greater than 500ms."
+
+- groups:
+  - name: mysql-performance-alerts
+    rules:
+    - alert: HighQueryExecutionTime
+      expr: rate(mysql_query_execution_time_total[5m]) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Query Execution Time"
+        description: "Average query execution time is greater than 50ms."
+
+    - alert: HighSlowQueries
+      expr: increase(mysql_slow_queries_total[5m]) > 10
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Slow Queries Count"
+        description: "More than 10 slow queries detected in 5 minutes."
+
+    - alert: LowQueryCacheEfficiency
+      expr: 1 - (mysql_cache_hits_total / (mysql_cache_hits_total + mysql_cache_misses_total)) < 0.8
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low Query Cache Efficiency"
+        description: "Query cache efficiency is below 80%."
+
+    - alert: HighPreparedStatementsRate
+      expr: rate(mysql_prepared_statements_total[5m]) > 200
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Prepared Statements Rate"
+        description: "Rate of prepared statements is greater than 200 per second."
+
+    - alert: HighFullTableScanRate
+      expr: rate(mysql_handlers_total_created[5m]) - rate(mysql_handlers_total[5m]) > 50
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Full Table Scan Rate"
+        description: "Full table scan rate is greater than 50 per minute."
+
+- groups:
+  - name: mysql-stability-alerts
+    rules:
+    - alert: LowMySQLUptime
+      expr: mysql_uptime_seconds_total < 300
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "MySQL Uptime Low"
+        description: "MySQL uptime is unexpectedly low (less than 5 minutes)."
+
+    - alert: HighReplicationLag
+      expr: mysql_seconds_behind_master > 5
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Replication Lag"
+        description: "Replication lag is greater than 5 seconds."
+
+    - alert: HighDeadlockRate
+      expr: increase(mysql_innodb_deadlocks_total[5m]) > 5
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High InnoDB Deadlock Rate"
+        description: "More than 5 deadlocks detected in 5 minutes."
+
+    - alert: ImbalancedPageReadsWrites
+      expr: abs((rate(mysql_page_operations_total[5m]) / rate(mysql_page_operations_total_created[5m])) - 1) > 0.5
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Imbalanced Page Reads vs Writes"
+        description: "Significant imbalance in page reads vs writes detected."
+
+    - alert: ReplicationErrors
+      expr: increase(mysql_replication_errors_total[5m]) > 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Replication Errors Detected"
+        description: "Replication errors occurred in the last 5 minutes."
+
+    - alert: HighBufferPoolUsageThreshold
+      expr: mysql_buffer_pool_usage_bytes / mysql_buffer_pool_size_bytes > 0.8
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Buffer Pool Usage Threshold"
+        description: "Buffer pool usage is above 80%."
+
+    - alert: HighDiskUsageThreshold
+      expr: mysql_buffer_pool_pages / mysql_total_disk_pages > 0.9
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Disk Usage Threshold"
+        description: "Disk usage is above 90%."
+
+    - alert: SlowQueriesDetected
+      expr: increase(mysql_slow_queries_total[5m]) > 10
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Slow Queries Detected"
+        description: "More than 10 slow queries detected."
+
+    - alert: LowCacheEfficiencyDetected
+      expr: 1 - (mysql_cache_hits_total / (mysql_cache_hits_total + mysql_cache_misses_total)) < 0.8
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low Cache Efficiency Detected"
+        description: "Cache efficiency is below 80%."
+
+    - alert: ThreadUtilizationHigh
+      expr: mysql_threads / mysql_max_threads > 0.8
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Thread Utilization High"
+        description: "Thread utilization is over 80%."
+
+    - alert: PreparedStatementsRateExceeded
+      expr: rate(mysql_prepared_statements_total[5m]) > 200
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Prepared Statements Rate Exceeded"
+        description: "Prepared statements rate is higher than 200/sec."
