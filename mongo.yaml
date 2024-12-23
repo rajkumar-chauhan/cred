@@ -1,0 +1,163 @@
+apiVersion:  operator.victoriametrics.com/v1beta1
+kind:  VMRule
+metadata:
+  name: RDS_critical-alert-rules
+  namespace: monitoring
+spec:
+  # MongoDB Prometheus Alerting Rules
+
+- groups:
+  - name: mongodb-resource-usage-alerts
+    rules:
+    - alert: HighMemoryUsage
+      expr: (mongodb_memory_usage_bytes / mongodb_memory_limit_bytes) > 0.9
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Memory Usage"
+        description: "MongoDB memory usage is above 90% of the total memory limit."
+
+    - alert: HighCPUUtilization
+      expr: rate(mongodb_cpu_user_seconds_total[5m]) > 0.8
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High CPU Utilization"
+        description: "MongoDB CPU utilization exceeds 80%."
+
+    - alert: HighDiskUsage
+      expr: mongodb_storage_size_bytes > 0.9 * <disk_capacity_bytes>
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Disk Usage"
+        description: "MongoDB is using over 90% of the available disk space."
+
+    - alert: HighDiskLatency
+      expr: (rate(mongodb_disk_io_time_seconds_sum[5m]) / rate(mongodb_disk_io_time_seconds_count[5m])) > 0.5
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Disk Latency"
+        description: "MongoDB disk latency exceeds 500ms."
+
+    - alert: HighConnectionsUsage
+      expr: mongodb_connections_current > <connections_limit>
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Connections Usage"
+        description: "MongoDB active connections exceed the expected limit."
+
+- groups:
+  - name: mongodb-performance-alerts
+    rules:
+    - alert: HighQueryExecutionTime
+      expr: (rate(mongodb_query_execution_time_seconds_sum[5m]) / rate(mongodb_query_execution_time_seconds_count[5m])) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Query Execution Time"
+        description: "Average query execution time exceeds 50ms."
+
+    - alert: LowCacheHitRatio
+      expr: ((mongodb_cache_hits_total / (mongodb_cache_hits_total + mongodb_cache_misses_total)) * 100) < 80
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low Cache Hit Ratio"
+        description: "MongoDB cache hit ratio is below 80%."
+
+    - alert: HighLockWaitTime
+      expr: (rate(mongodb_lock_wait_time_seconds_sum[5m]) / rate(mongodb_lock_wait_time_seconds_count[5m])) > 0.5
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Lock Wait Time"
+        description: "MongoDB lock wait time exceeds 500ms."
+
+    - alert: LowIndexUsageEfficiency
+      expr: ((mongodb_index_hits_total / mongodb_queries_total) * 100) < 80
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low Index Usage Efficiency"
+        description: "Less than 80% of queries are utilizing indexes."
+
+    - alert: HighReplicationLag
+      expr: mongodb_replication_lag_seconds > 0.1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Replication Lag"
+        description: "Replication lag between primary and secondary nodes exceeds 100ms."
+
+    - alert: DocumentGrowthRate
+      expr: rate(mongodb_documents_inserted_total[5m]) > <document_threshold>
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Document Growth Rate"
+        description: "The document growth rate exceeds the configured threshold."
+
+- groups:
+  - name: mongodb-reliability-alerts
+    rules:
+    - alert: InstanceUnavailable
+      expr: mongodb_uptime_seconds_total == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "MongoDB Instance Unavailable"
+        description: "The MongoDB instance is not running."
+
+    - alert: LowOplogWindow
+      expr: mongodb_oplog_window_seconds < <threshold_seconds>
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low Oplog Window"
+        description: "MongoDB oplog window is less than the configured threshold."
+
+    - alert: ReplicaSetNotPrimary
+      expr: mongodb_replset_status{status!="PRIMARY"} > 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Replica Set Not Primary"
+        description: "The MongoDB replica set is not in PRIMARY state."
+
+- groups:
+  - name: mongodb-general-monitoring-alerts
+    rules:
+    - alert: NetworkTrafficHigh
+      expr: rate(mongodb_network_bytes_in_total[5m]) > <network_threshold_in> or rate(mongodb_network_bytes_out_total[5m]) > <network_threshold_out>
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Network Traffic"
+        description: "MongoDB network traffic exceeds the configured thresholds."
+
+    - alert: HighIndexBuildTime
+      expr: (rate(mongodb_index_build_time_seconds_sum[5m]) / rate(mongodb_index_build_time_seconds_count[5m])) > 0.5
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Index Build Time"
+        description: "Index build time exceeds the configured threshold."
