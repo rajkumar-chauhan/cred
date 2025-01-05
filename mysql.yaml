@@ -4,8 +4,6 @@ metadata:
   name: RDS_critical-alert-rules
   namespace: monitoring
 spec:
-  # MySQL Prometheus Alerting Rules
-
 - groups:
   - name: mysql-resource-usage-alerts
     rules:
@@ -13,7 +11,9 @@ spec:
       expr: mysql_buffer_pool_usage_bytes > 0.9 * mysql_buffer_pool_size_bytes
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Buffer Pool Usage"
         description: "Buffer pool usage is above 90% for more than 5 minutes."
@@ -22,7 +22,9 @@ spec:
       expr: rate(mysql_buffer_pool_page_flushes_total[5m]) > 50
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Buffer Pool Page Flush Rate"
         description: "Buffer pool page flush rate is greater than 50 per second."
@@ -32,6 +34,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Thread Connection Utilization"
         description: "More than 90% of maximum threads are connected."
@@ -41,6 +45,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Disk Usage"
         description: "Disk usage for MySQL data is above 90%."
@@ -49,7 +55,9 @@ spec:
       expr: rate(mysql_buffer_pool_page_flushes_total[5m]) / rate(mysql_buffer_pool_operations_total[5m]) > 0.5
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Disk Latency"
         description: "Disk latency is greater than 500ms."
@@ -62,6 +70,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Query Execution Time"
         description: "Average query execution time is greater than 50ms."
@@ -70,7 +80,9 @@ spec:
       expr: increase(mysql_slow_queries_total[5m]) > 10
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Slow Queries Count"
         description: "More than 10 slow queries detected in 5 minutes."
@@ -80,6 +92,8 @@ spec:
       for: 10m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Low Query Cache Efficiency"
         description: "Query cache efficiency is below 80%."
@@ -89,6 +103,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Prepared Statements Rate"
         description: "Rate of prepared statements is greater than 200 per second."
@@ -98,6 +114,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Full Table Scan Rate"
         description: "Full table scan rate is greater than 50 per minute."
@@ -109,7 +127,9 @@ spec:
       expr: mysql_uptime_seconds_total < 300
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "MySQL Uptime Low"
         description: "MySQL uptime is unexpectedly low (less than 5 minutes)."
@@ -118,7 +138,9 @@ spec:
       expr: mysql_seconds_behind_master > 5
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Replication Lag"
         description: "Replication lag is greater than 5 seconds."
@@ -128,6 +150,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High InnoDB Deadlock Rate"
         description: "More than 5 deadlocks detected in 5 minutes."
@@ -137,6 +161,8 @@ spec:
       for: 10m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Imbalanced Page Reads vs Writes"
         description: "Significant imbalance in page reads vs writes detected."
@@ -145,7 +171,9 @@ spec:
       expr: increase(mysql_replication_errors_total[5m]) > 0
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Replication Errors Detected"
         description: "Replication errors occurred in the last 5 minutes."
@@ -155,6 +183,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Buffer Pool Usage Threshold"
         description: "Buffer pool usage is above 80%."
@@ -163,7 +193,9 @@ spec:
       expr: mysql_buffer_pool_pages / mysql_total_disk_pages > 0.9
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "High Disk Usage Threshold"
         description: "Disk usage is above 90%."
@@ -173,6 +205,8 @@ spec:
       for: 5m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Slow Queries Detected"
         description: "More than 10 slow queries detected."
@@ -182,6 +216,8 @@ spec:
       for: 10m
       labels:
         severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Low Cache Efficiency Detected"
         description: "Cache efficiency is below 80%."
@@ -190,7 +226,9 @@ spec:
       expr: mysql_threads / mysql_max_threads > 0.8
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Thread Utilization High"
         description: "Thread utilization is over 80%."
@@ -199,7 +237,9 @@ spec:
       expr: rate(mysql_prepared_statements_total[5m]) > 200
       for: 5m
       labels:
-        severity: critical
+        severity: warning
+        channel: slack
+        team: devops 
       annotations:
         summary: "Prepared Statements Rate Exceeded"
         description: "Prepared statements rate is higher than 200/sec."
