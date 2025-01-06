@@ -1,0 +1,118 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: mongodb-production-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: mongodb-resource-alerts
+    rules:
+    - alert: HighConnectionCount
+      expr: mongodb_connection_count > 300
+      for: 2m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High MongoDB Connection Count in Production
+        description: "The number of active connections to MongoDB is very high, exceeding 300. This could indicate overloaded resources or unexpected traffic."
+
+    - alert: HighMemoryUsage
+      expr: mongodb_memory_usage_bytes / 1073741824 > 16
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High MongoDB Memory Usage in Production
+        description: "MongoDB is using over 16GB of memory. This might cause performance issues or lead to out-of-memory errors. Current usage."
+
+    - alert: HighGlobalLockTime
+      expr: rate(mongodb_global_lock_time_milliseconds_total[5m]) > 2000
+      for: 3m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High Global Lock Time in Production
+        description: "Global lock time is averaging over 2 seconds in the last 5 minutes. This could slow down operations or indicate contention issues."
+
+    - alert: LowStorageAvailable
+      expr: mongodb_storage_size_bytes_total / (mongodb_storage_size_bytes_total + mongodb_data_size_bytes) < 0.25
+      for: 10m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops    
+      annotations:
+        summary: Low Storage Space Available in Production
+        description: "MongoDB is running out of storage space. Less than 25% of total storage is free, which could lead to disruptions. "
+
+    - alert: HighDocumentOperationRate
+      expr: rate(mongodb_document_operation_count[5m]) > 500
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High Document Operation Rate in Production
+        description: "The rate of document operations (read/write) is very high, exceeding 500 operations per second. This could indicate a spike in traffic or inefficient queries."
+
+    - alert: HighCursorTimeoutRate
+      expr: rate(mongodb_cursor_timeout_count[5m]) > 5
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High Cursor Timeout Rate in Production
+        description: "MongoDB cursors are timing out frequently, with more than 5 timeouts per second. This could indicate inefficient queries or poor indexing."
+
+    - alert: HighIndexSize
+      expr: mongodb_index_size_bytes > 21474836480
+      for: 10m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High Index Size in Production
+        description: "The total size of MongoDB indexes exceeds 20GB. This could lead to increased disk I/O and slower query performance. "
+
+    - alert: HighSessionCount
+      expr: mongodb_session_count > 100
+      for: 2m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High MongoDB Session Count in Production
+        description: "The number of active MongoDB sessions is unusually high, exceeding 100. This might indicate excessive client connections or inefficient session management. "
+
+    - alert: LowDatabaseCount
+      expr: mongodb_database_count < 1
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops    
+      annotations:
+        summary: Low Database Count in Production
+        description: "No databases are detected in MongoDB. This might indicate a misconfiguration or critical issue. Ensure that databases are correctly configured and accessible."
+
+    - alert: HighOperationLatency
+      expr: rate(mongodb_operation_time_milliseconds_total[5m]) > 500
+      for: 2m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops    
+      annotations:
+        summary: High Operation Latency in Production
+        description: "MongoDB operations are taking longer than 500ms on average. This might cause delays in application responses. "
