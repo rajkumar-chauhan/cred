@@ -130,9 +130,7 @@ spec:
         summary: "High Document Growth Rate"
         description: "The document growth rate exceeds the configured threshold."
 
-- groups:
-  - name: mongodb-reliability-alerts
-    rules:
+
     - alert: InstanceUnavailable
       expr: mongodb_uptime_seconds_total == 0
       for: 1m
