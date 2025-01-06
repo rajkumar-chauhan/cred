@@ -1,0 +1,118 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: postgres-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: postgres-resource-alerts
+    rules:
+    - alert: HighActiveConnections
+      expr: postgresql_backends / postgresql_connection_max > 0.9
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops 
+      annotations:
+        summary: High Active PostgreSQL Connections
+        description: "The number of active PostgreSQL connections exceeds 90% of the maximum limit. This could lead to connection rejections. Current usage: {{ $value }}."
+
+    - alert: FrequentCheckpointWrites
+      expr: rate(postgresql_bgwriter_buffers_writes_total[5m]) > 1000
+      for: 3m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: High Checkpoint Buffer Writes in PostgreSQL
+        description: "The PostgreSQL background writer is flushing buffers at a rate exceeding 1000 per minute. This might indicate write bottlenecks. Current rate: {{ $value }} buffers/minute."
+
+    - alert: HighDatabaseSize
+      expr: postgresql_db_size_bytes > 107374182400
+      for: 10m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops 
+      annotations:
+        summary: Large PostgreSQL Database Size
+        description: "The size of the PostgreSQL database exceeds 100GB. This could lead to storage issues. Current size: {{ $value }} bytes."
+
+    - alert: FrequentRollbacks
+      expr: rate(postgresql_rollbacks_total[5m]) > 10
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: Frequent PostgreSQL Transaction Rollbacks
+        description: "More than 10 transaction rollbacks are occurring per minute. This might indicate query or application issues. Current rate: {{ $value }} rollbacks/minute."
+
+    - alert: HighCommitRate
+      expr: rate(postgresql_commits_total[5m]) > 1000
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: High Transaction Commit Rate in PostgreSQL
+        description: "The rate of committed transactions exceeds 1000 per minute. This could indicate high load or application activity. Current rate: {{ $value }} commits/minute."
+
+    - alert: HighBufferAllocations
+      expr: rate(postgresql_bgwriter_buffers_allocated_total[5m]) > 500
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: High PostgreSQL Buffer Allocations
+        description: "The background writer is allocating buffers at a rate exceeding 500 per minute. This might indicate memory pressure or inefficient query usage. Current rate: {{ $value }} allocations/minute."
+
+    - alert: HighTableCount
+      expr: postgresql_table_count > 10000
+      for: 10m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: High Number of Tables in PostgreSQL
+        description: "The number of tables in the database exceeds 10,000. This might indicate potential inefficiencies or mismanagement. Current table count: {{ $value }}."
+
+    - alert: LowMaxConnections
+      expr: postgresql_connection_max < 100
+      for: 10m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops 
+      annotations:
+        summary: Low PostgreSQL Maximum Connection Limit
+        description: "The maximum number of allowed PostgreSQL connections is set below 100. This might lead to connection rejections during peak load. Current max connections: {{ $value }}."
+
+    - alert: HighRollbackToCommitRatio
+      expr: rate(postgresql_rollbacks_total[5m]) / rate(postgresql_commits_total[5m]) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: High Rollback-to-Commit Ratio in PostgreSQL
+        description: "The ratio of rollbacks to commits exceeds 10%. This could indicate frequent transaction failures. Current ratio: {{ $value }}."
+
+    - alert: HighCheckpointDuration
+      expr: rate(postgresql_bgwriter_duration_milliseconds_total[5m]) > 5000
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops 
+      annotations:
+        summary: Long Checkpoint Duration in PostgreSQL
+        description: "The average checkpoint duration exceeds 5 seconds. This might cause delays in query processing. Current duration: {{ $value }} ms."
