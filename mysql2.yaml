@@ -1,0 +1,118 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: mysql-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: mysql-resource-alerts
+    rules:
+    - alert: HighBufferPoolUsage
+      expr: mysql_buffer_pool_usage_bytes / 1073741824 > 32
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High MySQL Buffer Pool Usage in Production
+        description: "The MySQL buffer pool is using over 32GB of memory, which might cause performance degradation or resource exhaustion."
+
+    - alert: FrequentPageFlushes
+      expr: rate(mysql_buffer_pool_page_flushes_total[5m]) > 1000
+      for: 3m
+      labels:
+        severity: warning
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Page Flushes in MySQL Buffer Pool
+        description: "The buffer pool is experiencing frequent page flushes, exceeding 1000 per minute. This might indicate write contention."
+
+    - alert: HighThreadCount
+      expr: mysql_threads > 500
+      for: 2m
+      labels:
+        severity: critical
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High MySQL Thread Count in Production
+        description: "The number of threads in MySQL exceeds 500. This might indicate high load or thread mismanagement. "
+
+    - alert: HighRowLocks
+      expr: rate(mysql_row_locks_total[5m]) > 100
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Row Lock Rate in MySQL
+        description: "The number of row locks is unusually high, exceeding 100 per minute. This might cause delays in transactions."
+
+    - alert: LowOpenFilesLimit
+      expr: mysql_opened_resources_total > 5000
+      for: 10m
+      labels:
+        severity: critical
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Open Files Count in MySQL
+        description: "The number of opened resources is very high, exceeding 5000. This might indicate a resource leak or configuration issue."
+
+    - alert: HighSortOperations
+      expr: rate(mysql_sorts_total[5m]) > 200
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Sort Operation Rate in MySQL
+        description: "The rate of sort operations is unusually high, exceeding 200 per minute. This might indicate inefficient queries or missing indexes. "
+
+    - alert: LowUptime
+      expr: mysql_uptime_seconds_total < 3600
+      for: 10m
+      labels:
+        severity: critical
+        channel: slack
+        team:  devops
+      annotations:
+        summary: MySQL Instance Restart Detected
+        description: "The MySQL instance uptime is less than 1 hour. This might indicate frequent restarts or instability. "
+
+    - alert: HighTemporaryObjects
+      expr: rate(mysql_tmp_resources_total[5m]) > 300
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Temporary Object Usage in MySQL
+        description: "The rate of temporary object creation is very high, exceeding 300 per minute. This might indicate inefficient query processing. "
+
+    - alert: HighRowOperations
+      expr: rate(mysql_row_operations_total[5m]) > 500
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Row Operation Rate in MySQL
+        description: "The rate of row-level operations (read/write) is very high, exceeding 500 per second. This might indicate high traffic or inefficient queries. "
+
+    - alert: HighLogOperations
+      expr: rate(mysql_log_operations_total[5m]) > 1000
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team:  devops
+      annotations:
+        summary: High Log Operation Rate in MySQL
+        description: "The rate of log operations is very high, exceeding 1000 per minute. This might indicate excessive write activity. Current log operation rate: {{ $value }} per minute."
