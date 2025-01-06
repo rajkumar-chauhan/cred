@@ -117,9 +117,6 @@ spec:
         summary: "High Full Table Scan Rate"
         description: "Full table scan rate is greater than 50 per minute."
 
-- groups:
-  - name: mysql-stability-alerts
-    rules:
     - alert: LowMySQLUptime
       expr: mysql_uptime_seconds_total < 300
       for: 5m
