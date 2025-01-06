@@ -1,9 +1,9 @@
 apiVersion:  operator.victoriametrics.com/v1beta1
 kind:  VMRule
 metadata:
-  name: Mongodb_alerts
+  name: Postgres_alerts
   namespace: monitoring
 spec: 
 - groups:
-  - name: mongodb-resource-usage-alerts
+  - name: Postgres-alerts
     rules:
