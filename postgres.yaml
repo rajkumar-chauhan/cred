@@ -1,9 +1,86 @@
-apiVersion:  operator.victoriametrics.com/v1beta1
-kind:  VMRule
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
 metadata:
-  name: Postgres_alerts
+  name: postgresql-alerts
   namespace: monitoring
-spec: 
-- groups:
-  - name: Postgres-alerts
+spec:
+  groups:
+  - name: postgresql-resource-usage-alerts
     rules:
+    - alert: HighDatabaseConnections
+      expr: postgresql_backends / postgresql_connection_max > 0.8
+      for: 1m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+      annotations:
+        summary: High Database Connections
+        description: "The database connections are at {{ $value | humanizePercentage }} of the maximum allowed."
+
+    - alert: CheckpointWriteIssues
+      expr: rate(postgresql_bgwriter_buffers_writes_total[5m]) < 10
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+      annotations:
+        summary: Low Checkpoint Write Performance
+        description: "The checkpoint write rate is unusually low. Investigate bgwriter performance."
+
+    - alert: HighCheckpointDuration
+      expr: rate(postgresql_bgwriter_duration_milliseconds_total[5m]) > 5000
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+      annotations:
+        summary: High Checkpoint Duration
+        description: "The checkpoint duration is averaging more than 5 seconds over the last 5 minutes."
+
+    - alert: LowDatabaseSize
+      expr: postgresql_db_size_bytes < 1000000000
+      for: 10m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+      annotations:
+        summary: Low Database Size
+        description: "The database size is less than 1GB. Ensure this is expected."
+
+    - alert: HighRollbackRate
+      expr: rate(postgresql_rollbacks_total[5m]) / rate(postgresql_commits_total[5m]) > 0.1
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+      annotations:
+        summary: High Rollback Rate
+        description: "The rollback rate is above 10% of total transactions. Investigate potential issues."
+
+    - alert: HighTableCount
+      expr: postgresql_table_count > 1000
+      for: 10m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+      annotations:
+        summary: High Table Count
+        description: "The table count is unusually high at {{ $value }}. Ensure this is expected."
+
+    - alert: HighDatabaseCount
+      expr: postgresql_database_count > 100
+      for: 10m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+      annotations:
+        summary: High Database Count
+        description: "The number of databases is unusually high at {{ $value }}. Ensure this is expected."
+
