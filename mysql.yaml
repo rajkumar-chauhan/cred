@@ -62,9 +62,6 @@ spec:
         summary: "High Disk Latency"
         description: "Disk latency is greater than 500ms."
 
-- groups:
-  - name: mysql-performance-alerts
-    rules:
     - alert: HighQueryExecutionTime
       expr: rate(mysql_query_execution_time_total[5m]) > 0.05
       for: 5m
