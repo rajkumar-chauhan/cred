@@ -166,9 +166,7 @@ spec:
         summary: "Replica Set Not Primary"
         description: "The MongoDB replica set is not in PRIMARY state."
 
-- groups:
-  - name: mongodb-general-monitoring-alerts
-    rules:
+
     - alert: NetworkTrafficHigh
       expr: rate(mongodb_network_bytes_in_total[5m]) > <network_threshold_in> or rate(mongodb_network_bytes_out_total[5m]) > <network_threshold_out>
       for: 5m
