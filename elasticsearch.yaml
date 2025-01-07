@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
 spec: 
 - groups:
-  - name: postgres-usage-alerts
+  - name: elasticsearch-alerts
     rules:
       - alert: ElasticsearchHighCPUUsage
         expr: elasticsearch_os_cpu_usage_percent > 75
