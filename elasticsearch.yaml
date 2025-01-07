@@ -1,0 +1,108 @@
+apiVersion:  operator.victoriametrics.com/v1beta1
+kind:  VMRule
+metadata:
+  name: elasticsearch_alerts
+  namespace: monitoring
+spec: 
+- groups:
+  - name: postgres-usage-alerts
+    rules:
+      - alert: ElasticsearchHighCPUUsage
+        expr: elasticsearch_os_cpu_usage_percent > 75
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on Elasticsearch node"
+          description: |
+            CPU usage on the Elasticsearch node has been above 75% for the last 5 minutes.
+            Check for heavy query loads or resource contention.
+
+      - alert: ElasticsearchLowDiskSpace
+        expr: elasticsearch_node_fs_disk_free_bytes / elasticsearch_node_fs_disk_total_bytes < 0.15
+        for: 10m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops      
+        annotations:
+          summary: "Low disk space on Elasticsearch node"
+          description: |
+            Free disk space is below 15% of the total disk capacity for more than 10 minutes.
+            Immediate action is required to avoid service disruption.
+      - alert: ElasticsearchHighMemoryUsage
+        expr: elasticsearch_os_memory_bytes > 0.85 * elasticsearch_node_fs_disk_total_bytes
+        for: 5m
+        labels:
+          severity: warning
+          channel: slack
+          team: devops    
+        annotations:
+          summary: "High memory usage on Elasticsearch node"
+          description: |
+            Memory usage has exceeded 85% of the available memory for the past 5 minutes.
+            Consider increasing memory or analyzing memory-intensive operations.
+      - alert: ElasticsearchCacheEvictions
+        expr: rate(elasticsearch_node_cache_evictions_total[5m]) > 50
+        for: 5m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops    
+        annotations:
+          summary: "Frequent cache evictions detected in Elasticsearch"
+          description: |
+            Cache evictions are occurring at a rate greater than 50 per second.
+            This may indicate insufficient memory allocation for caching.
+      - alert: ElasticsearchThreadPoolQueueHigh
+        expr: avg_over_time(elasticsearch_node_thread_pool_tasks_queued[10m]) > 150
+        for: 10m
+        labels:
+          severity: warning
+          channel: slack
+          team: devops    
+        annotations:
+          summary: "High thread pool queue size in Elasticsearch"
+          description: |
+            Thread pool queue size has exceeded 150 tasks on average over the past 10 minutes.
+            This could lead to delays in processing tasks.
+      - alert: ElasticsearchSlowIndexOperations
+        expr: rate(elasticsearch_index_operations_time_milliseconds_total[5m]) > 1000
+        for: 5m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops    
+        annotations:
+          summary: "Slow index operations in Elasticsearch"
+          description: |
+            Index operation times are exceeding 1000ms consistently for 5 minutes.
+            Investigate indexing workload or optimize queries.
+
+     
+      - alert: ElasticsearchCircuitBreakerTripped
+        expr: rate(elasticsearch_breaker_tripped_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops    
+        annotations:
+          summary: "Elasticsearch circuit breaker tripped"
+          description: |
+            Circuit breaker has tripped, indicating resource or memory exhaustion.
+            Immediate investigation is required to prevent data loss or downtime.
+
+     
+      - alert: ElasticsearchHighQueryLatency
+        expr: rate(elasticsearch_index_operations_time_milliseconds_total[5m]) > 500
+        for: 10m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops    
+        annotations:
+          summary: "High query latency detected in Elasticsearch"
+          description: |
+            Query latencies are consistently above 500ms over the past 10 minutes.
+            This could indicate performance bottlenecks or heavy workload.
