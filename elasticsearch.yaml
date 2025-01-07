@@ -12,6 +12,8 @@ spec:
         for: 5m
         labels:
           severity: warning
+          channel: slack
+          team: devops
         annotations:
           summary: "High CPU usage on Elasticsearch node"
           description: |
