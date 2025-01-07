@@ -1,0 +1,106 @@
+apiVersion:  operator.victoriametrics.com/v1beta1
+kind:  VMRule
+metadata:
+  name: redis_alerts
+  namespace: monitoring
+spec: 
+- groups:
+  - name: redis-alerts
+    rules:
+      - alert: RedisHighKeyspaceMissRatio
+        expr: (rate(redis_keyspace_misses_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m]))) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High keyspace miss ratio in Redis"
+          description: |
+            More than 20% of Redis keyspace lookups are misses. 
+            Optimize key access patterns or increase memory to accommodate the dataset.
+      - alert: RedisDown
+        expr: redis_uptime_seconds_total == 0
+        for: 5m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops
+        annotations:
+          summary: "Redis down (instance {{ $labels.instance }})"
+          description: "Redis instance is down\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: RedisReplicationBroken
+        expr: delta(redis_slaves_connected[1m]) < 0
+        for: 5m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops
+        annotations:
+          summary: "Redis replication broken (instance {{ $labels.instance }})"
+          description: "Redis instance lost a slave\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: RedisClusterFlapping
+        expr: changes(redis_connected_slaves[5m]) > 2
+        for: 5m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops
+        annotations:
+          summary: "Redis cluster flapping (instance {{ $labels.instance }})"
+          description: "Changes have been detected in Redis replica connection. This can occur when replica nodes lose connection to the master and reconnect (a.k.a flapping).\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: RedisOutOfMemory
+        expr: redis_memory_used_bytes / redis_total_system_memory_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+          channel: slack
+          team: devops
+        annotations:
+          summary: "Redis out of memory (instance {{ $labels.instance }})"
+          description: "Redis is running out of memory (> 90%)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: RedisNotEnoughConnections
+        expr: redis_connected_clients < 5
+        for: 5m
+        labels:
+          severity: warning
+          channel: slack
+          team: devops
+        annotations:
+          summary: "Redis not enough connections (instance {{ $labels.instance }})"
+          description: "Redis instance should have more connections (> 5)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+     - alert: RedisTooManyConnections
+        expr: redis_connected_clients > 100
+        for: 5m
+        labels:
+          severity: warning
+          channel: slack
+          team: devops
+        annotations:
+          summary: "Redis too many connections (instance {{ $labels.instance }})"
+          description: "Redis instance has too many connections\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: RedisHighKeyEvictionRate
+        expr: rate(redis_keys_evicted_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          channel: slack
+          team: devops
+        annotations:
+          summary: "High key eviction rate in Redis"
+          description: |
+            Redis is evicting keys at a rate of more than 100 keys per second.
+            This indicates insufficient memory to hold all keys. Investigate memory
+            allocation or eviction policies.
+      - alert: RedisHighConnectedClients
+        expr: redis_clients_connected > 1000
+        for: 5m
+        labels:
+          severity: critical
+          channel: slack
+          team: devops
+        annotations:
+          summary: "High number of connected clients in Redis"
+          description: |
+            Redis has more than 1000 connected clients, which may lead to resource exhaustion 
+            or performance degradation. Check the client connection settings and usage patterns.
+            Current connected clients: {{ redis_clients_connected }}.
+          
