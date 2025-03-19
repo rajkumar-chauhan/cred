@@ -28,11 +28,13 @@ spec:
         channel: slack
         team: devops
 
-    - alert: ApacheSlowResponse
+    - alert: ApacheP95SlowResponse
       annotations:
-        description: Apache request time is high ({{ printf "%.2f" $value }}ms) for the last 5 minutes.
-        summary: Apache response time is above normal.
-      expr: rate(apache_request_time_milliseconds_total[5m]) > 500
+        description: 95th percentile Apache response time is high ({{ printf "%.2f" $value }}ms) for the last 5 minutes.
+        summary: Apache response time is degrading.
+      expr: |
+        histogram_quantile(0.95, rate(apache_request_time_milliseconds_total[5m])) > 500
+      for: 2m
       labels:
         severity: warning
         channel: slack
