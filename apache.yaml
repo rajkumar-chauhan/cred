@@ -1,0 +1,119 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: apache-metrics-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: apache-metrics
+    rules:
+    
+    - alert: ApacheHighCPULoad
+      annotations:
+        description: Apache CPU load is high ({{ printf "%.2f" $value }}%) for the last 5 minutes.
+        summary: Apache CPU load is critically high.
+      expr: avg_over_time(apache_cpu_load_percent[5m]) > 80
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: ApacheHighConnections
+      annotations:
+        description: Apache has too many active connections ({{ $value }}) in the last 5 minutes.
+        summary: High number of Apache active connections.
+      expr: avg_over_time(apache_current_connections[5m]) > 500
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheSlowResponse
+      annotations:
+        description: Apache request time is high ({{ printf "%.2f" $value }}ms) for the last 5 minutes.
+        summary: Apache response time is above normal.
+      expr: rate(apache_request_time_milliseconds_total[5m]) > 500
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheLowWorkers
+      annotations:
+        description: Apache worker processes are low ({{ $value }} active workers).
+        summary: Apache may be overloaded due to low worker availability.
+      expr: sum(apache_workers) < 5
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: ApacheHighRequestRate
+      annotations:
+        description: Apache is processing too many requests per second ({{ printf "%.2f" $value }} requests/sec).
+        summary: Apache experiencing high request load.
+      expr: rate(apache_requests_total[1m]) > 1000
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheHighTraffic
+      annotations:
+        description: Apache is handling high traffic ({{ printf "%.2f" $value }} bytes/sec).
+        summary: Apache experiencing high bandwidth usage.
+      expr: rate(apache_traffic_bytes_total[1m]) > 100000000  # 100MB/sec
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheRestarted
+      annotations:
+        description: Apache has restarted in the last 5 minutes.
+        summary: Apache uptime counter reset detected.
+      expr: changes(apache_uptime_seconds_total[5m]) > 0
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheHighLoad1Min
+      annotations:
+        description: Apache 1-minute load average is high ({{ printf "%.2f" $value }}%).
+        summary: Apache experiencing high load.
+      expr: avg_over_time(apache_load_1_percent[5m]) > 75
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheHighLoad5Min
+      annotations:
+        description: Apache 5-minute load average is high ({{ printf "%.2f" $value }}%).
+        summary: Apache experiencing high load.
+      expr: avg_over_time(apache_load_5_percent[5m]) > 70
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheHighLoad15Min
+      annotations:
+        description: Apache 15-minute load average is high ({{ printf "%.2f" $value }}%).
+        summary: Apache experiencing sustained high load.
+      expr: avg_over_time(apache_load_15_percent[5m]) > 65
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: ApacheScoreboardSaturation
+      annotations:
+        description: Apache scoreboard saturation detected. Too many busy workers.
+        summary: Apache may be overloaded due to worker saturation.
+      expr: sum(apache_scoreboard) > 90
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
