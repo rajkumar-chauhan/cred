@@ -1,0 +1,119 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: haproxy-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: haproxy-monitoring
+    rules:
+    
+    - alert: HAProxyHighTraffic
+      annotations:
+        description: HAProxy is handling high traffic ({{ printf "%.2f" $value }} MB/sec).
+        summary: HAProxy experiencing heavy bandwidth usage.
+      expr: (sum(rate(haproxy_bytes_input_by_total[5m])) + sum(rate(haproxy_bytes_output_by_total[5m]))) / (1024 * 1024) > 100
+      for: 2m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: HAProxyHighConnectionErrors
+      annotations:
+        description: HAProxy is experiencing high connection errors ({{ printf "%.2f" $value }}%).
+        summary: HAProxy connection errors are above normal levels.
+      expr: (sum(rate(haproxy_connections_errors_total[5m])) / sum(rate(haproxy_connections_total[5m]))) * 100 > 5
+      for: 2m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: HAProxyHighRetries
+      annotations:
+        description: HAProxy is retrying too many connections ({{ printf "%.2f" $value }}%).
+        summary: Backend may be unstable, HAProxy retries increasing.
+      expr: (sum(rate(haproxy_connections_retries_total[5m])) / sum(rate(haproxy_connections_total[5m]))) * 100 > 3
+      for: 2m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: HAProxyHighRequestDenials
+      annotations:
+        description: HAProxy is denying too many requests ({{ printf "%.2f" $value }}%).
+        summary: HAProxy request denials are unusually high.
+      expr: (sum(rate(haproxy_requests_denied_total[5m])) / sum(rate(haproxy_requests_total[5m]))) * 100 > 2
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: HAProxyHighRequestErrors
+      annotations:
+        description: HAProxy request errors are at {{ printf "%.2f" $value }}% in the last 5 minutes.
+        summary: High request errors detected.
+      expr: (sum(rate(haproxy_requests_errors_total[5m])) / sum(rate(haproxy_requests_total[5m]))) * 100 > 3
+      for: 5m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: HAProxyRequestQueueHigh
+      annotations:
+        description: HAProxy request queue is too high (avg {{ printf "%.2f" $value }} requests).
+        summary: Requests are getting queued for too long.
+      expr: avg_over_time(haproxy_requests_queued_total[5m]) > 50
+      for: 5m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: HAProxyHighResponseErrors
+      annotations:
+        description: HAProxy response errors are too high ({{ printf "%.2f" $value }}%).
+        summary: Backend servers might be failing.
+      expr: (sum(rate(haproxy_responses_errors_total[5m])) / sum(rate(haproxy_requests_total[5m]))) * 100 > 5
+      for: 3m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
+
+    - alert: HAProxyBackendFailing
+      annotations:
+        description: HAProxy backend health checks are failing ({{ printf "%.2f" $value }} failures).
+        summary: Some backend servers are unhealthy.
+      expr: sum(rate(haproxy_failed_checks_total[5m])) > 10
+      for: 2m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: HAProxyBackendDown
+      annotations:
+        description: HAProxy backend has been down for {{ printf "%.2f" $value }} seconds.
+        summary: A backend server is down for a long time.
+      expr: max(haproxy_downtime_seconds_total) > 60
+      for: 2m
+      labels:
+        severity: critical
+        channel: slack
+        team: devops
+
+    - alert: HAProxySessionSpike
+      annotations:
+        description: HAProxy is handling a high number of sessions ({{ printf "%.2f" $value }} new sessions/sec).
+        summary: Possible traffic spike or attack.
+      expr: sum(rate(haproxy_sessions_rate[5m])) > 500
+      for: 3m
+      labels:
+        severity: warning
+        channel: slack
+        team: devops
