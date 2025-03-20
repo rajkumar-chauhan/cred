@@ -100,7 +100,7 @@ spec:
       annotations:
         description: HAProxy backend has been down for {{ printf "%.2f" $value }} seconds.
         summary: A backend server is down for a long time.
-      expr: max(haproxy_downtime_seconds_total) > 60
+      expr: increase(haproxy_downtime_seconds_total[5m]) > 60
       for: 2m
       labels:
         severity: critical
