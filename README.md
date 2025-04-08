@@ -7,10 +7,16 @@ The values.yaml file for the Loki Helm chart allows you to customize various asp
 The general structure for specifying an image is as follows:
 
 <component_name>:
+```
   image:
-    registry: <registry_hostname>  # Optional: Docker registry
-    repository: <image_name>       # Required: Name of the Docker image
-    tag: <image_tag>               # Required: Specific version or tag of the image
+  
+    registry: <registry_hostname>  #  Docker registry
+    
+    repository: <image_name>       #  Name of the Docker image
+    
+    tag: <image_tag>               #  Specific version or tag of the image
+```
+
 Where <component_name> refers to the different Loki services, like:
 
 gateway , loki , compactor , queryFrontend , distributor , ingester , querier , memcachedChunks , memcachedFrontend , memcachedIndexQueries , indexGateway
