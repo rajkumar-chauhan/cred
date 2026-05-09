@@ -1,0 +1,33 @@
+tempo:
+  enabled: true
+  fullnameOverride: tempo
+  tempo:
+    retention: 8h
+    resources:
+      requests:
+        cpu: "0.3"
+        memory: "100Mi"
+      limits:
+        cpu: "0.4"
+        memory: "150Mi"
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 10001
+      runAsGroup: 10001
+      allowPrivilegeEscalation: false
+    metricsGenerator:
+      enabled: true
+      remoteWriteUrl: "http://vminsert-vm.monitoring.svc:8480/insert/0/prometheus/api/v1/write"
+  persistence:
+    enabled: true
+    size: 1Gi
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+
+
+  

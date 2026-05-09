@@ -1,0 +1,104 @@
+kube-events:
+  cleanupJob:
+    enabled: false
+  crds:
+    enabled: false
+  opentelemetry-operator:
+    enabled: false
+  defaultCRConfig:
+    kubernetesEvents:
+      enabled: true
+  collectors:
+    daemon:
+      enabled: false
+    kube-event:
+      mode: deployment
+      suffix: "otel"
+      enabled: true
+      replicas: 1
+      # image:
+      #   repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib 
+      #   tag: "0.140.1"
+      resources:
+        limits:
+          cpu: 100m
+          memory: 250Mi
+        requests:
+          cpu: 50m
+          memory: 100Mi
+      config: 
+        extensions:
+          basicauth/loki:
+            client_auth:
+              username: infra-eks-log
+              password: infra-eks-log
+        receivers:
+          k8s_events:
+            auth_type: serviceAccount
+          k8sobjects:
+            auth_type: serviceAccount
+            objects:
+              - group: events.k8s.io
+                mode: watch
+                name: events
+          prometheus:
+            config:
+              scrape_configs:
+                - job_name: otelcol
+                  scrape_interval: 30s
+                  static_configs:
+                    - targets: [127.0.0.1:8889]
+
+        processors:
+          batch:
+            send_batch_max_size: 128
+            send_batch_size: 64
+            timeout: 1s
+          resource:
+            attributes:
+              - action: insert
+                key: service.name
+                value: kube-events
+              - action: insert
+                key: k8s.cluster
+                value: 182466-eks_dev_s1_1a
+              - action: insert
+                key: env
+                value: dev
+
+        exporters:
+          otlphttp/loki:
+            headers:
+              "X-Scope-OrgID": "infra-eks-log" 
+            auth:
+              authenticator: basicauth/loki
+            endpoint: http://logging-loki-gateway.logging.svc.cluster.local:80/otlp
+            tls:
+              insecure_skip_verify: true
+            compression: gzip
+
+          prometheusremotewrite:
+            endpoint: http://vmsingle-vm.monitoring.svc.cluster.local:8429/api/v1/write
+            tls:
+              insecure_skip_verify: true
+
+        service:
+          extensions: [basicauth/loki]
+          pipelines:
+            logs:
+              receivers: [k8s_events, k8sobjects]
+              processors: [batch, resource]
+              exporters: [otlphttp/loki]
+            metrics:
+              receivers: [prometheus]
+              processors: [batch, resource]
+              exporters: [prometheusremotewrite]
+          telemetry:
+            metrics:
+              level: detailed
+              readers:
+                - pull:
+                    exporter:
+                      prometheus:
+                        host: 127.0.0.1
+                        port: 8889

@@ -1,0 +1,37 @@
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: otel-instrumentation
+  namespace: observability
+  labels:
+    helm.sh/chart: collector-0.12.4
+    app.kubernetes.io/version: "0.138.0"
+    app.kubernetes.io/managed-by: Helm
+    release: "otel-collector"    
+spec:
+  exporter:
+    endpoint: http://otel-collector-collector.observability.svc.cluster.local:4317
+  propagators:
+    - tracecontext
+    - baggage
+    - b3
+  sampler:
+    argument: "1"
+    type: parentbased_traceidratio
+  resource:
+    addK8sUIDAttributes: true
+    resourceAttributes: {}
+  python:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://otel-collector-collector.observability.svc.cluster.local:4318
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:0.60b1
+  dotnet:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://otel-collector-collector.observability.svc.cluster.local:4318
+  go:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://otel-collector-collector.observability.svc.cluster.local:4318

@@ -1,0 +1,1207 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {},
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": 61,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 16,
+            "gradientMode": "scheme",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 3,
+            "pointSize": 8,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "timezone": [
+          "browser"
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  toDate(usage_start_ts) AS date,\n  round(sum(cost_blended), 2) AS total_rds_cost,\n  min(usage_start_ts) as min_ts,\n  max(usage_start_ts) as max_ts\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\nGROUP BY date\nORDER BY date\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  toDate(usage_start_ts) AS date,\n  round(sum(cost_blended), 2) AS total_rds_cost,\n  min(usage_start_ts) as min_ts,\n  max(usage_start_ts) as max_ts\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\nGROUP BY date\nORDER BY date",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Daily RDS Cost Trend",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 5,
+      "panels": [],
+      "title": "High-Level Cost View ",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS cost on the basis of account ids",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 9
+      },
+      "id": 9,
+      "options": {
+        "displayLabels": [
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "/^value$/",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n    concat('Account ID -', cast(account_id AS String)) AS metric,\n    round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\nGROUP BY metric\nORDER BY value DESC\n\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n    concat('Account ID -', cast(account_id AS String)) AS metric,\n    round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Account ID",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "Cost Comparison Across Regions",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 9
+      },
+      "id": 2,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  region AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\nGROUP BY region\nORDER BY value DESC\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  region AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\nGROUP BY region\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Region",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS cost on the basis of Availability Zones",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 9
+      },
+      "id": 22,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  availability_zone AS metric,\n  round(sum(cost_blended), 2) AS total_cost\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trimBoth(availability_zone) != ''\nGROUP BY metric\nORDER BY total_cost DESC\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  availability_zone AS metric,\n  round(sum(cost_blended), 2) AS total_cost\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trimBoth(availability_zone) != ''\nGROUP BY metric\nORDER BY total_cost DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Availability Zones",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 18,
+      "panels": [],
+      "title": "Instance Cost Insights",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS cost on the basis of Instance family",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": true,
+          "mappings": [],
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 0,
+        "y": 20
+      },
+      "id": 10,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": false,
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeColDataType": "usage_start_ts",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  trim(instance_family) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND instance_family IS NOT NULL\n  AND trim(instance_family) != ''\nGROUP BY metric\nORDER BY value DESC\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  trim(instance_family) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND instance_family IS NOT NULL\n  AND trim(instance_family) != ''\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Instance Family",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS cost on the basis of Instance Type Family",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#b735f8",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "APS1-EBS:SnapshotUsage": {
+                  "color": "light-blue",
+                  "index": 1,
+                  "text": "APS1-EBS:SnapshotUsage"
+                },
+                "APS3-BoxUsage:t2.micro": {
+                  "color": "#f4abdf",
+                  "index": 2,
+                  "text": "APS3-BoxUsage:t2.micro"
+                },
+                "APS3-BoxUsage:t2.xlarge": {
+                  "color": "purple",
+                  "index": 0,
+                  "text": "APS3-BoxUsage:t2.xlarge"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "value"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 8,
+        "y": 20
+      },
+      "id": 20,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^value$/",
+          "limit": 70,
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": true,
+          "maxHeight": 500,
+          "maxWidth": 380,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeColDataType": "usage_start_ts",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  trim(instance_type_family) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND instance_type_family IS NOT NULL\n  AND trim(instance_type_family) != ''\nGROUP BY metric\nORDER BY value DESC\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  trim(instance_type_family) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND instance_type_family IS NOT NULL\n  AND trim(instance_type_family) != ''\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Instance Type Family",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS cost on the basis of Instance Type",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#b735f8",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "APS1-EBS:SnapshotUsage": {
+                  "color": "light-blue",
+                  "index": 1,
+                  "text": "APS1-EBS:SnapshotUsage"
+                },
+                "APS3-BoxUsage:t2.micro": {
+                  "color": "#f4abdf",
+                  "index": 2,
+                  "text": "APS3-BoxUsage:t2.micro"
+                },
+                "APS3-BoxUsage:t2.xlarge": {
+                  "color": "purple",
+                  "index": 0,
+                  "text": "APS3-BoxUsage:t2.xlarge"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "value"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 16,
+        "y": 20
+      },
+      "id": 19,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^value$/",
+          "limit": 70,
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": true,
+          "maxHeight": 500,
+          "maxWidth": 380,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeColDataType": "usage_start_ts",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  trim(instance_type) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND instance_type IS NOT NULL\n  AND trim(instance_type) != ''\nGROUP BY metric\nORDER BY value DESC\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  trim(instance_type) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND instance_type IS NOT NULL\n  AND trim(instance_type) != ''\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Instance Type",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS cost on the basis of Pricing Model ",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#b735f8",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "APS1-EBS:SnapshotUsage": {
+                  "color": "light-blue",
+                  "index": 1,
+                  "text": "APS1-EBS:SnapshotUsage"
+                },
+                "APS3-BoxUsage:t2.micro": {
+                  "color": "#f4abdf",
+                  "index": 2,
+                  "text": "APS3-BoxUsage:t2.micro"
+                },
+                "APS3-BoxUsage:t2.xlarge": {
+                  "color": "purple",
+                  "index": 0,
+                  "text": "APS3-BoxUsage:t2.xlarge"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "value"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 31
+      },
+      "id": 21,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^value$/",
+          "limit": 70,
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": true,
+          "maxHeight": 500,
+          "maxWidth": 380,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeColDataType": "usage_start_ts",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  trim(pricing_model) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trim(pricing_model) != ''\n  AND pricing_model IS NOT NULL\nGROUP BY metric\nORDER BY value DESC\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  trim(pricing_model) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trim(pricing_model) != ''\n  AND pricing_model IS NOT NULL\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Pricing Model",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS Instance Cost on Basis of Spot pricing model",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "APS1-EBS:SnapshotUsage": {
+                  "color": "light-blue",
+                  "index": 1,
+                  "text": "APS1-EBS:SnapshotUsage"
+                },
+                "APS3-BoxUsage:t2.micro": {
+                  "color": "#f4abdf",
+                  "index": 2,
+                  "text": "APS3-BoxUsage:t2.micro"
+                },
+                "APS3-BoxUsage:t2.xlarge": {
+                  "color": "purple",
+                  "index": 0,
+                  "text": "APS3-BoxUsage:t2.xlarge"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "value"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 31
+      },
+      "id": 23,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^value$/",
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": true,
+          "maxHeight": 500,
+          "maxWidth": 380,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeColDataType": "usage_start_ts",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  trimBoth(instance_type) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trimBoth(pricing_model) = 'Spot'\n  AND trimBoth(instance_type) != ''\nGROUP BY metric\nORDER BY value DESC\n\n\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  trimBoth(instance_type) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trimBoth(pricing_model) = 'Spot'\n  AND trimBoth(instance_type) != ''\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Instance Cost on Basis of Spot ",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "vertamedia-clickhouse-datasource",
+        "uid": "${ClickHouse}"
+      },
+      "description": "RDS Instance Cost on Basis of OnDemand pricing model",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#b735f8",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 31
+      },
+      "id": 24,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^value$/",
+          "limit": 70,
+          "values": true
+        },
+        "tooltip": {
+          "hideZeros": true,
+          "maxHeight": 500,
+          "maxWidth": 380,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "adHocFilters": [],
+          "adHocValuesQuery": "",
+          "add_metadata": true,
+          "contextWindowSize": "10",
+          "database": "cost",
+          "datasource": {
+            "type": "vertamedia-clickhouse-datasource",
+            "uid": "${ClickHouse}"
+          },
+          "dateTimeColDataType": "usage_start_ts",
+          "dateTimeType": "DATETIME",
+          "editorMode": "sql",
+          "extrapolate": true,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "interval": "",
+          "intervalFactor": 1,
+          "query": "SELECT\n  trimBoth(instance_type) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trimBoth(pricing_model) = 'OnDemand'\n  AND trimBoth(instance_type) != ''\nGROUP BY metric\nORDER BY value DESC\n\n\n\n\n",
+          "rawQuery": "/* grafana dashboard=AWS RDS Cost Analytics, user=1 */\nSELECT\n  trimBoth(instance_type) AS metric,\n  round(sum(cost_blended), 2) AS value\nFROM cost.service_costs\nWHERE product_code = 'AmazonRDS'\n  AND trimBoth(pricing_model) = 'OnDemand'\n  AND trimBoth(instance_type) != ''\nGROUP BY metric\nORDER BY value DESC",
+          "refId": "A",
+          "round": "0s",
+          "skip_comments": true,
+          "table": "service_costs",
+          "useWindowFuncForMacros": true
+        }
+      ],
+      "title": "Instance Cost on Basis of On Demand ",
+      "transparent": true,
+      "type": "piechart"
+    }
+  ],
+  "preload": true,
+  "schemaVersion": 41,
+  "tags": [
+    "aws ",
+    "cost",
+    "analytics"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": [
+            "ClickHouse"
+          ],
+          "value": [
+            "ceq0hwork47pcd"
+          ]
+        },
+        "hide": 2,
+        "multi": true,
+        "name": "ClickHouse",
+        "options": [],
+        "query": "vertamedia-clickhouse-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "uniteconpro/AWS_RDS_Cost_Analytics",
+  "uid": "45e8963c-1cef-4504-9060-3ab5a37f1fec12",
+  "version": 6
+}

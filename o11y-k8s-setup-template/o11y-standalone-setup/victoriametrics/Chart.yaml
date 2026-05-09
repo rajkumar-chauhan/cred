@@ -1,0 +1,15 @@
+apiVersion: v2
+name: vm-standalone
+description: A Helm chart for victoriametrics standalone
+type: application
+version: 0.0.1
+appVersion: v0.0.1
+
+dependencies:
+  - name: victoria-metrics-k8s-stack
+    version: 0.44.0
+    repository: https://victoriametrics.github.io/helm-charts/
+    alias: vm
+    tags:
+      - monitoring
+    condition: vm.enabled

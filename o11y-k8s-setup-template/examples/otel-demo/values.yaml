@@ -1,0 +1,188 @@
+otel-demo:
+  default:
+    envOverrides:
+      - name: OTEL_COLLECTOR_NAME
+        value: otel-collector.observability.svc.cluster.local
+      - name: OTEL_RESOURCE_ATTRIBUTES_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: OTEL_LOGS_EXPORTER
+        value: none
+      - name: OTEL_RESOURCE_ATTRIBUTES
+        value: 'k8s.pod.name=$(OTEL_RESOURCE_ATTRIBUTES_POD_NAME),service.name=$(OTEL_SERVICE_NAME),service.namespace={{ .Release.Namespace }},service.version={{ .Chart.AppVersion }}'
+
+  #-- Disable monitoring components as we have o11y cluster
+  grafana:
+    enabled: false
+  prometheus:
+    enabled: false
+  opentelemetry-collector:
+    enabled: false
+  jaeger:
+    enabled: false
+
+
+  #-- Enable otel-demo components
+  components:
+    postgresql:
+      enabled: false
+  
+    accounting:
+      env:
+        - name: KAFKA_ADDR
+          value: kafka:9092
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://$(OTEL_COLLECTOR_NAME):4318
+        - name: DB_CONNECTION_STRING
+          value: Host=otel-demo-postgres-hl;Username=otelu;Password=otelp;Database=otel
+        - name: OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED
+          value: "false"    
+      resources: 
+        limits:
+          memory: 120Mi
+        requests:
+          memory: 100Mi
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: ad
+                topologyKey: kubernetes.io/hostname 
+
+    ad:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: accounting
+                topologyKey: kubernetes.io/hostname
+
+    cart:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: checkout
+                topologyKey: kubernetes.io/hostname
+
+    checkout:
+      resources: 
+        limits:
+          memory: 120Mi
+        requests:
+          memory: 100Mi
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: cart
+                topologyKey: kubernetes.io/hostname
+
+    currency:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: email
+                topologyKey: kubernetes.io/hostname
+
+    email:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: currency
+                topologyKey: kubernetes.io/hostname
+
+    frontend:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: frontend-proxy
+                topologyKey: kubernetes.io/hostname
+
+    frontend-proxy:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: frontend
+                topologyKey: kubernetes.io/hostname
+
+    payment:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: product-catalog
+                topologyKey: kubernetes.io/hostname
+
+    product-catalog:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: payment
+                topologyKey: kubernetes.io/hostname
+
+    quote:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: recommendation
+                topologyKey: kubernetes.io/hostname
+
+    recommendation:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: quote
+                topologyKey: kubernetes.io/hostname
+
+    shipping:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: flagd
+                topologyKey: kubernetes.io/hostname
+
+    flagd:
+      schedulingRules: 
+        affinity: 
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: shipping
+                topologyKey: kubernetes.io/hostname

@@ -1,0 +1,2272 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "bev7g4dwv9b7kb12"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "panels": [],
+        "title": "Clickhouse overview",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ClickHouse Uptime"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "s"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "orange"
+                      },
+                      {
+                        "color": "green",
+                        "value": 172800
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 311
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Node Memory Usage"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "custom.width",
+                  "value": 185
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Node CPU Usage"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 190
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "OS Uptime"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "s"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red"
+                      },
+                      {
+                        "color": "green",
+                        "value": 3964800
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 345
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Instance"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 115
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Num of Tables"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 202
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Num of DBs"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 239
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Readonly Replicas"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 217
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Consumers"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 202
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ClickHouse Version"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 87
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Build Revision"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 223
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 1,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Consumers"
+            }
+          ]
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseMetrics_VersionInteger{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseMetrics_Revision{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseAsyncMetrics_NumberOfTables{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseAsyncMetrics_Uptime{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseAsyncMetrics_NumberOfDatabases{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseMetrics_ReadonlyReplica{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseMetrics_KafkaConsumers{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "G"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(ClickHouseAsyncMetrics_OSMemoryTotal{job=\"coe-clickhouse\"}\n-\nClickHouseAsyncMetrics_OSMemoryFreePlusCached{job=\"coe-clickhouse\"})\n/ ClickHouseAsyncMetrics_OSMemoryTotal{job=\"coe-clickhouse\"} * 100",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "H"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(1 - ClickHouseAsyncMetrics_OSIdleTimeNormalized{job=\"coe-clickhouse\"}) * 100 ",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "I"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseAsyncMetrics_OSUptime{job=\"coe-clickhouse\"}",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "J"
+          }
+        ],
+        "title": "Nodes Information",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "instance"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time 1": true,
+                "Time 10": true,
+                "Time 2": true,
+                "Time 3": true,
+                "Time 4": true,
+                "Time 5": true,
+                "Time 6": true,
+                "Time 7": true,
+                "Time 8": true,
+                "Time 9": true,
+                "Value #A 2": true,
+                "Value #B 2": true,
+                "Value #C 2": true,
+                "Value #D 2": true,
+                "Value #E 2": true,
+                "__name__ 1": true,
+                "__name__ 10": true,
+                "__name__ 2": true,
+                "__name__ 3": true,
+                "__name__ 4": true,
+                "__name__ 5": true,
+                "__name__ 6": true,
+                "__name__ 7": true,
+                "__name__ 8": true,
+                "__name__ 9": true,
+                "bu 1": true,
+                "bu 10": true,
+                "bu 2": true,
+                "bu 3": true,
+                "bu 4": true,
+                "bu 5": true,
+                "bu 6": true,
+                "bu 7": true,
+                "bu 8": true,
+                "bu 9": true,
+                "cluster 1": true,
+                "cluster 10": true,
+                "cluster 2": true,
+                "cluster 3": true,
+                "cluster 4": true,
+                "cluster 5": true,
+                "cluster 6": true,
+                "cluster 7": true,
+                "cluster 8": true,
+                "cluster 9": true,
+                "env 1": true,
+                "env 10": true,
+                "env 2": true,
+                "env 3": true,
+                "env 4": true,
+                "env 5": true,
+                "env 6": true,
+                "env 7": true,
+                "env 8": true,
+                "env 9": true,
+                "job 1": true,
+                "job 10": true,
+                "job 2": true,
+                "job 3": true,
+                "job 4": true,
+                "job 5": true,
+                "job 6": true,
+                "job 7": true,
+                "job 8": true,
+                "job 9": true,
+                "k8s_cluster 1": true,
+                "k8s_cluster 10": true,
+                "k8s_cluster 2": true,
+                "k8s_cluster 3": true,
+                "k8s_cluster 4": true,
+                "k8s_cluster 5": true,
+                "k8s_cluster 6": true,
+                "k8s_cluster 7": true,
+                "k8s_cluster 8": true,
+                "k8s_cluster 9": true,
+                "l6ecluster 1": true,
+                "l6ecluster 10": true,
+                "l6ecluster 2": true,
+                "l6ecluster 3": true,
+                "l6ecluster 4": true,
+                "l6ecluster 5": true,
+                "l6ecluster 6": true,
+                "l6ecluster 7": true,
+                "l6ecluster 8": true,
+                "l6ecluster 9": true,
+                "l6elake 1": true,
+                "l6elake 10": true,
+                "l6elake 2": true,
+                "l6elake 3": true,
+                "l6elake 4": true,
+                "l6elake 5": true,
+                "l6elake 6": true,
+                "l6elake 7": true,
+                "l6elake 8": true,
+                "l6elake 9": true,
+                "l6etenant 1": true,
+                "l6etenant 10": true,
+                "l6etenant 2": true,
+                "l6etenant 3": true,
+                "l6etenant 4": true,
+                "l6etenant 5": true,
+                "l6etenant 6": true,
+                "l6etenant 7": true,
+                "l6etenant 8": true,
+                "l6etenant 9": true,
+                "org 1": true,
+                "org 10": true,
+                "org 2": true,
+                "org 3": true,
+                "org 4": true,
+                "org 5": true,
+                "org 6": true,
+                "org 7": true,
+                "org 8": true,
+                "org 9": true,
+                "prometheus 1": true,
+                "prometheus 10": true,
+                "prometheus 2": true,
+                "prometheus 3": true,
+                "prometheus 4": true,
+                "prometheus 5": true,
+                "prometheus 6": true,
+                "prometheus 7": true,
+                "prometheus 8": true,
+                "prometheus 9": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Time 1": 1,
+                "Time 10": 27,
+                "Time 2": 4,
+                "Time 3": 7,
+                "Time 4": 10,
+                "Time 5": 13,
+                "Time 6": 16,
+                "Time 7": 19,
+                "Time 8": 22,
+                "Time 9": 25,
+                "Value #A": 47,
+                "Value #B": 48,
+                "Value #C": 33,
+                "Value #D": 35,
+                "Value #E": 32,
+                "Value #F": 39,
+                "Value #G": 41,
+                "Value #H": 43,
+                "Value #I": 45,
+                "Value #J": 36,
+                "__name__ 1": 2,
+                "__name__ 2": 5,
+                "__name__ 3": 8,
+                "__name__ 4": 11,
+                "__name__ 5": 14,
+                "__name__ 6": 17,
+                "__name__ 7": 20,
+                "__name__ 8": 23,
+                "cluster 1": 29,
+                "cluster 10": 46,
+                "cluster 2": 30,
+                "cluster 3": 31,
+                "cluster 4": 34,
+                "cluster 5": 37,
+                "cluster 6": 38,
+                "cluster 7": 40,
+                "cluster 8": 42,
+                "cluster 9": 44,
+                "instance": 0,
+                "job 1": 3,
+                "job 10": 28,
+                "job 2": 6,
+                "job 3": 9,
+                "job 4": 12,
+                "job 5": 15,
+                "job 6": 18,
+                "job 7": 21,
+                "job 8": 24,
+                "job 9": 26
+              },
+              "renameByName": {
+                "Value #A": "ClickHouse Version",
+                "Value #A 1": "version",
+                "Value #B": "Build Revision",
+                "Value #B 1": "revision",
+                "Value #C": "Num of Tables",
+                "Value #C 1": "tables",
+                "Value #D": "ClickHouse Uptime",
+                "Value #D 1": "uptime",
+                "Value #E": "Num of DBs",
+                "Value #E 1": "databases",
+                "Value #F": "Readonly Replicas",
+                "Value #G": "Consumers",
+                "Value #H": "Node Memory Usage",
+                "Value #I": "Node CPU Usage",
+                "Value #J": "OS Uptime",
+                "cluster 1": "Cluster",
+                "cluster 2": "",
+                "cluster 6": "",
+                "instance": "Instance"
+              }
+            }
+          }
+        ],
+        "transparent": true,
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Available"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 136
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 133
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 126
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Usage"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green"
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 70
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 85
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "custom.width",
+                  "value": 493
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Unreserved"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 219
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Instance"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": []
+                },
+                {
+                  "id": "custom.width",
+                  "value": 320
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Disk"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 106
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "isk"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 137
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 15,
+          "x": 0,
+          "y": 5
+        },
+        "id": 3,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "enablePagination": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 0,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Usage"
+            }
+          ]
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "  label_replace(\n    {__name__=~\"ClickHouseAsyncMetrics_DiskAvailable_.*\", job=\"coe-clickhouse\"},\n    \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskAvailable_(.*)\"\n  )",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{disk}}",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "  label_replace(\n    {__name__=~\"ClickHouseAsyncMetrics_DiskUsed_.*\", job=\"coe-clickhouse\"},\n    \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskUsed_(.*)\"\n  )",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{disk}}",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "  label_replace(\n    {__name__=~\"ClickHouseAsyncMetrics_DiskTotal_.*\", job=\"coe-clickhouse\"},\n    \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskTotal_(.*)\"\n  )",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "  label_replace(\n    {__name__=~\"ClickHouseAsyncMetrics_DiskUnreserved_.*\", job=\"coe-clickhouse\"},\n    \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskUnreserved_(.*)\"\n  )",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(\n  label_replace(\n    {__name__=~\"ClickHouseAsyncMetrics_DiskTotal_.*\", job=\"coe-clickhouse\"},\n    \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskTotal_(.*)\"\n  )\n  -\n  label_replace(\n    {__name__=~\"ClickHouseAsyncMetrics_DiskAvailable_.*\", job=\"coe-clickhouse\"},\n    \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskAvailable_(.*)\"\n  )\n)\n/\nlabel_replace(\n  {__name__=~\"ClickHouseAsyncMetrics_DiskTotal_.*\", job=\"coe-clickhouse\"},\n  \"disk\", \"$1\", \"__name__\", \"ClickHouseAsyncMetrics_DiskTotal_(.*)\"\n)\n* 100\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Disk Space Usage",
+        "transformations": [
+          {
+            "id": "concatenate",
+            "options": {
+              "frameNameLabel": "frame",
+              "frameNameMode": "field"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value #C": false,
+                "Value #E": true,
+                "__name__ 1": true,
+                "__name__ 2": true,
+                "__name__ 3": true,
+                "__name__ 4": true,
+                "bu 1": true,
+                "bu 2": true,
+                "bu 3": true,
+                "bu 4": true,
+                "bu 5": true,
+                "cluster 1": true,
+                "cluster 2": true,
+                "cluster 3": true,
+                "cluster 4": true,
+                "cluster 5": true,
+                "disk 2": true,
+                "disk 3": true,
+                "disk 4": true,
+                "disk 5": true,
+                "env 1": true,
+                "env 2": true,
+                "env 3": true,
+                "env 4": true,
+                "env 5": true,
+                "instance 2": true,
+                "instance 3": true,
+                "instance 4": true,
+                "instance 5": false,
+                "job 1": true,
+                "job 2": true,
+                "job 3": true,
+                "job 4": true,
+                "job 5": false,
+                "k8s_cluster 1": true,
+                "k8s_cluster 2": true,
+                "k8s_cluster 3": true,
+                "k8s_cluster 4": true,
+                "k8s_cluster 5": true,
+                "l6ecluster 1": true,
+                "l6ecluster 2": true,
+                "l6ecluster 3": true,
+                "l6ecluster 4": true,
+                "l6ecluster 5": true,
+                "l6elake 1": true,
+                "l6elake 2": true,
+                "l6elake 3": true,
+                "l6elake 4": true,
+                "l6elake 5": true,
+                "l6etenant 1": true,
+                "l6etenant 2": true,
+                "l6etenant 3": true,
+                "l6etenant 4": true,
+                "l6etenant 5": true,
+                "org 1": true,
+                "org 2": true,
+                "org 3": true,
+                "org 4": true,
+                "org 5": true,
+                "prometheus 1": true,
+                "prometheus 2": true,
+                "prometheus 3": true,
+                "prometheus 4": true,
+                "prometheus 5": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Time": 2,
+                "Value #A": 23,
+                "Value #B": 6,
+                "Value #C": 13,
+                "Value #D": 7,
+                "__name__ 1": 3,
+                "__name__ 2": 8,
+                "__name__ 3": 14,
+                "cluster 1": 4,
+                "cluster 2": 9,
+                "cluster 3": 15,
+                "cluster 4": 19,
+                "disk 1": 1,
+                "disk 2": 10,
+                "disk 3": 16,
+                "disk 4": 20,
+                "instance 1": 0,
+                "instance 2": 11,
+                "instance 3": 17,
+                "instance 4": 21,
+                "job 1": 5,
+                "job 2": 12,
+                "job 3": 18,
+                "job 4": 22
+              },
+              "renameByName": {
+                "Value #A": "Usage",
+                "Value #B": "Available",
+                "Value #C": "Total",
+                "Value #D": "Used",
+                "Value #E": "Unreserved",
+                "disk 1": "Disk",
+                "disk 3": "",
+                "instance 1": "Instance",
+                "instance 3": "",
+                "job 1": ""
+              }
+            }
+          },
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "field": "Instance"
+                }
+              ]
+            }
+          }
+        ],
+        "transparent": true,
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Total amount of memory (bytes) allocated by the server. This is the internal memory tracking by ClickHouse, instead of OS Level memory.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 9,
+          "x": 15,
+          "y": 5
+        },
+        "id": 4,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseMetrics_MemoryTracking{job=\"coe-clickhouse\"}",
+            "interval": "",
+            "legendFormat": "cli201-22a.cpp5.prod.clickhouse.com",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "ClickHouse Service Memory Usage",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 11
+        },
+        "id": 5,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseAsyncMetrics_OSIdleTimeNormalized{job=\"coe-clickhouse\"} * 100",
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Clickhouse CPU Usage",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Number of reads from a file that were slow. This indicate system overload. Thresholds are controlled by read_backoff_* settings.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "cps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 11
+        },
+        "id": 6,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max_over_time( (irate(ClickHouseProfileEvents_SlowRead{job=\"coe-clickhouse\"}[2m]))[$__rate_interval:15s] ) ",
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "rate(ClickHouseProfileEvents_SlowRead{job=\"coe-clickhouse\"}[$__rate_interval]) ",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Slow reads",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Number of times the number of query processing threads was lowered due to slow reads.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "cps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 18
+        },
+        "id": 7,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max_over_time( (irate(ClickHouseProfileEvents_ReadBackoff{job=\"coe-clickhouse\"}[2m]))[$__rate_interval:15s] ) ",
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "rate(ClickHouseProfileEvents_ReadBackoff{job=\"coe-clickhouse\"}[$__rate_interval]) ",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Read backoff",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Total Parts of MergeTreeTables. From the source code, we could see that this only refers to Active Parts",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 19
+        },
+        "id": 8,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseAsyncMetrics_TotalPartsOfMergeTreeTables{job=\"coe-clickhouse\"}",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Total Parts of Merge Tree Tables",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 9,
+        "panels": [],
+        "title": "Queries",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Number of queries to be interpreted and potentially executed. Does not include queries that failed to parse or were rejected due to AST size limits, quota limits or limits on the number of simultaneously running queries. May include internal queries initiated by ClickHouse itself. Does not count subqueries.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 27
+        },
+        "id": 10,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max_over_time( (irate(ClickHouseProfileEvents_Query{job=\"coe-clickhouse\"}[2m]))[$__rate_interval:15s] )",
+            "hide": true,
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "rate(ClickHouseProfileEvents_Query{job=\"coe-clickhouse\"}[$__rate_interval]) ",
+            "hide": true,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "ClickHouseProfileEvents_Query{job=\"coe-clickhouse\"}",
+            "hide": true,
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "increase(ClickHouseProfileEvents_Query{job=\"coe-clickhouse\"}[2m])/120",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Queries Per Second",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Number of failed queries.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 27
+        },
+        "id": 11,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max_over_time( (irate(ClickHouseProfileEvents_FailedQuery{job=\"coe-clickhouse\"}[2m]))[$__rate_interval:15s] ) ",
+            "hide": true,
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "rate(ClickHouseProfileEvents_FailedQuery{job=\"coe-clickhouse\"}[$__rate_interval]) ",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Failed queries per Second",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Number of times when memory limit exceeded for query.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 35
+        },
+        "id": 12,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "rate(ClickHouseProfileEvents_QueryMemoryLimitExceeded{job=\"coe-clickhouse\"}[$__rate_interval]) ",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Queries Exceeded Memory Limit per Second",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Number of rows SELECTed from all tables.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "cps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 35
+        },
+        "id": 13,
+        "maxDataPoints": 200,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "max_over_time( (irate(ClickHouseProfileEvents_SelectedRows{job=\"coe-clickhouse\"}[2m]))[$__rate_interval:15s] ) ",
+            "interval": "",
+            "legendFormat": "peaks - {{instance}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "rate(ClickHouseProfileEvents_SelectedRows{job=\"coe-clickhouse\"}[$__rate_interval]) ",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Selected Rows per Second",
+        "transparent": true,
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 43
+        },
+        "id": 14,
+        "panels": [],
+        "title": "Logs",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "logging"
+        },
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 44
+        },
+        "id": 15,
+        "options": {
+          "dedupStrategy": "none",
+          "enableInfiniteScrolling": false,
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": false,
+          "sortOrder": "Descending",
+          "wrapLogMessage": false
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "logging"
+            },
+            "editorMode": "builder",
+            "expr": "{database=\"clickhouse\"} |= ``",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Clickhouse Logs",
+        "type": "logs"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Clickhouse"
+  }
+}

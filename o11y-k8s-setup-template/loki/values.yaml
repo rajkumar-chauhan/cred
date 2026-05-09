@@ -1,0 +1,348 @@
+logging:
+  global:
+    # dnsService: "coredns"
+    dnsService: "kube-dns"
+  loki:
+    schemaConfig:
+      configs:
+        - from: 2024-04-01
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: loki_index_ 
+            period: 24h
+    commonConfig:
+      replication_factor: 1
+    compactor:
+      compaction_interval: 10m
+      delete_request_store: filesystem
+      retention_delete_delay: 2h
+      retention_enabled: true
+      working_directory: /var/loki/compactor
+    ingester:
+      chunk_encoding: snappy
+    limits_config:
+      retention_period: 3d
+    tracing:
+      enabled: true
+    querier:
+      # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
+      max_concurrent: 4
+    auth_enabled: false
+
+
+  deploymentMode: Distributed
+  gateway:
+    image: 
+      registry: docker.io    
+      repository: nginxinc/nginx-unprivileged
+      tag: 1.27.3-alpine
+    enabled: true
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+    # resources:
+    #   requests:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    #   limits:
+    #     memory: 600Mi
+    #     cpu: 0.5
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+    #-- nginx dns resolver need to update for GKE cluster
+    #-- CoreDNS service name in GKE is kube-dns
+    # nginxConfig:
+    #   resolver: "kube-dns.kube-system.svc.cluster.local."
+
+  chunksCache:
+    enabled: false
+    batchSize: 4
+    parallelism: 5
+    timeout: 5s
+    defaultValidity: 0s
+    replicas: 1
+    port: 11211
+    resources: {}
+      # requests:
+      #   memory: 400Mi
+      #   cpu: 0.2
+      # limits:
+      #   memory: 600Mi
+      #   cpu: 0.4
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  ingester:
+    replicas: 2
+    # maxUnavailable: 1
+    persistence:
+      enabled: true
+      claims:
+        - name: data
+          size: 2Gi
+          accessModes:
+            - ReadWriteOnce
+    zoneAwareReplication:
+      enabled: false
+    # resources:
+      # requests:
+      #   memory: 1Gi
+      #   cpu: 1
+      # limits:
+      #   memory: 1Gi
+      #   cpu: 1
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  querier:
+    replicas: 1
+    maxUnavailable: 1
+    kind: Deployment
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 2
+    # resources:
+    #   requests:
+    #     memory: 1Gi
+    #     cpu: 1
+    #   limits:
+    #     memory: 1Gi
+    #     cpu: 1
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+  
+  queryFrontend:
+    replicas: 1
+    maxUnavailable: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 10
+    # resources:
+    #   requests:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    #   limits:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  queryScheduler:
+    replicas: 1
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  distributor:
+    replicas: 1
+    maxUnavailable: 1
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 10
+    # resources:
+    #   requests:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    #   limits:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  compactor:
+    replicas: 1
+    enabled: true
+    retention_enabled: true
+    persistence:
+      enabled: true
+      claims:
+      - name: data
+        size: 1Gi
+        # storageClass: longhorn
+    # resources:
+    #   requests:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    #   limits:
+    #     memory: 500Mi
+    #     cpu: 0.5
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+  
+  indexGateway:
+    enabled: true
+    replicas: 1
+    maxUnavailable: 1
+    persistence:
+      enabled: true
+      size: 1Gi
+    # resources:
+    #   requests:
+    #     memory: 400Mi
+    #     cpu: 0.3
+    #   limits:
+    #     memory: 600Mi
+    #     cpu: 0.5
+    tolerations:
+      - key: "team"
+        operator: "Equal"
+        value: "o11y"
+        effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    
+  bloomPlanner:
+    replicas: 0
+  bloomBuilder:
+    replicas: 0
+  bloomGateway:
+    replicas: 0
+
+  minio:
+    enabled: true
+    persistence:
+      size: 15Gi
+    service:
+      type: ClusterIP
+      port: "9000"
+      nodePort: 32000
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  ruler:
+    enabled: false
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+
+  singleBinary: 
+    replicas: 0
+
+  # Disable loki Canary
+  lokiCanary:
+    enabled: false
+  test:
+    enabled: false
+
+fluentbit:
+  kind: DaemonSet
+  image:
+    repository: cr.fluentbit.io/fluent/fluent-bit
+    tag: 3.2.10
+    pullPolicy: IfNotPresent
+  serviceAccount:
+    create: true
+  rbac:
+    create: true
+  metricsPort: 2020
+  service:
+    type: ClusterIP
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  tolerations:
+  - effect: NoExecute
+    operator: Exists
+  - effect: NoSchedule
+    operator: Exists
+  config:
+    service: |
+      [SERVICE]
+          Flush        1
+          Daemon       Off
+          Log_Level    info
+          Parsers_File parsers.conf
+          HTTP_Server  On
+          HTTP_Listen  0.0.0.0
+          HTTP_Port    2020
+
+    inputs: |
+      [INPUT]
+          Name             tail
+          Path             /var/log/containers/*.log
+          Parser           docker,cri
+          Tag              kube.*
+          Refresh_Interval 5
+          Rotate_Wait      30
+          Mem_Buf_Limit    5MB
+          Skip_Long_Lines  On
+          DB               /var/log/flb_kube.db
+          Ignore_Older     4h
+          multiline.parser docker,cri
+
+    filters: |
+      [FILTER]
+          Name                kubernetes
+          Match               kube.*
+          K8S-Logging.Parser  On
+          K8S-Logging.Exclude Off
+          Keep_Log            On
+          Merge_Log           On
+
+    outputs: |
+      [OUTPUT]
+          Name              loki
+          Match             *
+          host              logging-loki-gateway.logging.svc.cluster.local
+          port              80
+          drop_single_key   on                                                                     
+          labels            namespace=$kubernetes['namespace_name'],container=$kubernetes['container_name'],service_name=$kubernetes['labels']['app'],name=$kubernetes['labels']['app.kubernetes.io/name'],application_group=$kubernetes['labels']['rems/application_group'],rems_service=$kubernetes['labels']['rems/service'],cluster=ldc-gk
+          remove_keys       kubernetes

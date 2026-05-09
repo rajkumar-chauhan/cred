@@ -1,0 +1,531 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "ceve3fux1c000c"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "service",
+                "url": "https://grafana.k8s.opstree.dev/d/betwcqgqs9zi8f/bu?orgId=1\u0026var-datasource=victoriametrics\u0026var-cluster=\u0026var-namespace=otel-demo\u0026var-application=${__value.text}\u0026var-pods=$__all\u0026var-container=$__all\u0026var-route=$__all\u0026var-search=\u0026var-logging=logging\u0026var-tempo=tempo\u0026${__url_time_range}\n"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Success Rate"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red"
+                      },
+                      {
+                        "color": "red",
+                        "value": 85
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 94
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 100
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Service Name"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Request Rate"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "semi-dark-red"
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 80
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 200
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 13,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "(\r\n  sum by (service_name) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", http_status_code=~\"^2.*|^3.*\"}\r\n  )\r\n  or\r\n  sum by (service_name) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", rpc_grpc_status_code=\"0\"}\r\n  )\r\n)\r\n/\r\n(\r\n  sum by (service_name) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", http_status_code=~\".+\"}\r\n  )\r\n  or\r\n  sum by (service_name) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", rpc_grpc_status_code=~\".+\"}\r\n  )\r\n) * 100\r\n",
+            "format": "table",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n)\r\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "service_name",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #A": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #B": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "service_name": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "Success Rate",
+                "Value #A": "Success Rate",
+                "Value #B": "Request Rate",
+                "service_name": "Service Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-yellow",
+                  "value": 80
+                },
+                {
+                  "color": "dark-red",
+                  "value": 90
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Deployment"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Memory Usage %"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU Usage %"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 14,
+          "w": 24,
+          "x": 0,
+          "y": 13
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "{beta_kubernetes_io_arch=\"amd64\", beta_kubernetes_io_os=\"linux\", cpu=\"total\", env=\"LDC\", image=\"registry.k8s.io/pause:3.10\", instance=\"worker6\", job=\"kubelet\", k8s_cluster=\"LDC\", kubernetes_io_arch=\"amd64\", kubernetes_io_hostname=\"worker6\", kubernetes_io_os=\"linux\", metrics_path=\"/metrics/cadvisor\", namespace=\"otel-demo\", node=\"worker6\", node_role_kubernetes_io_o11y=\"o11y\", node_role_kubernetes_io_worker=\"worker\", pod=\"frontend-6bc5db86b9-8kn9k\", prometheus=\"monitoring/vm\", service_name=\"orchestrator-api\"}"
+            }
+          ]
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(avg by (deployment, replicaset) (\r\n    avg by (replicaset, namespace, cluster) (\r\n        label_replace(\r\n            rate(container_cpu_usage_seconds_total{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}[1m]),\r\n            \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\"\r\n        )\r\n    )\r\n    *\r\n    on(replicaset) group_left(deployment)\r\n    kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\r\n) \r\n )* 100\r\n",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{CPU}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (deployment, replicaset) (\r\n  (\r\n    label_replace(container_memory_usage_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\r\n    /\r\n    label_replace(container_spec_memory_limit_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\r\n  ) * 100\r\n)\r\n* on(replicaset) group_left(deployment)\r\nkube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\r\n",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(\r\n  sum by (pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", http_status_code=~\"^2.*|^3.*\", namespace=\"$namespace\"}\r\n  )\r\n  /\r\n  sum by (pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", namespace=\"$namespace\"}\r\n  )\r\n)\r\n* on(pod) group_left(replicaset)\r\nkube_pod_info{namespace=\"$namespace\", pod=~\"(.*)-[a-z0-9]+$\"}\r\n* on(replicaset) group_left(deployment)\r\nkube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\", deployment=\"$deployment\"}\r\n* 100\r\n",
+            "format": "table",
+            "hide": true,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          }
+        ],
+        "title": "",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "replicaset",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Value": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #A": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #B": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "replicaset": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value #A": "CPU Usage %",
+                "Value #B": "Memory Usage %",
+                "replicaset": "Deployment"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "VictoriaMetrics",
+            "value": "victoriametrics"
+          },
+          "hide": 2,
+          "label": "Data source",
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "/VictoriaMetrics/",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "otel-demo",
+            "value": "otel-demo"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values(kube_deployment_status_replicas_available{job=\"kube-state-metrics\", namespace=~\"otel-demo\"},namespace)",
+          "hide": 2,
+          "label": "Namespace",
+          "name": "namespace",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_deployment_status_replicas_available{job=\"kube-state-metrics\", namespace=~\"otel-demo\"},namespace)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values()",
+          "hide": 2,
+          "includeAll": false,
+          "label": "Cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values()",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Service Summary"
+  }
+}

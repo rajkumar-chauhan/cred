@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 8.0.1 
+dependencies:
+- alias: redis
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 21.1.4  
+description: Helm chart to deploy Redis
+name: redis
+version: 0.0.1

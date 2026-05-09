@@ -1,0 +1,286 @@
+vm:
+  victoria-metrics-operator:
+    enabled: true
+    fullnameOverride: vm-operator
+    operator:
+      disable_prometheus_converter: false
+    # resources:
+    #   limits:
+    #     cpu: "0.5"
+    #     memory: 500Mi
+    #   requests:
+    #     cpu: "0.3"
+    #     memory: 300Mi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+  vmsingle:
+    enabled: false
+  vmcluster:
+    enabled: true
+    spec:
+      retentionPeriod: 7d
+      replicationFactor: 1
+      vmstorage:
+        replicaCount: 2
+        extraArgs:
+            search.maxUniqueTimeseries: "10000000000000"
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2Gi
+          requests:
+            cpu: "0.5"
+            memory: 1Gi
+        storage:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 5Gi
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: vmstorage
+                topologyKey: kubernetes.io/hostname
+        # tolerations:
+        #   - key: "team"
+        #     operator: "Equal"
+        #     value: "o11y"
+        #     effect: "NoSchedule"
+        # nodeSelector:
+        #   node-role.kubernetes.io/o11y: o11y
+      vmselect:
+        enabled: true
+        replicaCount: 2
+        extraArgs:
+          memory.allowedPercent: "75"
+          search.cacheTimestampOffset: 60m
+          search.maxLabelsAPISeries: "10000000000000"
+          search.maxMemoryPerQuery: 2GB
+          search.maxPointsPerTimeseries: "10000000000000"
+          search.maxQueryDuration: 10m
+          search.maxQueryLen: "10000000000000"
+          search.maxSeries: "10000000000000"
+          search.maxUniqueTimeseries: "10000000000000"
+        cacheMountPath: "/select-cache"
+        storage:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 1Gi
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: vmselect
+                topologyKey: kubernetes.io/hostname
+
+        # resources:
+        #   limits:
+        #     cpu: 1
+        #     memory: 1Gi
+        #   requests:
+        #     cpu: 1
+        #     memory: 1Gi
+        # tolerations:
+        #   - key: "team"
+        #     operator: "Equal"
+        #     value: "o11y"
+        #     effect: "NoSchedule"
+        # nodeSelector:
+        #   node-role.kubernetes.io/o11y: o11y
+      vminsert:
+        enabled: true
+        replicaCount: 2
+        extraArgs:
+          maxLabelsPerTimeseries: "100"
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: vminsert
+                topologyKey: kubernetes.io/hostname
+        # resources:
+        #   limits:
+        #     cpu: "500m"
+        #     memory: 500Mi
+        #   requests:
+        #     cpu: "500m"
+        #     memory: 250Mi
+        # tolerations:
+        #   - key: "team"
+        #     operator: "Equal"
+        #     value: "o11y"
+        #     effect: "NoSchedule"
+        # nodeSelector:
+        #   node-role.kubernetes.io/o11y: o11y
+    route: 
+      select:
+        enabled: true
+        parentRefs:
+          - name: kong-gateway
+            namespace: kong
+            sectionName: https
+        hostnames:
+          - vm-dev.k8s.opstree.dev 
+
+  alertmanager:
+    enabled: false
+   
+  vmalert:
+    enabled: true
+    spec:
+      selectAllByDefault: true
+      evaluationInterval: 15s
+      # resources:
+      #   limits:
+      #     cpu: "0.5"
+      #     memory: 500Mi
+      #   requests:
+      #     cpu: "0.5"
+      #     memory: 500Mi
+      notifiers: 
+        - url: http://alertmanager-0.alertmanager-headless:9093
+        - url: http://alertmanager-1.alertmanager-headless:9093
+      # tolerations:
+      #   - key: "team"
+      #     operator: "Equal"
+      #     value: "o11y"
+      #     effect: "NoSchedule"
+      # nodeSelector:
+      #   node-role.kubernetes.io/o11y: o11y
+
+  vmagent:
+    enabled: true
+    spec:
+      selectAllByDefault: true
+      serviceScrapeNamespaceSelector: {}
+        # matchLabels:
+        #   kubernetes.io/metadata.name: vm
+      scrapeInterval: 30s
+      extraArgs:
+        promscrape.maxScrapeSize: 200MB
+        promscrape.dropOriginalLabels: "true"
+        remoteWrite.label: cluster=coe-gke,env=prod
+      useVMConfigReloader: false
+      # resources:
+      #   limits:
+      #     cpu: "1"
+      #     memory: 1Gi
+      #   requests:
+      #     cpu: "0.5"
+      #     memory: 500Mi
+      # tolerations:
+      #   - key: "team"
+      #     operator: "Equal"
+      #     value: "o11y"
+      #     effect: "NoSchedule"
+      # nodeSelector:
+      #   node-role.kubernetes.io/o11y: o11y
+
+    # ingress:
+    #   enabled: true
+    #   ingressClassName: kong
+    #   annotations:
+    #     konghq.com/strip-path: "true"
+    #     konghq.com/protocols: "http"
+    #   path: /
+    #   pathType: Prefix
+    #   hosts:
+    #     - vmagent.k8s.opstree.dev   
+ 
+  kube-state-metrics:
+    enabled: true
+    extraArgs:
+      - --metric-labels-allowlist=pods=[*]
+    # resources:
+    #   requests:
+    #     memory: "500Mi"
+    #     cpu: "500m"
+    #   limits:
+    #     memory: "1Gi"
+    #     cpu: "1"
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+      port: 8080
+      targetPort: http-metrics
+    rbac:
+      create: true  
+    serviceAccount:
+      create: true
+      name: "kube-sa"
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+    vmScrape:
+      enabled: true
+      spec:
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: '{{ include "kube-state-metrics.name" (index .Subcharts "kube-state-metrics") }}'
+            app.kubernetes.io/instance: '{{ include "vm.release" . }}'
+        endpoints:
+          - port: http
+            honorLabels: true
+            metricRelabelConfigs:
+              - action: labeldrop
+                regex: (uid|container_id|image_id)
+                # Rename all label_rems_* to rems_*
+              - action: labelmap
+                regex: label_(rems_.+)
+              # Drop old label_rems_* labels to manage the cardinality 
+              - action: labeldrop
+                regex: label_rems_.+
+        jobLabel: app.kubernetes.io/name
+  
+  defaultRules:
+    create: false
+
+  grafana:
+    enabled: false
+  prometheus-node-exporter:
+    enabled: true
+  kubeApiServer:
+    enabled: false
+  kubeControllerManager:
+    enabled: false
+  crds:
+    enabled: true
+
+# To read the prometheus operator object by vm operator
+prometheus-operator-crds:
+  enabled: true

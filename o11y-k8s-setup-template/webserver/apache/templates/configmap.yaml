@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-status-config
+data:
+  httpd.conf: |
+    ExtendedStatus On
+    <Location "/server-status">
+      SetHandler server-status
+      Require all granted
+    </Location>

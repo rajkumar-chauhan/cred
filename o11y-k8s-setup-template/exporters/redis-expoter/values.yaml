@@ -1,0 +1,45 @@
+redis-exporter:
+  redisAddress: "redis://valkey-cart.otel-demo.svc.cluster.local:6379"
+  serviceMonitor:
+    enabled: true
+    multipleTarget: true
+    interval: 15s
+    scrapeTimeout: 10s
+    targets:
+      - url: "redis://valkey-cart.otel-demo.svc.cluster.local:6379"
+        name: "valkey-cart"
+        additionalRelabeling:
+        - sourceLabels: [replace]
+          targetLabel: rems_app_dev_owner
+          replacement: "abhishek.dubey"
+        - sourceLabels: [replace]
+          targetLabel: rems_app_manager_owner
+          replacement: "sandeep"
+      
+        - sourceLabels: [replace]
+          targetLabel: rems_app_qa_owner
+          replacement: "shwetabh.vats"
+      
+        - sourceLabels: [replace]
+          targetLabel: rems_app_severity
+          replacement: "critical"
+
+        - sourceLabels: [replace]
+          targetLabel: rems_application_group
+          replacement: "AstronomyEcom"
+
+        - sourceLabels: [replace]
+          targetLabel: rems_category
+          replacement: "application"
+
+        - sourceLabels: [replace]
+          targetLabel: rems_environment
+          replacement: "prod"
+
+        - sourceLabels: [replace]
+          targetLabel: rems_service
+          replacement: "cart"
+
+  
+  
+  

@@ -1,0 +1,243 @@
+tempo:
+  mode: distributed
+  global:
+    #-- For EKS cluster
+    # dnsService: "coredns"
+    # For GKE cluster
+    dnsService: kube-dns
+  tempo:
+    image:
+      registry: docker.io 
+      repository: grafana/tempo
+      tag: null
+
+  traces:
+    otlp:
+      http:
+        enabled: true
+      grpc:
+        enabled: true
+  gateway:
+    enabled: true
+    replicas: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 4
+    # resources: 
+    #   requests:
+    #     cpu: 100
+    #     memory: 300Mi
+    #   limits:
+    #     cpu: 250
+    #     memory: 500Mi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+    #-- nginx dns resolver need to update for GKE cluster
+    #-- CoreDNS service name in GKE is kube-dns
+    # nginxConfig:
+    #   resolver: "kube-dns.kube-system.svc.cluster.local."
+    affinity: ""
+    topologySpreadConstraints: ""
+
+  ingester:
+    image:
+      repository: grafana/tempo
+      tag: null
+    replicas: 2
+    resources:
+      requests:
+        cpu: 0.5
+        memory: 500Mi
+      limits:
+        cpu: 1
+        memory: 1Gi 
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    persistence:
+      enabled: true
+      size: 2Gi
+    config:
+      replication_factor: 1
+      #-- This setting defines the length of time after a trace has not received new spans for it to be considered complete and flushed to disk
+      trace_idle_period: 60s
+      # -- How often to sweep all tenants and move traces from live -> wal -> completed blocks.
+      flush_check_period: 60s
+    # affinity: ""
+    # topologySpreadConstraints: ""
+
+  metricsGenerator:
+    enabled: true
+    # resources:
+    #   requests:
+    #     cpu: "0.2"
+    #     memory: "200Mi"
+    #   limits:
+    #     cpu: "0.4"
+    #     memory: "400Mi"
+    config:
+      storage:
+        remote_write:
+          - url: "http://vminsert-vm.monitoring.svc:8480/insert/0/prometheus/api/v1/write"
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    # affinity: ""
+    # topologySpreadConstraints: ""
+
+  distributor:
+    image:
+      repository: grafana/tempo
+      tag: null
+    replicas: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage:
+    # resources:
+    #   requests:
+    #     cpu: 100
+    #     memory: 250Mi
+    #   limits:
+    #     cpu: 250
+    #     memory: 500Mi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    # affinity: ""
+    # topologySpreadConstraints: ""
+
+  compactor: 
+    image:
+      repository: grafana/tempo
+      tag: null
+    config:
+      compaction:
+        block_retention: 48h
+        compacted_block_retention: 1h
+        compaction_window: 1h
+        v2_in_buffer_bytes: 5242880
+        v2_out_buffer_bytes: 20971520
+        max_compaction_objects: 6000000
+        max_block_bytes: 107374182400
+        retention_concurrency: 10
+        v2_prefetch_traces_count: 1000
+        max_time_per_tenant: 5m
+        compaction_cycle: 30s
+    # resources: 
+    #   requests:
+    #     cpu: 250
+    #     memory: 500Mi
+    #   limits:
+    #     cpu: 500
+    #     memory: 1Gi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    # affinity: ""
+    # topologySpreadConstraints: ""
+
+  querier:
+    image:
+      repository: grafana/tempo
+      tag: null
+    replicas: 2
+    autoscaling: 
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage:  
+    config:
+      max_concurrent_queries: 20
+    # resources: 
+    #   requests:
+    #     cpu: 250
+    #     memory: 500Mi
+    #   limits:
+    #     cpu: 500
+    #     memory: 1Gi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    # affinity: ""
+    # topologySpreadConstraints: ""
+
+  queryFrontend:
+    image:
+      repository: grafana/tempo
+      tag: 
+    replicas: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 4
+    # resources: 
+    #   requests:
+    #     cpu: 250
+    #     memory: 500Mi
+    #   limits:
+    #     cpu: 500
+    #     memory: 1Gi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+    # affinity: ""
+    # topologySpreadConstraints: ""
+   
+  memcached:
+    enabled: true
+    # resources: 
+    #   requests:
+    #     cpu: 250
+    #     memory: 300Mi
+    #   limits:
+    #     cpu: 500
+    #     memory: 500Mi
+    # tolerations:
+    #   - key: "team"
+    #     operator: "Equal"
+    #     value: "o11y"
+    #     effect: "NoSchedule"
+    # nodeSelector:
+    #   node-role.kubernetes.io/o11y: o11y
+
+  memcachedExporter:
+    enabled: true
+    
+  metaMonitoring:
+    serviceMonitor:
+      enabled: true

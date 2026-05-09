@@ -1,0 +1,28 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: blackbox-static-endpoints
+  namespace: monitoring
+spec:
+  jobName: blackbox
+  targetEndpoints:
+    - targets:
+        - https://jenkins.opstree.dev/login
+        - https://orchestrator.ldc.opstree.dev
+        - http://grafana.k8s.opstree.dev
+        - http://longhorn.k8s.opstree.dev
+        - https://vpn.opstree.dev
+        - https://itms.opstree.dev/
+      labels:
+        job: blackbox
+      scheme: http
+      path: /probe
+      params:
+        module: [http_2xx]
+      relabelConfigs:
+        - sourceLabels: [__address__]
+          targetLabel: __param_target
+        - sourceLabels: [__param_target]
+          targetLabel: instance
+        - targetLabel: __address__
+          replacement: blackbox.monitoring.svc.cluster.local:9115

@@ -1,0 +1,5399 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "xButrvtZk"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Performance and health metrics for your SQL Servers using windows Exporter v0.16 and Prometheus",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/ot-client/o11y-k8s-setup-template/blob/main/grafana/dashboardsOpsTree/Database/mssql-windows-exporter.json"
+      }
+    ],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 26,
+        "panels": [],
+        "title": "SRV | General Statistics",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows Databse Health ",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "1": {
+                    "text": "HEALTHY"
+                  }
+                },
+                "type": "value"
+              },
+              {
+                "options": {
+                  "0": {
+                    "text": "NOT HEALTHY"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgba(32, 33, 58, 0.9)",
+                  "value": 0
+                },
+                {
+                  "color": "#C4162A",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(50, 172, 45, 0.97)",
+                  "value": 1
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 0,
+          "y": 1
+        },
+        "id": 28,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^up\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "up{job=~\"$server.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "DATABASES HEALTH",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**LOGICAL CONNECTIONS**\n\nNumber of logical connections to the system.\n\nThe main purpose of logical connections is to service multiple active result sets (MARS) requests. For MARS requests, every time that an application makes a connection to SQL Server, there may be more than one logical connection that corresponds to a physical connection.\n\nWhen MARS is not used, the ratio between physical and logical connections is 1:1. Therefore, every time that an application makes a connection to SQL Server, logical connections will increase by 1.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#009a5e",
+                  "index": 0,
+                  "value": 0
+                },
+                {
+                  "color": "#47a848",
+                  "index": 1,
+                  "value": 10
+                },
+                {
+                  "color": "#90b83e",
+                  "index": 2,
+                  "value": 20
+                },
+                {
+                  "color": "#c4c02f",
+                  "index": 3,
+                  "value": 30
+                },
+                {
+                  "color": "#ebbd1d",
+                  "index": 4,
+                  "value": 40
+                },
+                {
+                  "color": "#faad18",
+                  "index": 5,
+                  "value": 50
+                },
+                {
+                  "color": "#f68c1e",
+                  "index": 6,
+                  "value": 60
+                },
+                {
+                  "color": "#f16222",
+                  "index": 7,
+                  "value": 70
+                },
+                {
+                  "color": "semi-dark-red",
+                  "index": 8,
+                  "value": 80
+                },
+                {
+                  "color": "dark-red",
+                  "index": 9,
+                  "value": 90
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 5,
+          "y": 1
+        },
+        "id": 32,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_logical_connections{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "refId": "A"
+          }
+        ],
+        "title": "LOGICAL CONNECTIONS",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the real-time network utilization percentage based on incoming and outgoing traffic across all network interfaces.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#299c46",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 50
+                },
+                {
+                  "color": "#d44a3a",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 10,
+          "y": 1
+        },
+        "id": 40,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "(sum(irate(windows_net_bytes_total{job=~\"$server.*\"}[5m]))) \r\n/ \r\n125000000 * 100\r\n",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "NETWORK UTILIZATION",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**STORAGE**\n\nShow drive space usage by percentage.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#009a5e",
+                  "index": 0,
+                  "value": 0
+                },
+                {
+                  "color": "#47a848",
+                  "index": 1,
+                  "value": 10
+                },
+                {
+                  "color": "#90b83e",
+                  "index": 2,
+                  "value": 20
+                },
+                {
+                  "color": "#c4c02f",
+                  "index": 3,
+                  "value": 30
+                },
+                {
+                  "color": "#ebbd1d",
+                  "index": 4,
+                  "value": 40
+                },
+                {
+                  "color": "#faad18",
+                  "index": 5,
+                  "value": 50
+                },
+                {
+                  "color": "#f68c1e",
+                  "index": 6,
+                  "value": 60
+                },
+                {
+                  "color": "#f16222",
+                  "index": 7,
+                  "value": 70
+                },
+                {
+                  "color": "semi-dark-red",
+                  "index": 8,
+                  "value": 80
+                },
+                {
+                  "color": "dark-red",
+                  "index": 9,
+                  "value": 90
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 5,
+          "x": 15,
+          "y": 1
+        },
+        "id": 105,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "label_replace(({__name__=~\"^windows_logical_disk_size_bytes.*\", job=~\"$server.*\"} - {__name__=~\"^windows_logical_disk_free_bytes.*\", job=~\"$server.*\"}) / {__name__=~\"^windows_logical_disk_size_bytes.*\", job=~\"$server.*\"} * 100, \"name\", \"$1\", \"__name__\", \"(.*)\")",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{ volume }}",
+            "refId": "A"
+          }
+        ],
+        "title": "STORAGE",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of active temporary tables currently in use by the SQL Server instance",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 0,
+          "y": 4
+        },
+        "id": 37,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_genstats_active_temp_tables\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_genstats_active_temp_tables{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "ACTIVE TEMP TABLES",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the amount of free space available in TempDB",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 5,
+          "y": 4
+        },
+        "id": 39,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_transactions_tempdb_free_space_bytes\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_transactions_tempdb_free_space_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "tempDB FREE SPACE",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**LOGINS-LOGOUTS**\n\nTotal number of logins started per second. This does not include pooled connections.\n\nTotal number of logout operations started per second.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "index": 0,
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "index": 1,
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "reqps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 10,
+          "y": 4
+        },
+        "id": 35,
+        "options": {
+          "displayMode": "lcd",
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "maxVizHeight": 300,
+          "minVizHeight": 16,
+          "minVizWidth": 8,
+          "namePlacement": "auto",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "sizing": "auto",
+          "valueMode": "color"
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "rate (windows_mssql_genstats_logins{mssql_instance=~\"$dbinstance.*\"}[1m])",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "Logins/m",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "rate (windows_mssql_genstats_logouts{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}[1m])",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "Logins/m",
+            "refId": "B"
+          }
+        ],
+        "title": "LOGINS-LOGOUTS",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**LOCK WAITS I/O**\n\nSQL Trace IO Provider Lock Waits",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 0,
+          "y": 7
+        },
+        "id": 36,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_genstats_sql_trace_io_provider_lock_waits\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_sql_trace_io_provider_lock_waits{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "LOCK WAITS I/O",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**DEADLOCKS**\n\nNumber of lock requests per second that resulted in a deadlock since last restart",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgba(32, 33, 58, 0.9)",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(50, 172, 45, 0.97)",
+                  "value": 0
+                },
+                {
+                  "color": "#C4162A",
+                  "value": 1
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 4,
+          "y": 7
+        },
+        "id": 29,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_genstats_mars_deadlocks\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_mars_deadlocks{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "DEADLOCKS",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "\nNumber of duplicate tempdb recovery unit id generated.",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "1": {
+                    "text": "NOK"
+                  }
+                },
+                "type": "value"
+              },
+              {
+                "options": {
+                  "0": {
+                    "text": "OK"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#C4162A",
+                  "value": 0
+                },
+                {
+                  "color": "rgb(255, 85, 0)",
+                  "value": 0
+                },
+                {
+                  "color": "#37872D",
+                  "value": 1
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 8,
+          "y": 7
+        },
+        "id": 30,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_genstats_tempdb_recovery_unit_ids_generated\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_genstats_tempdb_recovery_unit_ids_generated{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "RUIG",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of SQL Server connection resets",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 12,
+          "y": 7
+        },
+        "id": 34,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_genstats_connection_resets\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_genstats_connection_resets{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "CONNECTIONS RESETS",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the duration in seconds of the longest-running active transaction on the SQL Server instance. ",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 17,
+          "y": 7
+        },
+        "id": 38,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_transactions_longest_transaction_running_seconds\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_transactions_longest_transaction_running_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "LONGEST TRANSACT RUN",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 24,
+        "panels": [],
+        "title": "KPI | CPU",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**CPU Usage**\n\nShow cpu usage by mode.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "user"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": true,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 10,
+          "x": 0,
+          "y": 11
+        },
+        "id": 42,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "sum by (mode) (irate(windows_cpu_time_total{job=~\"$server.*\"}[$interval]))",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{ mode }}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "CPU Usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**CPU**\n\nShow CPU usage by percentage.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#299c46",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 60
+                },
+                {
+                  "color": "#d44a3a",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 10,
+          "y": 11
+        },
+        "id": 44,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^\\{instance=\"172\\.30\\.176\\.1:9182\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "100 - (avg by (instance) (irate(windows_cpu_time_total{job=~\"$server.*\", mode=~\"idle.*\"}[$interval])) * 100)",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "CPU",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**CPU load per process**\n\nShow cpu usage by process.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "CPU load",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "Value"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": true,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 10,
+          "x": 14,
+          "y": 11
+        },
+        "id": 43,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "sum by (process) (rate(process_cpu_seconds_total {job=~\"$server.*\", process !~\"Idle\"}[$interval]))",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{ process }}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "CPU load per process",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**USER CONNECTIONS**\n\nCounts the number of users currently connected to SQL Server.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#009a5e",
+                  "index": 0,
+                  "value": 0
+                },
+                {
+                  "color": "#47a848",
+                  "index": 1,
+                  "value": 10
+                },
+                {
+                  "color": "#90b83e",
+                  "index": 2,
+                  "value": 20
+                },
+                {
+                  "color": "#c4c02f",
+                  "index": 3,
+                  "value": 30
+                },
+                {
+                  "color": "#ebbd1d",
+                  "index": 4,
+                  "value": 40
+                },
+                {
+                  "color": "#faad18",
+                  "index": 5,
+                  "value": 50
+                },
+                {
+                  "color": "#f68c1e",
+                  "index": 6,
+                  "value": 60
+                },
+                {
+                  "color": "#f16222",
+                  "index": 7,
+                  "value": 70
+                },
+                {
+                  "color": "semi-dark-red",
+                  "index": 8,
+                  "value": 80
+                },
+                {
+                  "color": "dark-red",
+                  "index": 9,
+                  "value": 90
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 10,
+          "y": 17
+        },
+        "id": 64,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_user_connections{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "USER CONNECTIONS",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 20
+        },
+        "id": 22,
+        "panels": [],
+        "title": "KPI | Memory",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows SQL Server Target Server Memory, which is the amount of RAM SQL Server",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "decimals": 2,
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 0,
+          "y": 21
+        },
+        "id": 52,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_memmgr_target_server_memory_bytes\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_memmgr_target_server_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Target Server Memory",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of times SQL Server located the required data page in the Buffer Cache \n(memory) instead of reading it from disk",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "Kbits"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 5,
+          "y": 21
+        },
+        "id": 50,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_bufman_buffer_cache_hits\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_bufman_buffer_cache_hits{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Buffer Pool Rate",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of data pages SQL Server writes from the Buffer Pool to disk",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 9,
+          "y": 21
+        },
+        "id": 59,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_bufman_page_writes\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_bufman_page_writes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "PAGE WRITES",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the total size of all SQL Server data files (.mdf and .ndf) for the selected instance. ",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 13,
+          "y": 21
+        },
+        "id": 66,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^{mssql_instance=\"MSSQLSERVER\"}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "sum by (mssql_instance) (windows_mssql_databases_data_files_size_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "DATA FILE SIZE",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "**PLE**\n\nIndicates the number of seconds a page will stay in the buffer pool without references.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "decimals": 1,
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "text": "PRESSURE"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#d44a3a",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 300
+                },
+                {
+                  "color": "rgba(32, 33, 58, 0.9)",
+                  "value": 600
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 3,
+          "x": 17,
+          "y": 21
+        },
+        "id": 56,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_bufman_page_life_expectancy_seconds\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_page_life_expectancy_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "refId": "A"
+          }
+        ],
+        "title": "PLE",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the total memory used by active SQL Server connections. This includes session context, \nlogin information, user session data, and internal connection structures.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 20,
+          "y": 21
+        },
+        "id": 65,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^{mssql_instance=\"MSSQLSERVER\"}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "sum by (mssql_instance) (windows_mssql_memmgr_connection_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "BYTES PER CONNECTION",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the total amount of memory currently in use by SQL Server",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "decimals": 2,
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 0,
+          "y": 24
+        },
+        "id": 54,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_memmgr_total_server_memory_bytes\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_memmgr_total_server_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "SQL Actual Memory Usage",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of times SQL Server could not find a free buffer page and had to wait",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgba(32, 33, 58, 0.9)",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 2
+                },
+                {
+                  "color": "#d44a3a",
+                  "value": 10
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 5,
+          "y": 24
+        },
+        "id": 51,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_bufman_free_list_stalls\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_bufman_free_list_stalls{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Free List Stalls/sec",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of data pages SQL Server is reading from disk into the Buffer Pool",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 9,
+          "y": 24
+        },
+        "id": 58,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_bufman_page_reads\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_bufman_page_reads{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "PAGE READS",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the average percentage of transaction log space used across all databases in the \nselected SQL Server instance",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#56A64B",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 50
+                },
+                {
+                  "color": "#d44a3a",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 13,
+          "y": 24
+        },
+        "id": 67,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^{mssql_instance=\"MSSQLSERVER\"}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_log_used_percent{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "LOG USED (%)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of SQL queries waiting for a memory grant",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgba(32, 33, 58, 0.9)",
+                  "value": 0
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 1
+                },
+                {
+                  "color": "#d44a3a",
+                  "value": 5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 0,
+          "y": 27
+        },
+        "id": 55,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_memmgr_pending_memory_grants\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_memmgr_pending_memory_grants{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Memory Grant Pending",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the amount of memory SQL Server has taken (\"stolen\") from the buffer pool for \ninternal operations such as query execution, sorting, hashing, index",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "fixedColor": "rgb(31, 120, 193)",
+              "mode": "fixed"
+            },
+            "decimals": 2,
+            "mappings": [
+              {
+                "options": {
+                  "match": "null",
+                  "result": {
+                    "text": "N/A"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 5,
+          "x": 5,
+          "y": 27
+        },
+        "id": 53,
+        "maxDataPoints": 100,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^windows_mssql_memmgr_stolen_server_memory_bytes\\{instance=\"172\\.30\\.176\\.1:9182\", job=\"windows\\-exporter\", mssql_instance=\"MSSQLSERVER\"\\}$/",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_memmgr_stolen_server_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "SQL Stolen Memory",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 30
+        },
+        "id": 16,
+        "panels": [],
+        "title": "Performance Counters",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of SQL batches processed per second by the SQL Server instance",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 31
+        },
+        "id": 70,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_sqlstats_batch_requests{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Batch Requests/sec",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_user_connections{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "User Connections",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_logins{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Logins/sec",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_logouts{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Logouts/sec",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_sqlstats_sql_compilations{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SQL Compilations/sec",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_sqlstats_sql_recompilations{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SQL Re-Compilations/sec",
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_genstats_blocked_processes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Processes blocked",
+            "refId": "G"
+          }
+        ],
+        "title": "SQL Server Activity",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the average number of SQL transactions occurring across all databases in the \nselected SQL Server instance",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 31
+        },
+        "id": 71,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_transactions{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Transactions/sec",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_write_transactions{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Write Transactions/sec",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_log_flushes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Log Flushes/sec",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_log_flush_wait_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Log Flush Wait Time",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_locks_lock_timeouts{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Lock Timeouts/sec",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_group_commit_stall_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Group Stall/sec",
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_locks_lock_wait_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Lock Waits/sec",
+            "refId": "G"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "avg by (mssql_instance) (windows_mssql_databases_log_pool_disk_reads{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Pool Disc/sec",
+            "refId": "H"
+          }
+        ],
+        "title": "DB Transactions – Average",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the number of full table or full index scans performed by SQL Server",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 39
+        },
+        "id": 72,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_accessmethods_full_scans{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Full Scans/sec",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_accessmethods_index_searches{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Index Searches/sec",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_accessmethods_page_splits{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Page Splits/sec",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_page_lookups{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Page lookups/sec",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_page_reads{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Page reads/sec",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_page_writes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Page writes/sec",
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_read_ahead_pages{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Readahead pages/sec",
+            "refId": "G"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_lazywrites{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Lazy writes/sec",
+            "refId": "H"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_checkpoint_pages{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Checkpoint pages/sec",
+            "refId": "I"
+          }
+        ],
+        "title": "Full Scans/sec",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "description": "Shows the amount of memory SQL Server is using to store cached SQL objects, including \nquery execution plans, stored procedure plans, ad-hoc plans, and prepared statements. ",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 39
+        },
+        "id": 73,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "windows_mssql_memmgr_sql_cache_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SQL Cache",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_memmgr_optimizer_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Optimizer",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_memmgr_log_pool_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Log Pool",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_memmgr_lock_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Lock",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_memmgr_database_cache_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Database Cache",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_memmgr_connection_memory_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Connection",
+            "refId": "F"
+          }
+        ],
+        "title": "SQL Cache Memory",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 47
+        },
+        "id": 74,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "expr": "label_replace({__name__=~\"windows_mssql_locks_lock_requests.*\",job=~\"$server.*\"}, \"name\", \"$1\", \"__name__\", \"windows_mssql_locks_lock_requests(.*)\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{resource}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Lock Requests",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 47
+        },
+        "id": 75,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_accessmethods_page_splits{job=~\"$server.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Pages split/batch request",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_sqlstats_sql_compilations{job=~\"$server.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SQL Compilation/batch request",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_bufman_page_reads{job=~\"$server.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Read-ahead/page read",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "expr": "windows_mssql_sqlstats_sql_recompilations{job=~\"$server.*\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SQL Recompilation/batch request",
+            "refId": "D"
+          }
+        ],
+        "title": "Ratios",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 55
+        },
+        "id": 14,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the number of rows inserted using Bulk Copy operations (BCP, Bulk Insert, SSIS, SqlBulkCopy, ETL jobs) for each SQL Server database.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "decbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 56
+            },
+            "id": 77,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "label_replace({__name__=~\"^windows_mssql_databases_bulk_copy_rows.*\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"db\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ database }}",
+                "refId": "A"
+              }
+            ],
+            "title": "Database | Rows Size",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "decbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 56
+            },
+            "id": 78,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "editorMode": "code",
+                "expr": "label_replace({__name__=~\"^windows_mssql_databases_log_files_size_bytes.*\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"db\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ database }}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Database | Log Size",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Database Size Trend",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 56
+        },
+        "id": 8,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "**Fetch | DLC Latency (ms)**\n\nAverage latency in microseconds between log blocks entering the Direct Log Consumer and being retrieved by the XTP controller, per second.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ms"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 129
+            },
+            "id": 85,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "label_replace({__name__=~\"^windows_mssql_databases_xtp_controller_dlc_fetch_latency_seconds.*\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"db\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "{{ database }}",
+                "refId": "A"
+              }
+            ],
+            "title": "Fetch | DLC Latency (ms)",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "**Peak | DLC Latency (ms)**\n\nThe largest recorded latency, in microseconds, of a fetch from the Direct Log Consumer by the XTP controller.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ms"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 129
+            },
+            "id": 86,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "label_replace({__name__=~\"^windows_mssql_databases_xtp_controller_dlc_peak_latency_seconds.*\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"db\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "{{ database }}",
+                "refId": "A"
+              }
+            ],
+            "title": "Peak | DLC Latency (ms)",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Database Latency | FETCH/PEAK",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 57
+        },
+        "id": 10,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the number of log cache misses in SQL Server. \nA cache miss occurs when required log data is not found in memory and must be fetched from disk. ",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 130
+            },
+            "id": 90,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "editorMode": "code",
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_cache_misses{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Cache Misses/sec",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_disk_reads{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Disk Reads/sec",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_empty_free_pool_pushes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Empty Free Pool Pushes/sec",
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_hash_deletes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Hash Deletes/sec",
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_hash_inserts{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Hash Inserts/sec",
+                "refId": "E"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_log_scan_pushes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Log Scan Pushes/sec",
+                "refId": "F"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_requests{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Requests/sec",
+                "refId": "G"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_requests_old_vlf{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Requests Old VLF/sec",
+                "refId": "H"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_total_active_log_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "refId": "I"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_pool_total_shared_pool_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Pool Total Shared Pool Bytes/sec",
+                "refId": "J"
+              }
+            ],
+            "title": "Log | Pool Activities",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Displays SQL Server transaction log activity including log file size, used size, \nflush operations, bytes written, and wait times.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": [
+                {
+                  "__systemRef": "hideSeriesFrom",
+                  "matcher": {
+                    "id": "byNames",
+                    "options": {
+                      "mode": "exclude",
+                      "names": [
+                        "Log Flushes/sec"
+                      ],
+                      "prefix": "All except:",
+                      "readOnly": true
+                    }
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.hideFrom",
+                      "value": {
+                        "legend": false,
+                        "tooltip": true,
+                        "viz": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 130
+            },
+            "id": 91,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "sortBy": "Name",
+                "sortDesc": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "editorMode": "code",
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_files_size_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Files Size Bytes/sec",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_files_used_size_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Files Used Size Bytes/sec",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_flush_wait_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Flush Wait Seconds/sec",
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_flush_waits{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Flush Waits/sec",
+                "refId": "D"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_flush_write_seconds{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Flush Write Seconds/sec",
+                "refId": "E"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_flushed_bytes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Flushed Bytes/sec",
+                "refId": "F"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "sum by (mssql_instance) (windows_mssql_databases_log_flushes{job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"})",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "Log Flushes/sec",
+                "refId": "G"
+              }
+            ],
+            "title": "Log | Bytes",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the percentage of transaction log space used for each SQL Server database.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 24,
+              "x": 0,
+              "y": 146
+            },
+            "id": 92,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "desc"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "label_replace({__name__=~\"^windows_mssql_databases_log_used_percent.*\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"db\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "{{ database }}",
+                "refId": "A"
+              }
+            ],
+            "title": "Database | Log Used",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Database Logs",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 58
+        },
+        "id": 6,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the time SQL Server queries spend waiting on locks, broken down by lock type. ",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 50,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Total"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.drawStyle",
+                      "value": "line"
+                    },
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 2
+                    },
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    },
+                    {
+                      "id": "custom.axisLabel",
+                      "value": "Total"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 131
+            },
+            "id": 94,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "editorMode": "code",
+                "expr": "label_replace({__name__=\"windows_mssql_locks_lock_wait_seconds\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"name\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "{{ resource }}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Lock Wait Time",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows SQL Server lock timeouts by lock type. \nA lock timeout occurs when a query cannot acquire a lock within the configured wait period \nand SQL Server cancels the operation",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 50,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Total"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.fillOpacity",
+                      "value": 0
+                    },
+                    {
+                      "id": "custom.drawStyle",
+                      "value": "line"
+                    },
+                    {
+                      "id": "custom.lineWidth",
+                      "value": 2
+                    },
+                    {
+                      "id": "custom.axisPlacement",
+                      "value": "right"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 131
+            },
+            "id": 96,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.6.1",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "label_replace({__name__=\"windows_mssql_locks_lock_timeouts\", job=~\"$server.*\", mssql_instance=~\"$dbinstance.*\"}, \"name\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "intervalFactor": 1,
+                "legendFormat": "{{ resource }}",
+                "refId": "A"
+              }
+            ],
+            "title": "Lock Timeouts",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Lock Statistics",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 59
+        },
+        "id": 4,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the total amount of disk space currently consumed on each logical disk/partition",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 50,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "decimals": 2,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "decbytes"
+              },
+              "overrides": [
+                {
+                  "__systemRef": "hideSeriesFrom",
+                  "matcher": {
+                    "id": "byNames",
+                    "options": {
+                      "mode": "exclude",
+                      "names": [
+                        "HarddiskVolume4"
+                      ],
+                      "prefix": "All except:",
+                      "readOnly": true
+                    }
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.hideFrom",
+                      "value": {
+                        "legend": false,
+                        "tooltip": true,
+                        "viz": true
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 60
+            },
+            "id": 99,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true,
+                "sortBy": "Name",
+                "sortDesc": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "editorMode": "code",
+                "expr": "label_replace({__name__=~\"^windows_logical_disk_size_bytes.*\", job=~\"$server.*\"} - {__name__=~\"^windows_logical_disk_free_bytes.*\", job=~\"$server.*\"}, \"name\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ volume }}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Used space",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the amount of free storage available on each logical disk/partition. ",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 50,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "decimals": 2,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "decbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 60
+            },
+            "id": 100,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "label_replace({__name__=~\"windows_logical_disk_free_bytes.*\",job=~\"$server.*\"}, \"name\", \"$1\", \"__name__\", \"(.*)\")",
+                "format": "time_series",
+                "interval": "",
+                "intervalFactor": 1,
+                "legendFormat": "{{ volume }}",
+                "refId": "A"
+              }
+            ],
+            "title": "Available Space",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Storage",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 60
+        },
+        "id": 2,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "**Network Traffic**\n\nHere we can see how much network traffic is generated by the Server.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 60,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "Bps"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 69
+            },
+            "id": 103,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "rate(windows_net_bytes_received_total{job=~\"$server\"}[$interval]) or irate(windows_net_bytes_received_total{job=~\"$server\"}[5m])",
+                "format": "time_series",
+                "interval": "$interval",
+                "intervalFactor": 1,
+                "legendFormat": "Inbound",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "rate(windows_net_bytes_sent_total{job=~\"$server\"}[$interval]) or irate(windows_net_bytes_sent_total{job=~\"$server\"}[5m])",
+                "format": "time_series",
+                "interval": "$interval",
+                "intervalFactor": 1,
+                "legendFormat": "Outbound",
+                "refId": "B"
+              }
+            ],
+            "title": "Network Traffic",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "**Network Usage Hourly**\n\nHere we can see how much network traffic is generated by the Server per hour.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "bars",
+                  "fillOpacity": 100,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "normal"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "decbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 69
+            },
+            "id": 104,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "max",
+                  "min"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "increase(windows_net_bytes_received_total{job=~\"$server\"}[1h])",
+                "format": "time_series",
+                "interval": "1h",
+                "intervalFactor": 1,
+                "legendFormat": "Received",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "victoriametrics"
+                },
+                "expr": "increase(windows_net_bytes_sent_total{job=~\"$server\"}[1h])",
+                "format": "time_series",
+                "interval": "1h",
+                "intervalFactor": 1,
+                "legendFormat": "Sent",
+                "refId": "B"
+              }
+            ],
+            "timeFrom": "24h",
+            "title": "Network Usage Hourly",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Networking",
+        "type": "row"
+      }
+    ],
+    "preload": false,
+    "refresh": false,
+    "schemaVersion": 42,
+    "tags": [
+      "SQL Server",
+      "Prometheus",
+      "windows_exporter"
+    ],
+    "templating": {
+      "list": [
+        {
+          "auto": false,
+          "auto_count": 30,
+          "auto_min": "10s",
+          "current": {
+            "text": "60s",
+            "value": "60s"
+          },
+          "hide": 2,
+          "label": "Interval",
+          "name": "interval",
+          "options": [
+            {
+              "selected": true,
+              "text": "60s",
+              "value": "60s"
+            }
+          ],
+          "query": "60s",
+          "refresh": 2,
+          "type": "interval"
+        },
+        {
+          "current": {
+            "text": "windows-exporter",
+            "value": "windows-exporter"
+          },
+          "definition": "label_values(windows_mssql_collector_duration_seconds, job)",
+          "includeAll": false,
+          "label": "Server",
+          "name": "server",
+          "options": [],
+          "query": "label_values(windows_mssql_collector_duration_seconds, job)",
+          "refresh": 2,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "MSSQLSERVER",
+            "value": "MSSQLSERVER"
+          },
+          "definition": "label_values(windows_mssql_genstats_logical_connections, mssql_instance)",
+          "includeAll": false,
+          "label": "DB Instance",
+          "name": "dbinstance",
+          "options": [],
+          "query": "label_values(windows_mssql_genstats_logical_connections, mssql_instance)",
+          "refresh": 2,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "MSSQL windows_exporter"
+  }
+}

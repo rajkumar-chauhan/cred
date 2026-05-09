@@ -1,0 +1,3275 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "postgres-dba-overview"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "PostgreSQL DB Overview - CPU, Memory, Disk, Settings, Connections, Locks. Metrics from postgres_exporter.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/ot-client/o11y-k8s-setup-template/blob/main/grafana/dashboards/OpsTree/Prod/Databases/postgressql.json"
+      }
+    ],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "panels": [],
+        "title": "Resources \u0026 Connections",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel gives a quick health overview of the PostgreSQL database pod.\nIf the value is Up (green), it means the database is running and responding normally.If it shows Down (red), it indicates the database is unavailable.",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 1,
+                    "text": "Down"
+                  },
+                  "1": {
+                    "index": 0,
+                    "text": "Up"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 1
+        },
+        "id": 503,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "last"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "count by(rems_service) (pg_up{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"})",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Database Status",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "d"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 6,
+          "y": 1
+        },
+        "id": 511,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "max (pg_uptime_days_uptime_days )",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "uptime ",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel displays the total number of connections that are currently running queries. It indicates the workload on your database. A high number of active connections may suggest a heavy load on the server.",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 12,
+          "y": 1
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "sum(pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", state=\"active\", rems_environment=\"$Env\"})",
+            "format": "time_series",
+            "legendFormat": "Active Connetion",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Active Connections",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Remaining Connections panel shows how many database connections are still available before reaching the max connection limit.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 10
+                },
+                {
+                  "color": "green",
+                  "value": 30
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 18,
+          "y": 1
+        },
+        "id": 509,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "max(pg_settings_max_connections{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"}) - (sum(pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\"}))",
+            "legendFormat": "Remaining connections",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Remaining Connections",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the maximum number of concurrent connections that your PostgreSQL database is configured to allow.",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 6
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "max(pg_settings_max_connections{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"})",
+            "format": "time_series",
+            "legendFormat": "Max Connection",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Max Connections",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the total number of connections that are currently open but aren't actively running any queries. ",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-red",
+                  "value": 75
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 6,
+          "y": 6
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "sum(pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", state=\"idle\", rems_environment=\"$Env\"})",
+            "format": "time_series",
+            "legendFormat": "Idle Connections",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Idle Connections",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Measures the total rate of data blocks (8KB chunks) requested by queries per second.\n\n    What it includes: Both blocks found in memory (cache hits) and blocks read from disk (physical reads).\n\n    What it means: This is a direct measure of the total data access workload or \"demand\" on the database. A high value indicates the database is busy serving data.\n\n    How to interpret: This panel is most useful when viewed alongside the Cache Hit Ratio. A high read rate with a high cache hit ratio (\u003e99%) is healthy.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 11
+        },
+        "id": 52,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true,
+            "sortBy": "Max",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (datname) (\r\n  rate(pg_stat_database_blks_read{rems_application_group=\"$application_group\", rems_service=\"$service\",datname=~\"$datname\"}[$__rate_interval])\r\n  +\r\n  rate(pg_stat_database_blks_hit{rems_application_group=\"$application_group\", rems_service=\"$service\",datname=~\"$datname\"}[$__rate_interval])\r\n)",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{ datname }}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Logical Block Reads/sec",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the percentage of database block reads that were served directly from memory (the cache) instead of from the disk.\n\nA higher percentage indicates better performance, as retrieving data from memory is significantly faster than from disk. ",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 4,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 18
+        },
+        "id": 62,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_database_blks_hit{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} / (pg_stat_database_blks_read{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} + pg_stat_database_blks_hit{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ datname }}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Cache Hit Rate",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the number of currently active sessions in the database. An active session is one that is currently running a query or is in a transaction.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 8,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "always",
+              "showValues": false,
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "decimals": 0,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 24
+        },
+        "id": 307,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} != 0",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}, s: {{state}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Active sessions",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the total number of connections that are currently open but are not doing any work. This includes connections that are simply waiting for a new command and those that have started a transaction but are not actively running a query.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 24
+        },
+        "id": 4,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Last *",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", state=~\"idle|idle in transaction|idle in transaction (aborted)\", rems_environment=\"$Env\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}, s: {{state}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Idle sessions",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the total number of rows that have been retrieved from the database by SELECT queries.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 34
+        },
+        "id": 309,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_database_tup_fetched{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} != 0",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Fetch data (SELECT)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel displays the total number of rows that have been inserted into the database. A non-zero value indicates that new data is being added to the database tables. ",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 34
+        },
+        "id": 310,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_database_tup_inserted{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} != 0",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Insert data",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Update Data\nThis panel shows the total number of rows that have been updated in the database.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 44
+        },
+        "id": 308,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_database_tup_updated{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} != 0",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Update data",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the total number of rows that have been returned by queries. ",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 44
+        },
+        "id": 14,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_database_tup_returned{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"} != 0",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Return data",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the total number of rows that have been deleted from the database. A non-zero value indicates that rows are being permanently removed from your tables.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 44
+        },
+        "id": 311,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_stat_database_tup_deleted{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"prod\"} != 0",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{datname}}",
+            "range": true,
+            "refId": "A",
+            "step": 2
+          }
+        ],
+        "title": "Delete data",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "This panel shows the rate of transactions being processed by the database per second. It combines two key metrics:\n\nCommits : The number of transactions successfully completed.\n\nRollbacks : The number of transactions that were aborted or failed",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 51
+        },
+        "id": 60,
+        "options": {
+          "dataLinks": [],
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "sum"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Mean",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "irate(pg_stat_database_xact_commit{cluster=\"$cluster\",datname=~\"$datname\"}[5m])",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{datname}} commits",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "irate(pg_stat_database_xact_rollback{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", rems_environment=\"$Env\"}[5m])",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{datname}} rollbacks",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Transactions",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Measures the rate of rows (tuples) being modified by INSERT, UPDATE, and DELETE commands per second.\n\n    What it includes: The sum of all inserted, updated, and deleted rows across the database.\n\n    What it means: This is a direct measure of the database's write workload, showing how frequently your applications are changing data.\n\n    How to interpret: Spikes in this graph can directly correspond to application features, bulk data processing jobs, or high user activity. Consistently high values may indicate a write-intensive application.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "Bps"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 51
+        },
+        "id": 53,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "mean"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (datname) (\r\n  rate(pg_stat_database_tup_inserted{rems_application_group=\"$application_group\", rems_service=\"$service\",datname=~\"$datname\"}[$__rate_interval])\r\n  +\r\n  rate(pg_stat_database_tup_updated{rems_application_group=\"$application_group\", rems_service=\"$service\",datname=~\"$datname\"}[$__rate_interval])\r\n  +\r\n  rate(pg_stat_database_tup_deleted{rems_application_group=\"$application_group\", rems_service=\"$service\",datname=~\"$datname\"}[$__rate_interval])\r\n)",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{ datname }}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Tuples Modified/sec",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Tracks the time-based replication lag in seconds between the primary server and its replicas. High or consistently growing values can indicate network latency, high write load on the primary, or a replica struggling to keep up.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#F2CC0C",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 300
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 61
+        },
+        "id": 502,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "builder",
+            "expr": "pg_replication_lag_seconds{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"}",
+            "instant": false,
+            "legendFormat": "pg_replication_lag",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "PostgreSQL Replication Lag",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 68
+        },
+        "id": 13,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel shows the number of database locks that are currently active. Locks are mechanisms used by the database to manage concurrent access to data. A high or increasing number of locks, especially exclusive locks, could indicate contention, where multiple transactions are trying to access the same data at the same time, which can lead to performance bottlenecks and slow queries.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "never",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "decimals": 0,
+                "mappings": [],
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 24,
+              "x": 0,
+              "y": 450
+            },
+            "id": 3,
+            "options": {
+              "dataLinks": [],
+              "legend": {
+                "calcs": [
+                  "mean",
+                  "lastNotNull",
+                  "sum"
+                ],
+                "displayMode": "table",
+                "placement": "right",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "multi",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "pg_locks_count{rems_application_group=\"$application_group\", datname=~\"$datname\", rems_service=\"$service\", rems_environment=\"$Env\"} != 0",
+                "format": "time_series",
+                "intervalFactor": 2,
+                "legendFormat": "{{datname}},{{mode}}",
+                "range": true,
+                "refId": "A",
+                "step": 2
+              }
+            ],
+            "title": "Lock tables",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Locks",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 69
+        },
+        "id": 508,
+        "panels": [
+          {
+            "description": "Provides a example to get more details of slow queries from the database.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 24,
+              "x": 0,
+              "y": 384
+            },
+            "id": 504,
+            "options": {
+              "code": {
+                "language": "plaintext",
+                "showLineNumbers": false,
+                "showMiniMap": false
+              },
+              "content": "Pick a queryid you want to check details of from the top queries list.\n\n1. Connect to PostgreSQL DB\n2. Run Query for That queryid\n\n```sql\nSELECT queryid,\n       query,\n       calls,\n       total_exec_time,\n       rows,\n       shared_blks_hit,\n       shared_blks_read,\n       shared_blks_dirtied,\n       shared_blks_written\nFROM pg_stat_statements\nWHERE queryid = \u003ccopied_query_id\u003e;\n```",
+              "mode": "markdown"
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "title": "Check Details of a Specific Query by queryid",
+            "type": "text"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel identifies the top 50 SQL statements that have consumed the greatest cumulative execution time over the selected time range. It is designed to pinpoint queries contributing the most to the overall database load, based on metrics from pg_stat_statements. The 'Query' column shows the unique hash (queryid) for each statement, not the full SQL text. A negative queryid is a normal artifact of the hashing algorithm and has no special meaning.",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "queryid"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Query"
+                    },
+                    {
+                      "id": "unit",
+                      "value": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 395
+            },
+            "id": 506,
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "__auto",
+                "refId": "A"
+              }
+            ],
+            "title": "Top 50 Queries by Total Execution Time",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {},
+                  "renameByName": {
+                    "datname": "Database"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel identifies the top 50 I/O-intensive SQL statements by ranking them based on their cumulative block read time. It helps pinpoint queries that read the most data from disk instead of from memory cache, which is a common performance bottleneck. The ranking is based on metrics from pg_stat_statements. The 'Query' column shows the unique hash (queryid) for each statement, not the full SQL text. A negative queryid is a normal artifact of the hashing algorithm and has no special meaning.",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "queryid"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Query"
+                    },
+                    {
+                      "id": "unit",
+                      "value": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 395
+            },
+            "id": 507,
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "topk(50, sum by (queryid, datname) (increase(pg_stat_statements_block_read_seconds_total{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", queryid=~\"$queryid\"}[$__range])))",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Top 50 I/O Intensive Queries (by Block Read Time)",
+            "transformations": [
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {},
+                  "renameByName": {
+                    "datname": "Database"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel identifies the top 50 SQL statements with the highest average execution time. The calculation divides the total time a query has run by its total number of calls over the selected time range, using data from pg_stat_statements. The 'Query' column shows the unique hash (queryid) for each statement, not the full SQL text. A negative queryid is a normal artifact of the hashing algorithm and has no special meaning.",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "fieldMinMax": true,
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "queryid"
+                  },
+                  "properties": [
+                    {
+                      "id": "displayName",
+                      "value": "Query"
+                    },
+                    {
+                      "id": "unit"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "s"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 9,
+              "w": 24,
+              "x": 0,
+              "y": 403
+            },
+            "id": 505,
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "topk(50,\n  sum by (queryid, datname) (increase(pg_stat_statements_seconds_total{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", queryid=~\"$queryid\"}[12h]))\n  /\n  (sum by (queryid, datname) (increase(pg_stat_statements_calls_total{rems_application_group=\"$application_group\", rems_service=\"$service\", datname=~\"$datname\", queryid=~\"$queryid\"}[12h])) \u003e 0)\n)",
+                "format": "table",
+                "instant": true,
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "title": "Top 50 Slowest Queries (by Avg Time)",
+            "transformations": [
+              {
+                "id": "groupBy",
+                "options": {}
+              },
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {},
+                  "renameByName": {
+                    "datname": "Database"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          }
+        ],
+        "title": "Query Performance Analysis",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 70
+        },
+        "id": 5,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel shows the total memory allocated by PostgreSQL for the shared buffer pool. Shared buffers are used to cache frequently accessed data from tables and indexes to improve query performance.\n",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": [],
+                "max": 2,
+                "min": 1,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 8,
+              "x": 0,
+              "y": 385
+            },
+            "id": 6,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "max(\n  pg_settings_shared_buffers_bytes{\n    rems_application_group=\"$application_group\",\n    rems_service=\"$service\"\n  }\n)",
+                "format": "time_series",
+                "legendFormat": "Shared Buffers",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Shared Buffers (megabytes)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel shows the amount of memory allocated by PostgreSQL for sorting and hashing operations within a single query. If a query requires more memory than this limit, PostgreSQL writes temporary data to disk, which can slow down query performance.\n",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 8,
+              "x": 8,
+              "y": 385
+            },
+            "id": 7,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "max(\n  pg_settings_work_mem_bytes{\n    rems_application_group=\"$application_group\",\n    rems_service=\"$service\"\n  }\n)",
+                "format": "time_series",
+                "legendFormat": "Work Memory",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Work Mem (megabytes)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "description": "This panel shows the maximum size that PostgreSQL allows for Write-Ahead Log (WAL) files before triggering a checkpoint. If WAL usage reaches this limit, PostgreSQL performs a checkpoint to recycle old WAL files.\n",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 8,
+              "x": 16,
+              "y": 385
+            },
+            "id": 510,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${DATASOURCE}"
+                },
+                "editorMode": "code",
+                "expr": "max(\n  pg_settings_max_wal_size_bytes{\n    rems_application_group=\"$application_group\",\n    rems_service=\"$service\"\n  }\n)",
+                "legendFormat": "Max WAL Size",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Max WAL Size",
+            "type": "stat"
+          }
+        ],
+        "title": "Settings \u0026 Other",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 71
+        },
+        "id": 520,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the rate of index scans per second over a 5-minute window, helping monitor real-time index usage and query activity trends.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ops"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 12,
+              "x": 0,
+              "y": 68
+            },
+            "id": 518,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "builder",
+                "expr": "sum by(schemaname) (rate(pg_stat_user_tables_idx_scan{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"}[5m]))",
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Index Scan Rate per Schema ",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Displays the number of rows fetched using index scans, grouped by schema in PostgreSQL. This metric helps evaluate how effectively indexes are used for retrieving data during query execution. Data is collected using postgres_exporter.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "ops"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 12,
+              "x": 12,
+              "y": 68
+            },
+            "id": 519,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "builder",
+                "expr": "sum by(schemaname) (rate(pg_stat_user_tables_idx_tup_fetch{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"}[5m]))",
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Index Tuples Fetched per Schema",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "“Shows the number of user tables present in each PostgreSQL schema.”",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-YlBl"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "__systemRef": "hideSeriesFrom",
+                  "matcher": {
+                    "id": "byNames",
+                    "options": {
+                      "mode": "exclude",
+                      "names": [
+                        "public"
+                      ],
+                      "prefix": "All except:",
+                      "readOnly": true
+                    }
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 7,
+              "x": 0,
+              "y": 73
+            },
+            "id": 517,
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value_and_name",
+              "wideLayout": true
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "count by(schemaname) (pg_stat_user_tables_table_size_bytes{rems_service=\"$service\", rems_environment=\"$Env\"})",
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Tables Count per Schema",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "“How many useless (deleted/updated) rows are currently sitting in tables and waiting to be cleaned”",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-BlPu"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 7,
+              "x": 7,
+              "y": 73
+            },
+            "id": 521,
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "value_and_name",
+              "wideLayout": true
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "builder",
+                "expr": "sum by(schemaname) (pg_stat_user_tables_n_dead_tup{rems_application_group=\"$application_group\", rems_service=\"$service\", rems_environment=\"$Env\"})",
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Dead Tuples per Schema",
+            "type": "stat"
+          }
+        ],
+        "title": "Schema ",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 72
+        },
+        "id": 516,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Displays the number of database connections per user and their current state (active, idle, etc.) across databases. Helps identify which users are actively running queries and which have idle or unused connections.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 0,
+              "y": 147
+            },
+            "id": 515,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "builder",
+                "expr": "pg_user_db_connections_by_state_connections{rems_service=\"$service\", rems_environment=\"$Env\", datname=\"$datname\"}",
+                "legendFormat": "{{usename}} - {{state}}- {{datname}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "User connection ",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the number of locks applied on database tables, grouped by lock type.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 12,
+              "y": 147
+            },
+            "id": 513,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "pg_table_locks_lock_count{rems_environment=\"$Env\"}",
+                "legendFormat": "{{table_name}} - {{mode}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Table lock ",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "description": "Shows the number of row-level locks currently held in PostgreSQL, grouped by lock type and user.",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "showValues": false,
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 12,
+              "x": 0,
+              "y": 154
+            },
+            "id": 514,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.4.0-19913286788",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "pg_row_locks_row_lock_count{rems_environment=\"$Env\"}",
+                "legendFormat": "{{usename}}",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Row-based lock ",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Custom Query data",
+        "type": "row"
+      }
+    ],
+    "preload": true,
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "ot-postgresql",
+      "ot-dashboard"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "dev",
+            "value": "dev"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "victoriametrics"
+          },
+          "definition": "label_values(pg_up,rems_environment)",
+          "label": "Env",
+          "name": "Env",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pg_up,rems_environment)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "VictoriaMetrics",
+            "value": "victoriametrics"
+          },
+          "hide": 2,
+          "name": "DATASOURCE",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "type": "datasource"
+        },
+        {
+          "allowCustomValue": false,
+          "current": {
+            "text": "REMS",
+            "value": "REMS"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(pg_up{rems_environment=\"$Env\"},rems_application_group)",
+          "includeAll": false,
+          "label": "ApplicationGroup",
+          "name": "application_group",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pg_up{rems_environment=\"$Env\"},rems_application_group)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "rems_db",
+            "value": "rems_db"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(pg_up{rems_application_group=\"$application_group\", rems_service!=\"postgres_db_dev\", rems_environment=\"$Env\"},rems_service)",
+          "label": "Database",
+          "name": "service",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pg_up{rems_application_group=\"$application_group\", rems_service!=\"postgres_db_dev\", rems_environment=\"$Env\"},rems_service)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\"},datname)",
+          "includeAll": true,
+          "label": "Schema",
+          "multi": true,
+          "name": "datname",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pg_stat_activity_count{rems_application_group=\"$application_group\", rems_service=\"$service\"},datname)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(pg_stat_statements_calls_total{rems_application_group=\"$application_group\", rems_service=\"$service\"},queryid)",
+          "hide": 2,
+          "includeAll": true,
+          "label": "queryid",
+          "multi": true,
+          "name": "queryid",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(pg_stat_statements_calls_total{rems_application_group=\"$application_group\", rems_service=\"$service\"},queryid)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "PostgreSQL"
+  }
+}

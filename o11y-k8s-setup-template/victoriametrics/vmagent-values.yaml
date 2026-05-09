@@ -1,0 +1,131 @@
+vm:  
+  victoria-metrics-operator:
+    enabled: true
+    fullnameOverride: vm-operator
+    replicaCount: 1
+    # resources:
+    #   limits:
+    #     cpu: 120m
+    #     memory: 220Mi
+    #   requests:
+    #     cpu: 80m
+    #     memory: 120Mi
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: victoria-metrics-operator
+              topologyKey: kubernetes.io/hostname
+    crds:
+      plain: false
+      cleanup:
+        enabled: false
+        image:
+          repository: bitnami/kubectl
+          pullPolicy: IfNotPresent
+    serviceMonitor:
+      enabled: true
+    operator:
+      disable_prometheus_converter: false
+    image:
+      registry: "quay.io"
+      repository: victoriametrics/operator
+      # tag: "v0.61.0"
+    env:
+      - name: "VM_USECUSTOMCONFIGRELOADER"
+        value: "true"
+      - name: VM_CUSTOMCONFIGRELOADERIMAGE
+        value: "quay.io/victoriametrics/operator:config-reloader-v0.53.0"
+      - name: VM_VLOGSDEFAULT_IMAGE
+        value: "quay.io/victoriametrics/victoria-logs"
+      - name: "VM_VMALERTDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/vmalert"
+      - name: "VM_VMAGENTDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/vmagent"
+      - name: "VM_VMSINGLEDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/victoria-metrics"
+      - name: "VM_VMCLUSTERDEFAULT_VMSELECTDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/vmselect"
+      - name: "VM_VMCLUSTERDEFAULT_VMSTORAGEDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/vmstorage"
+      - name: "VM_VMCLUSTERDEFAULT_VMINSERTDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/vminsert"
+      - name: "VM_VMBACKUP_IMAGE"
+        value: "quay.io/victoriametrics/vmbackupmanager"
+      - name: "VM_VMAUTHDEFAULT_IMAGE"
+        value: "quay.io/victoriametrics/vmauth"
+      - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
+        value: "quay.io/prometheus/alertmanager"
+      - name: "VM_CONFIG_RELOADER_REQUEST_CPU"
+        value: "unlimited"
+      - name: "VM_CONFIG_RELOADER_REQUEST_MEMORY"
+        value: "unlimited"  
+      - name: "VM_CONFIG_RELOADER_LIMIT_CPU"
+        value: "unlimited"
+      - name: "VM_CONFIG_RELOADER_LIMIT_MEMORY"
+        value: "unlimited"
+      - name: "VM_VMAGENTDEFAULT_USEDEFAULTRESOURCES"
+        value: "false"
+      - name: "VM_VMALERTMANAGER_USEDEFAULTRESOURCES"
+        value: "false"
+  prometheus-node-exporter:
+    enabled: true
+    service:
+      port: 9101
+      targetPort: 9101
+
+    extraArgs:
+      - --web.listen-address=:9101
+
+    hostPort: 9101
+  
+  vmsingle:
+    enabled: false 
+  vmcluster:
+    enabled: false 
+  alertmanager:
+    enabled: false
+  vmalert:
+    enabled: false 
+  vmagent:
+    enabled: true 
+    additionalRemoteWrites:
+      - url: "https://vm.opstree.net/insert/0/prometheus/api/v1/write"
+    spec:
+      selectAllByDefault: true
+      serviceScrapeNamespaceSelector: {}
+      scrapeInterval: 30s
+      extraArgs:
+        promscrape.maxScrapeSize: 200MB
+        promscrape.dropOriginalLabels: "true"
+        remoteWrite.label: "cluster=coe-ldc,env=LDC"
+      # hostAliases:
+      #   - hostnames:
+      #     - vminsert.k8s.opstree.dev
+      #     ip: 34.68.92.89
+      useVMConfigReloader: true
+      resources: {}
+      # resources:
+      #   limits:
+      #     cpu: "0.3"
+      #     memory: 500Mi
+      #   requests:
+      #     cpu: "0.2"
+      #     memory: 250Mi
+  kube-state-metrics:
+    enabled: true 
+  grafana:
+    enabled: false
+  defaultDashboards:
+    enabled: false
+  kubeApiServer:
+    enabled: false 
+  kubeControllerManager:
+    enabled: false 
+  defaultRules:
+    create: false 
+  prometheus-operator-crds:
+    enabled: true

@@ -1,0 +1,92 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: service-latency-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: Servicehealth.rules
+    rules:
+    - alert: HighP99LatencyWarning
+      expr: |
+        histogram_quantile( 0.99,
+            sum by (le, http_route, service_name,rems_app_severity, rems_application_group, rems_environment, rems_service, rems_technology,rems_type, rems_app_dev_owner, rems_app_manager_owner, rems_app_qa_owner,rems_category) (
+                rate(traces_span_metrics_duration_milliseconds_bucket{span_kind="SPAN_KIND_SERVER"}[5m])
+            )
+        ) > 1000
+        and
+        (
+        sum by (http_route, service_name,rems_app_severity, rems_application_group, rems_environment, rems_service, rems_technology,rems_type, rems_app_dev_owner, rems_app_manager_owner, rems_app_qa_owner,rems_category) (
+            rate(traces_span_metrics_duration_milliseconds_count{span_kind="SPAN_KIND_SERVER"}[5m])
+        ) > 1
+        )
+      for: 5m
+      labels:
+        alert: clusterobservability
+        severity: critical
+        team: coe
+      annotations:
+        summary: "High p99 latency for {{ $labels.service_name }}"
+        description: |
+            p99 latency exceeded 1000 ms.
+            Service: {{ $labels.service_name }}
+            Route: {{ $labels.http_route }}
+            Current p99 latency: {{ printf "%.2f" $value }} ms
+        runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping
+        dashboard_url: https://grafana.k8s.opstree.dev/goto/afbiq1an080e8d?orgId=1
+    - alert: HighP95LatencyWarning
+      expr: |
+        histogram_quantile( 0.95,
+            sum by (le, http_route, service_name,rems_app_severity, rems_application_group, rems_environment, rems_service, rems_technology,rems_type, rems_app_dev_owner, rems_app_manager_owner, rems_app_qa_owner,rems_category) (
+                rate(traces_span_metrics_duration_milliseconds_bucket{span_kind="SPAN_KIND_SERVER"}[5m])
+            )
+        ) > 1000
+        and
+        (
+        sum by (http_route, service_name,rems_app_severity, rems_application_group, rems_environment, rems_service, rems_technology,rems_type, rems_app_dev_owner, rems_app_manager_owner, rems_app_qa_owner,rems_category) (
+            rate(traces_span_metrics_duration_milliseconds_count{span_kind="SPAN_KIND_SERVER"}[5m])
+        ) > 1
+        )
+      for: 5m
+      annotations:
+        summary: "High p95 latency for {{ $labels.service_name }}"
+        description: |
+          p95 latency exceeded 1000 ms.
+          Service: {{ $labels.service_name }}
+          Route: {{ $labels.http_route }}
+          Current p95 latency: {{ printf "%.2f" $value }} ms
+        runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping
+        dashboard_url: https://grafana.k8s.opstree.dev/goto/afbiq1an080e8d?orgId=1
+      labels:
+        alert: clusterobservability
+        severity: critical
+        team: coe
+    - alert: HighP90LatencyWarning
+      expr: |
+        histogram_quantile( 0.90,
+            sum by (le, http_route, service_name,rems_app_severity, rems_application_group, rems_environment, rems_service, rems_technology,rems_type, rems_app_dev_owner, rems_app_manager_owner, rems_app_qa_owner,rems_category) (
+                rate(traces_span_metrics_duration_milliseconds_bucket{span_kind="SPAN_KIND_SERVER"}[5m])
+            )
+        ) > 1000
+        and
+        (
+        sum by (http_route, service_name,rems_app_severity, rems_application_group, rems_environment, rems_service, rems_technology,rems_type, rems_app_dev_owner, rems_app_manager_owner, rems_app_qa_owner,rems_category) (
+            rate(traces_span_metrics_duration_milliseconds_count{span_kind="SPAN_KIND_SERVER"}[5m])
+        ) > 1
+        )
+      for: 5m
+      labels:
+        alert: clusterobservability
+        severity: critical
+        team: coe
+      annotations:
+        summary: "High p90 latency for {{ $labels.service_name }}"
+        description: |
+          p90 latency exceeded 1000 ms.
+          Service: {{ $labels.service_name }}
+          Route: {{ $labels.http_route }}
+          Current p90 latency: {{ printf "%.2f" $value }} ms
+        runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping
+        dashboard_url: https://grafana.k8s.opstree.dev/goto/afbiq1an080e8d?orgId=1

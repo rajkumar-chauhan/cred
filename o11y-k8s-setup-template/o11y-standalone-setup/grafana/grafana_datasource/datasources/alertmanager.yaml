@@ -1,0 +1,10 @@
+apiVersion: 1
+datasources:
+  - name: "alertmanager"
+    type: alertmanager
+    uid: alertmanager
+    url: http://vmalertmanager-vm.monitoring.svc:9093/
+    access: proxy
+    jsonData:
+      handleGrafanaManagedAlerts: false
+      implementation: prometheus

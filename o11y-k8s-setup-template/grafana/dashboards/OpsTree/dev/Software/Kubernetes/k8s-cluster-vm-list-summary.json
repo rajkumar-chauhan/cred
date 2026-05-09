@@ -1,0 +1,908 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "dafee5lj181iiob"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/ot-client/o11y-k8s-setup-template/blob/main/grafana/dashboards/OpsTree/Dev/Software/Kubernetes/k8s-cluster-vm-list-summary.json"
+      }
+    ],
+    "panels": [
+      {
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "\u003cdiv style=\"background-color: #063970; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\"\u003e\n  \u003ch1 style=\"color: #ecf0f1; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 32px; margin: 0; letter-spacing: 2px;\"\u003e\n    ⚙️ \u003cstrong style=\"font-weight: 900;\"\u003ek8s Nodes\u003c/strong\u003e\n  \u003c/h1\u003e\n\u003c/div\u003e",
+          "mode": "markdown"
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false,
+              "wrapHeaderText": false,
+              "wrapText": false
+            },
+            "fieldMinMax": false,
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-green",
+                  "value": 70
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 75
+                },
+                {
+                  "color": "dark-red",
+                  "value": 85
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "instance"
+              },
+              "properties": [
+                {
+                  "id": "links"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "main",
+                      "url": "https://grafana.k8s.opstree.dev/d/ceu6zcbqkh88we12/summary?orgId=1\u0026var-nodename=${__data.fields.nodename}\u0026${__url_time_range}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "main",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk/node-monitoring?orgId=1\u0026var-nodename=${__data.fields.nodename}\u0026${__url_time_range}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU PSI (%)"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "main",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk/node-monitoring?orgId=1\u0026var-nodename=${__data.fields.nodename}\u0026${__url_time_range}"
+                    }
+                  ]
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "dark-green",
+                          "index": 0
+                        },
+                        "to": 1
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1,
+                        "result": {
+                          "color": "dark-yellow",
+                          "index": 1
+                        },
+                        "to": 5
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 5,
+                        "result": {
+                          "color": "dark-orange",
+                          "index": 2
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "dark-red",
+                          "index": 3
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 202
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Uptime"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "days"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-red",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 1
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 2
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 7
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "link",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk/node-monitoring?orgId=1\u0026var-nodename=${__data.fields.nodename}\u0026${__url_time_range}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "nodename"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "summary",
+                      "url": "https://grafana.k8s.opstree.dev/d/ceu6zcbqkh88we12/summary?orgId=1\u0026var-job=${__data.fields.nodename}\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 172
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "AZ"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "index": 0,
+                          "text": "Noida"
+                        },
+                        "to": 1000
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 78
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Memory PSI (%)"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk/node-monitoring?orgId=1\u0026var-nodename=${__data.fields.nodename}\u0026${__url_time_range}"
+                    }
+                  ]
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "dark-green",
+                          "index": 0
+                        },
+                        "to": 1
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1,
+                        "result": {
+                          "color": "dark-yellow",
+                          "index": 1
+                        },
+                        "to": 5
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 5,
+                        "result": {
+                          "color": "dark-orange",
+                          "index": 2
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "dark-red",
+                          "index": 3
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.width",
+                  "value": 210
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Disk PSI (%)"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk/node-monitoring?orgId=1\u0026var-nodename=${__data.fields.nodename}\u0026${__url_time_range}"
+                    }
+                  ]
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "dark-green",
+                          "index": 0
+                        },
+                        "to": 1
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1,
+                        "result": {
+                          "color": "dark-yellow",
+                          "index": 1
+                        },
+                        "to": 5
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1,
+                        "result": {
+                          "color": "dark-orange",
+                          "index": 2
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "dark-red",
+                          "index": 3
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "custom.width",
+                  "value": 223
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "IP"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 160
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Region"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 112
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "DC"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": ""
+              },
+              "properties": []
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 19,
+          "w": 24,
+          "x": 0,
+          "y": 3
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "enablePagination": true,
+          "frameIndex": 0,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Uptime"
+            }
+          ]
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "floor((time() - node_boot_time_seconds{bare_metal=\"false\", cluster=\"$cluster\", k8s=\"true\"}) / 86400)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{uptime}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "100 * (rate(node_pressure_cpu_waiting_seconds_total{bare_metal=\"false\", cluster=\"$cluster\", k8s=\"true\"}[$__rate_interval]))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "100 *\nrate(node_pressure_memory_waiting_seconds_total{bare_metal=\"false\", cluster=\"$cluster\", k8s=\"true\"}[$__rate_interval])\n* on(instance) group_left(nodename)\nnode_uname_info{bare_metal=\"false\", cluster=\"$cluster\", k8s=\"true\"}",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "100 * (rate(node_pressure_io_waiting_seconds_total{bare_metal=\"false\", cluster=\"$cluster\", k8s=\"true\"}[$__rate_interval]))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "count(node_uname_info{bare_metal=\"true\"}) by (dc)",
+            "format": "table",
+            "hide": true,
+            "instant": true,
+            "legendFormat": "{{test}}",
+            "range": false,
+            "refId": "E"
+          }
+        ],
+        "title": "",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "instance",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Time": {
+                  "aggregations": []
+                },
+                "Time 1": {
+                  "aggregations": []
+                },
+                "Value #A": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #B": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #C": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #D": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #E": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #F": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #G": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #H": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #I": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "dc 3": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "dc 4": {
+                  "aggregations": []
+                },
+                "instance": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "job": {
+                  "aggregations": []
+                },
+                "nodename": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "AZ",
+              "mode": "index",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Value #E": true,
+                "Value #F": true,
+                "job 1": true,
+                "job 2": true,
+                "nodename": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "AZ": 3,
+                "Value #A": 7,
+                "Value #B": 4,
+                "Value #C": 5,
+                "Value #D": 6,
+                "dc": 0,
+                "instance": 2,
+                "nodename": 1
+              },
+              "renameByName": {
+                "AZ": "Region",
+                "Value #A": "Uptime",
+                "Value #B": "CPU PSI (%)",
+                "Value #C": "Memory PSI (%)",
+                "Value #D": "Disk PSI (%)",
+                "Value #E": "",
+                "Value #F": "Swap Used %",
+                "Value #G": "CPU Pressure %",
+                "Value #H": "Memory Pressure %",
+                "Value #I": "I/O Pressure %",
+                "dc": "DC",
+                "instance": "IP",
+                "job 3": "DC",
+                "nodename": "Host"
+              }
+            }
+          },
+          {
+            "id": "convertFieldType",
+            "options": {
+              "conversions": [
+                {
+                  "destinationType": "number",
+                  "targetField": "Value #A"
+                },
+                {
+                  "destinationType": "number",
+                  "targetField": "Value #B"
+                },
+                {
+                  "destinationType": "number",
+                  "targetField": "Value #D"
+                },
+                {
+                  "destinationType": "number",
+                  "targetField": "Value #C"
+                }
+              ],
+              "fields": {}
+            }
+          }
+        ],
+        "transparent": true,
+        "type": "table"
+      }
+    ],
+    "preload": true,
+    "schemaVersion": 42,
+    "tags": [
+      "ot-dashboard",
+      "kubernetes",
+      "k8s-nodes",
+      "k8s"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "VictoriaMetrics",
+            "value": "victoriametrics"
+          },
+          "hide": 2,
+          "name": "DATASOURCE",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "allowCustomValue": true,
+          "current": {
+            "text": "buildpiper",
+            "value": "buildpiper"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(node_uname_info{k8s=\"true\"},cluster)",
+          "label": "Cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(node_uname_info{k8s=\"true\"},cluster)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "15s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Node Details",
+    "uid": "node-details"
+  }
+}

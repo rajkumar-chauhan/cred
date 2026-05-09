@@ -1,0 +1,39 @@
+@Library('o11y-ldc') _
+
+def helm_deploy = new opstree.cd.templates.helm.helm_deployment()
+
+node {
+    helm_deploy.call([
+        enable_jenkins_build_param_override: true,
+
+        clean_workspace: true,
+        ignore_clean_workspace_failure: false,
+        delete_dirs: false,
+        clean_when_build_aborted: true,
+        clean_when_build_failed: true,
+        clean_when_not_built: true,
+        clean_when_build_succeed: true,
+        clean_when_build_unstable: true,
+
+        repo_https_url: 'https://github.com/ot-client/o11y-k8s-setup-template.git',
+        repo_ssh_url: 'git@github.com:ot-client/o11y-k8s-setup-template.git',
+        repo_branch: 'main',
+        repo_url_type: 'http',
+        jenkins_git_creds_id: 'O11y_http_ldc',
+
+        
+
+        chart_name: 'o11y-standalone-setup/Endpoints',
+        release_name: 'endpoints',
+        namespace: 'monitoring-standalone',
+        values: 'o11y-standalone-setup/Endpoints/values.yaml',
+        atomic: true,
+        timeout: '5m',
+        wait: true,
+        create_namespace: true,
+        force: false,
+        helm_dependency_build: true,
+        helm_package: false,
+        kubeconfig_credential_id: 'o11y-cluster-Kubeconfig'
+    ])
+}

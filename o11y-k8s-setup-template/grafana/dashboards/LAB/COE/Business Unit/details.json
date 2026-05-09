@@ -1,0 +1,1059 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "fev2j5o7zwkqof"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "panels": [],
+        "title": "Services",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "service",
+                "url": "https://grafana.k8s.opstree.dev/d/dev3utzrk7dhcf/service?orgId=1\u0026var-datasource=victoriametrics\u0026var-cluster=\u0026var-namespace=orchestrator\u0026var-Service Name=${__value.text}\u0026var-pods=$__all\u0026var-container=$__all\u0026var-route=$__all\u0026var-search=\u0026var-logging=logging\u0026var-tempo=tempo\u0026${__url_time_range}"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "P95 latency"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "ms"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 1000
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1000,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 10000
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error rate %"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "green",
+                          "index": 2,
+                          "text": "0%"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.95, sum by(le, service_name) (rate(traces_span_metrics_duration_milliseconds_bucket{span_kind=\"SPAN_KIND_SERVER\",bu=~\"$business_unit\",org=\"coe\"}[5m])))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{service_name}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(sum(rate(traces_span_metrics_duration_milliseconds_count{http_status_code!~\"^2.*|^3.*|^4.*\",BU=~\"$business_unit\",org=\"coe\"}[5m])) by (service_name)) / (sum(rate(traces_span_metrics_duration_milliseconds_count{BU=~\"$business_unit\",org=\"coe\",http_status_code!=\"\"}[5m])) by (service_name)) * 100",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{service_name}}",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "API Services",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "Avg p95 latency",
+                "Value #A": "P95 latency",
+                "Value #B": "Error rate %",
+                "service_name": "Sevice Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "id": 3,
+        "panels": [],
+        "title": "Loadbalancer",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg latency P95"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 1000
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1000,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 1000000
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "unit",
+                  "value": "ms"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error rate %"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "green",
+                          "index": 2,
+                          "text": "0%"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 4,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.95, sum by(le, route) (rate(kong_request_latency_ms_bucket{route=\"httproute.orchestrator.orchestrator-backend-api.1.0\"}[5m])))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{route}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(rate(kong_http_requests_total{code=~\"^5.*\",route=\"httproute.orchestrator.orchestrator-backend-api.1.0\"}[5m])) by (route) / (sum(rate(kong_http_requests_total{route=\"httproute.orchestrator.orchestrator-backend-api.1.0\"}[5m])) by (route)) * 100",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{route}}",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "Loadbalancer SLO",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value #A": "Avg latency P95",
+                "Value #B": "Error rate %"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 5,
+        "panels": [],
+        "title": "Database",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "database",
+                "url": "https://grafana.k8s.opstree.dev/d/bev7g4dwv9b7kb/clickhouse-dashboard?orgId=1\u0026${__url_time_range}"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Current Query"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 500
+                      },
+                      "type": "range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Connections"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 50
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 50,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 500
+                      },
+                      "type": "range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Memory Usage"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "deckbytes"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 1000000
+                      },
+                      "type": "range"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 11
+        },
+        "id": 6,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(rate(ClickHouseProfileEvents_Query[15m])) by (job)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{job}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(ClickHouseMetrics_HTTPConnection) by (job) + sum(ClickHouseMetrics_TCPConnection) by (job)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{job}}",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(rate(ClickHouseMetrics_MemoryTracking[5m])) by (job)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{job}}",
+            "range": false,
+            "refId": "C"
+          }
+        ],
+        "title": "Database SLO",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "",
+                "Value #A": "Current Query",
+                "Value #B": "Connections",
+                "Value #C": "Memory Usage"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 15
+        },
+        "id": 7,
+        "panels": [],
+        "title": "Middleware",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "middleware",
+                "url": "https://grafana.k8s.opstree.dev/d/devcu7ax6efi8f/kafka-overview?orgId=1\u0026\u0026${__url_time_range}"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avg Latency"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 500
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "unit",
+                  "value": "ms"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Kafka Lag"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 50
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 50,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 500
+                      },
+                      "type": "range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Rate"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": ""
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        },
+        "id": 8,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(rate(kafka_consumer_fetch_latency_avg[15m])) by (instance)",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{instance}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(rate(kafka_consumer_records_lag[15m])) by (instance)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{instance}}",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum(kafka_consumer_rebalance_total) by (instance) /sum(kafka_consumer_rebalance_total) by (instance)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{instance}}",
+            "range": false,
+            "refId": "C"
+          }
+        ],
+        "title": "Kafka SLO",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "Avg Latency",
+                "Value #A": "Avg Latency",
+                "Value #B": "Kafka Lag",
+                "Value #C": "Error Rate"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "orchestrator",
+            "value": "orchestrator"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "victoriametrics"
+          },
+          "definition": "label_values(traces_span_metrics_calls_total{org=\"coe\"},bu)",
+          "includeAll": false,
+          "label": "Business Unit",
+          "name": "business_unit",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(traces_span_metrics_calls_total{org=\"coe\"},bu)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "^(?!UNKNOWN$).*$",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Details"
+  }
+}

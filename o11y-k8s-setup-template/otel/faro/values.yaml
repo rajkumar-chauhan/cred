@@ -1,0 +1,69 @@
+collector:
+  crds:
+    enabled: false
+  opentelemetry-operator:
+    enabled: false
+  collectors:
+    daemon:
+      enabled: false
+    faro:
+      mode: deployment
+      suffix: "otel"
+      enabled: true
+      replicas: 1
+      image:
+        repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib 
+        tag: "0.140.1"
+      resources:
+        limits:
+          cpu: 200m
+          memory: 500Mi
+        requests:
+          cpu: 100m
+          memory: 250Mi
+      config: 
+        receivers:
+          faro:
+            endpoint: 0.0.0.0:8081
+            cors:
+              allowed_origins: ["*"]
+              allowed_headers: ["*"]
+
+        processors:
+          batch:
+            send_batch_max_size: 128
+            send_batch_size: 64
+            timeout: 1s
+
+        exporters:
+          otlp/tempo:
+            endpoint: tempo-distributor.observability.svc.cluster.local:4317
+            tls:
+              insecure: true
+
+          otlphttp/loki:
+            endpoint: http://logging-loki-gateway.logging.svc.cluster.local:80/otlp
+            tls:
+              insecure_skip_verify: true
+
+          prometheusremotewrite:
+            endpoint: http://vminsert-vm.monitoring.svc.cluster.local:8480/insert/0/prometheus/api/v1/write
+            tls:
+              insecure_skip_verify: true
+
+        service:
+          pipelines:
+            logs:
+              receivers: [faro]
+              processors: [batch]
+              exporters: [otlphttp/loki]
+
+            traces:
+              receivers: [faro]
+              processors: [batch]
+              exporters: [otlp/tempo]
+
+            # metrics:
+            #   receivers: [faro]
+            #   processors: [batch]
+            #   exporters: [prometheusremotewrite]

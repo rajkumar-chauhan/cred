@@ -1,0 +1,18 @@
+ebpf:
+  endpoint:
+    address: "otel-collector-collector.observability.svc"
+    port: 4317
+  k8sCollector:
+    enabled: true
+  kernelCollector:
+    enabled: true
+    fetchKernelHeaders: false
+    # useDockerMetadata: true
+
+obi:
+  config:
+    data:
+      otel_traces_export:
+        endpoint: "http://otel-collector-collector.observability.svc:4317"
+      otel_metrics_export:
+        endpoint: "http://otel-collector-collector.observability.svc:4318"

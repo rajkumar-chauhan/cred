@@ -1,0 +1,1007 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "dffe7bjrcfs0e8a"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/ot-client/o11y-k8s-setup-template/blob/main/grafana/dashboardsOpsTree/Infrstructure/LDC/new-dashboard-2026-02-24-vz7l9.json"
+      }
+    ],
+    "panels": [
+      {
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "\u003cdiv style=\"background-color: #063970; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\"\u003e\n  \u003ch1 style=\"color: #ecf0f1; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 32px; margin: 0; letter-spacing: 2px;\"\u003e\n    ⚙️ \u003cstrong style=\"font-weight: 900;\"\u003eNode Summary\u003c/strong\u003e\n  \u003c/h1\u003e\n\u003c/div\u003e",
+          "mode": "markdown"
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false,
+              "wrapText": false
+            },
+            "decimals": 2,
+            "fieldMinMax": false,
+            "links": [],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-green",
+                  "value": 0
+                },
+                {
+                  "color": "dark-green",
+                  "value": 70
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 75
+                },
+                {
+                  "color": "dark-red",
+                  "value": 85
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "instance"
+              },
+              "properties": [
+                {
+                  "id": "links"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "auto"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "semi-dark-blue",
+                        "value": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Memory_used %"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "summary",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU_busy %"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "summary",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Root fs used%"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "summary",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Job"
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom.viz",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Uptime"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "s"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-red",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "text"
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "summary",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "AZ"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "index": 0,
+                          "text": "Noida"
+                        },
+                        "to": 1000
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "auto"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "semi-dark-blue",
+                        "value": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "nodename"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "summary",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Cache/Buffer"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "decbytes"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-blue",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-blue",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Swap Used %"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 70
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 80
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPU Pressure %"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-yellow",
+                        "value": 20
+                      },
+                      {
+                        "color": "orange",
+                        "value": 40
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 60
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 93
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "displayName",
+                  "value": "CPU PSI %"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Memory Pressure %"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-yellow",
+                        "value": 20
+                      },
+                      {
+                        "color": "orange",
+                        "value": 40
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 60
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 176
+                },
+                {
+                  "id": "displayName",
+                  "value": "MEMORY PSI %"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "I/O Pressure %"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "dark-green",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 1
+                      },
+                      {
+                        "color": "dark-yellow",
+                        "value": 20
+                      },
+                      {
+                        "color": "orange",
+                        "value": 40
+                      },
+                      {
+                        "color": "dark-orange",
+                        "value": 60
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      },
+                      {
+                        "color": "dark-red",
+                        "value": 90
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "lcd",
+                    "type": "gauge",
+                    "valueDisplayMode": "color"
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 100
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Monitoring",
+                      "url": "https://grafana.k8s.opstree.dev/d/rYdddlPWk1/monitoring?orgId=1\u0026var-job=${__data.fields.job}\u0026var-nodename=${__data.fields.nodename}\u0026var-node=${__data.fields.instance}\u0026var-diskdevices=%5Ba-z%5D%2B%7Cnvme%5B0-9%5D%2Bn%5B0-9%5D%2B%7Cmmcblk%5B0-9%5D%2B\u0026${__url_time_range}\n"
+                    }
+                  ]
+                },
+                {
+                  "id": "displayName",
+                  "value": "I/O PSI %"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "S.No."
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 71
+                },
+                {
+                  "id": "decimals"
+                },
+                {
+                  "id": "decimals"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Hostname"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 220
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 24,
+          "x": 0,
+          "y": 3
+        },
+        "id": 3,
+        "options": {
+          "cellHeight": "md",
+          "frameIndex": 0,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "instance"
+            }
+          ]
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "node_time_seconds{dc=\"$job\", bare_metal=\"false\"} - node_boot_time_seconds{dc=\"$job\", bare_metal=\"false\"}",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{uptime}}",
+            "range": false,
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(irate(node_pressure_cpu_waiting_seconds_total{dc=\"$job\", bare_metal=\"false\"}[$__rate_interval]))*100",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "G"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(irate(node_pressure_memory_waiting_seconds_total{dc=\"$job\", bare_metal=\"false\"}[$__rate_interval]))*100* on(instance) group_left(nodename) node_uname_info{dc=\"$job\", bare_metal=\"false\"}",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "H"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(irate(node_pressure_io_waiting_seconds_total{dc=\"$job\", bare_metal=\"false\"}[$__rate_interval]))*100",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "I"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "irate(node_pressure_irq_stalled_seconds_total{dc=\"$job\", bare_metal=\"false\"}[$__rate_interval])",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "J"
+          }
+        ],
+        "title": "",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {
+              "byField": "instance",
+              "mode": "outer"
+            }
+          },
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "Time": {
+                  "aggregations": []
+                },
+                "Time 1": {
+                  "aggregations": []
+                },
+                "Value #A": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #B": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #C": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #D": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #E": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #F": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #G": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #H": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "Value #I": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "instance": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "job": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                },
+                "job 3": {
+                  "aggregations": []
+                },
+                "nodename": {
+                  "aggregations": [],
+                  "operation": "groupby"
+                }
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "AZ",
+              "mode": "index",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          },
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "S.No.",
+              "index": {
+                "asPercentile": false
+              },
+              "mode": "index",
+              "reduce": {
+                "reducer": "sum"
+              },
+              "replaceFields": false
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "S.No.": false,
+                "job 1": false,
+                "job 2": true,
+                "job 3": true,
+                "job 4": true,
+                "job 5": true,
+                "nodename 2": true,
+                "nodename 3": true,
+                "nodename 4": true
+              },
+              "includeByName": {},
+              "indexByName": {
+                "AZ": 3,
+                "S.No.": 0,
+                "Value #D": 9,
+                "Value #G": 6,
+                "Value #H": 7,
+                "Value #I": 8,
+                "instance": 1,
+                "job 1": 5,
+                "job 2": 4,
+                "job 3": 10,
+                "job 4": 11,
+                "nodename 1": 2,
+                "nodename 2": 12,
+                "nodename 3": 13,
+                "nodename 4": 14
+              },
+              "renameByName": {
+                "Value #A": "Memory_used %",
+                "Value #B": "CPU_busy %",
+                "Value #C": "Root fs used%",
+                "Value #D": "Uptime",
+                "Value #E": "Cache/Buffer",
+                "Value #F": "Swap Used %",
+                "Value #G": "CPU Pressure %",
+                "Value #H": "Memory Pressure %",
+                "Value #I": "I/O Pressure %",
+                "instance": "Instance",
+                "job 1": "Job",
+                "job 3": "DC",
+                "nodename 1": "Nodename"
+              }
+            }
+          },
+          {
+            "disabled": true,
+            "id": "calculateField",
+            "options": {
+              "index": {
+                "asPercentile": false
+              },
+              "mode": "index",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "schemaVersion": 42,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "hercules",
+            "value": "hercules"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "victoriametrics"
+          },
+          "definition": "label_values(node_uname_info{bare_metal=\"false\"},dc)",
+          "label": "DC",
+          "name": "job",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(node_uname_info{bare_metal=\"false\"},dc)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "VictoriaMetrics",
+            "value": "victoriametrics"
+          },
+          "hide": 2,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "VictoriaMetrics",
+          "type": "datasource"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Physical Machine List"
+  }
+}

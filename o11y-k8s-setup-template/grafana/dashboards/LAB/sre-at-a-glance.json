@@ -1,0 +1,2571 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "derthihgvbojkb"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "liveNow": true,
+    "panels": [
+      {
+        "description": "",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 0
+        },
+        "id": 12,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "## Frontend\n#### 1 Week\n**SLI:** Availability | **SLO:** 99.50%\n\u003cbr\u003e\n**SLI:** Latency [100ms] | **SLO:** 99.00%\n\u003cbr\u003e\n**SLI:** Success Rate | **SLO:** 99.00%\n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.6.1",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 4,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 42,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  count_over_time(\n    (kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"frontend\"} \u003e 0)[7d:1m]\n  )\n  /\n  count_over_time(\n    kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"frontend\"}[7d:1m]\n  )\n  * 100,\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Availability SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 20
+                },
+                {
+                  "color": "green",
+                  "value": 50
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 7,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 43,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (round(\n  (\n    clamp_min(\n      ( 0.995 - \n        (count_over_time((kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"frontend\"} \u003e 0)[7d:1m]) \n        / \n        count_over_time(kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"frontend\"}[7d:1m]))\n      ) * 100, 0 \n      )\n    / 0.005\n  ),\n  0.01\n))",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Availability Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 97
+                },
+                {
+                  "color": "green",
+                  "value": 98.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 10,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 44,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"frontend\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"200\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"frontend\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"+Inf\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Latency SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 20
+                },
+                {
+                  "color": "green",
+                  "value": 50
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 13,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 45,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.99 - \n        (\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"frontend\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"100\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"frontend\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"+Inf\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.01\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Latency Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 16,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 46,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"frontend\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    status_code!=\"STATUS_CODE_ERROR\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"frontend\",\n    span_kind=\"SPAN_KIND_SERVER\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Success Rate SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": -1000
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 19,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 47,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.99 - (\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"frontend\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          status_code!=\"STATUS_CODE_ERROR\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"frontend\",\n          span_kind=\"SPAN_KIND_SERVER\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.01\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Success Rate Error Budget",
+        "type": "stat"
+      },
+      {
+        "description": "",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 5
+        },
+        "id": 18,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "## Cart\n#### 1 Week\n**SLI:** Availability | **SLO:** 99.90%\n\u003cbr\u003e\n**SLI:** Latency [50ms] | **SLO:** 99.00%\n\u003cbr\u003e\n**SLI:** Success Rate | **SLO:** 99.50%\n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.6.1",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 4,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 48,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  count_over_time(\n    (kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"cart\"} \u003e 0)[7d:1m]\n  )\n  /\n  count_over_time(\n    kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"cart\"}[7d:1m]\n  )\n  * 100,\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Availability SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 7,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 49,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.999 - \n        (count_over_time((kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"cart\"} \u003e 0)[7d:1m]) \n        / \n        count_over_time(kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"cart\"}[7d:1m]))\n      ) * 100, 0 \n      )\n    / 0.001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Availability Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 97
+                },
+                {
+                  "color": "green",
+                  "value": 98.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 10,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 50,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"cart\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"100\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"cart\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"+Inf\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Latency SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 13,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 51,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.99 - \n        (\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"cart\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"50\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"cart\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"+Inf\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.01\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Latency Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 16,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 52,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"cart\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    status_code!=\"STATUS_CODE_ERROR\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"cart\",\n    span_kind=\"SPAN_KIND_SERVER\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Success Rate SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": -1000
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 19,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 53,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.995 - (\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"cart\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          status_code!=\"STATUS_CODE_ERROR\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"cart\",\n          span_kind=\"SPAN_KIND_SERVER\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.005\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Success Rate Error Budget",
+        "type": "stat"
+      },
+      {
+        "description": "",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 10
+        },
+        "id": 19,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "## Checkout\n#### 1 Week\n**SLI:** Availability | **SLO:** 99.90%\n\u003cbr\u003e\n**SLI:** Latency [1000ms] | **SLO:** 99.00%\n\u003cbr\u003e\n**SLI:** Success Rate | **SLO:** 99.50%\n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.6.1",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 4,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 54,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  count_over_time(\n    (kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"checkout\"} \u003e 0)[7d:1m]\n  )\n  /\n  count_over_time(\n    kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"checkout\"}[7d:1m]\n  )\n  * 100,\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Availability SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 7,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 55,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.999 - \n        (count_over_time((kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"checkout\"} \u003e 0)[7d:1m]) \n        / \n        count_over_time(kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"checkout\"}[7d:1m]))\n      ) * 100, 0 \n      )\n    / 0.001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Availability Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 97
+                },
+                {
+                  "color": "green",
+                  "value": 98.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 10,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 56,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"checkout\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"1000\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"checkout\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"+Inf\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Latency SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 13,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 57,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.99 - \n        (\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"checkout\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"1000\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"checkout\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"+Inf\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.01\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Latency Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 16,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 58,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"checkout\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    status_code!=\"STATUS_CODE_ERROR\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"checkout\",\n    span_kind=\"SPAN_KIND_SERVER\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Success Rate SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 19,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 59,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.995 - (\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"checkout\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          status_code!=\"STATUS_CODE_ERROR\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"checkout\",\n          span_kind=\"SPAN_KIND_SERVER\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.005\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Success Rate Error Budget",
+        "type": "stat"
+      },
+      {
+        "description": "",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 15
+        },
+        "id": 20,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "## Payment\n#### 1 Week\n**SLI:** Availability | **SLO:** 99.90%\n\u003cbr\u003e\n**SLI:** Latency [50ms] | **SLO:** 99.90%\n\u003cbr\u003e\n**SLI:** Success Rate | **SLO:** 99.99%\n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.6.1",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 4,
+          "y": 15
+        },
+        "hideTimeOverride": true,
+        "id": 60,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  count_over_time(\n    (kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"payment\"} \u003e 0)[7d:1m]\n  )\n  /\n  count_over_time(\n    kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"payment\"}[7d:1m]\n  )\n  * 100,\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Availability SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 7,
+          "y": 15
+        },
+        "hideTimeOverride": true,
+        "id": 61,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.999 - \n        (count_over_time((kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"payment\"} \u003e 0)[7d:1m]) \n        / \n        count_over_time(kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"payment\"}[7d:1m]))\n      ) * 100, 0 \n      )\n    / 0.001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Availability Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 10,
+          "y": 15
+        },
+        "hideTimeOverride": true,
+        "id": 62,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"payment\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"50\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"payment\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"+Inf\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Latency SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 13,
+          "y": 15
+        },
+        "hideTimeOverride": true,
+        "id": 63,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.999 - \n        (\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"payment\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"50\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"payment\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"+Inf\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Latency Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 16,
+          "y": 15
+        },
+        "hideTimeOverride": true,
+        "id": 64,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"payment\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    status_code!=\"STATUS_CODE_ERROR\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"payment\",\n    span_kind=\"SPAN_KIND_SERVER\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Success Rate SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": -1000
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 19,
+          "y": 15
+        },
+        "hideTimeOverride": true,
+        "id": 65,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.9999 - (\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"payment\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          status_code!=\"STATUS_CODE_ERROR\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"payment\",\n          span_kind=\"SPAN_KIND_SERVER\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.0001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Success Rate Error Budget",
+        "type": "stat"
+      },
+      {
+        "description": "",
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 20
+        },
+        "id": 21,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "## Ads\n#### 1 Week\n**SLI:** Availability | **SLO:** 99.90%\n\u003cbr\u003e\n**SLI:** Latency [100ms] | **SLO:** 99.50%\n\u003cbr\u003e\n**SLI:** Success Rate | **SLO:** 99.90%\n",
+          "mode": "markdown"
+        },
+        "pluginVersion": "11.6.1",
+        "title": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 4,
+          "y": 20
+        },
+        "hideTimeOverride": true,
+        "id": 66,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  count_over_time(\n    (kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"ad\"} \u003e 0)[7d:1m]\n  )\n  /\n  count_over_time(\n    kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"ad\"}[7d:1m]\n  )\n  * 100,\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Availability SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 7,
+          "y": 20
+        },
+        "hideTimeOverride": true,
+        "id": 67,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.999 - \n        (count_over_time((kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"ad\"} \u003e 0)[7d:1m]) \n        / \n        count_over_time(kube_deployment_status_replicas_ready{namespace=\"otel-demo\", deployment=\"ad\"}[7d:1m]))\n      ) * 100, 0 \n      )\n    / 0.001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Availability Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 97.5
+                },
+                {
+                  "color": "green",
+                  "value": 99
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 10,
+          "y": 20
+        },
+        "hideTimeOverride": true,
+        "id": 68,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"ad\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"100\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n    service_name=\"ad\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    le=\"+Inf\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Latency SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 13,
+          "y": 20
+        },
+        "hideTimeOverride": true,
+        "id": 72,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.995 - \n        (\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"ad\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"100\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_duration_milliseconds_bucket{\n          service_name=\"ad\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          le=\"+Inf\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.005\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Latency Error Budget",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "mappings": [],
+            "max": 100,
+            "min": 90,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red"
+                },
+                {
+                  "color": "semi-dark-yellow",
+                  "value": 98
+                },
+                {
+                  "color": "green",
+                  "value": 99.5
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 16,
+          "y": 20
+        },
+        "hideTimeOverride": true,
+        "id": 70,
+        "interval": "5m",
+        "maxDataPoints": 1500,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "text": {}
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "round(\n  100 *\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"ad\",\n    span_kind=\"SPAN_KIND_SERVER\",\n    status_code!=\"STATUS_CODE_ERROR\"\n  }[7d]))\n  /\n  sum(rate(traces_span_metrics_calls_total{\n    service_name=\"ad\",\n    span_kind=\"SPAN_KIND_SERVER\"\n  }[7d])),\n  0.0001\n)",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "7d",
+        "title": "Success SLO",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 2,
+            "displayName": "Remaining",
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "dark-red",
+                  "value": -1000
+                },
+                {
+                  "color": "dark-red",
+                  "value": 20
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 40
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 19,
+          "y": 20
+        },
+        "hideTimeOverride": true,
+        "id": 71,
+        "interval": "10m",
+        "maxDataPoints": 1000,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 20,
+            "valueSize": 40
+          },
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "editorMode": "code",
+            "expr": "100 - (\n  round(\n  (\n    clamp_min(\n      ( 0.9999 - (\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"ad\",\n          span_kind=\"SPAN_KIND_SERVER\",\n          status_code!=\"STATUS_CODE_ERROR\"\n        }[7d:1m]))\n        /\n        sum(rate(traces_span_metrics_calls_total{\n          service_name=\"ad\",\n          span_kind=\"SPAN_KIND_SERVER\"\n        }[7d:1m]))\n      )\n      ) * 100, 0 \n      )\n    / 0.0001\n  ),\n  0.01\n  )\n)",
+            "hide": false,
+            "legendFormat": "{{label_name}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "timeFrom": "1w",
+        "title": "Success Rate Error Budget",
+        "type": "stat"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {
+      "hidden": true
+    },
+    "timezone": "browser",
+    "title": "SRE At A Glance"
+  }
+}

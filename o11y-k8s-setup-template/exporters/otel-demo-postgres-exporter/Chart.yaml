@@ -1,0 +1,11 @@
+apiVersion: v2
+name: postgres-exporter
+description: A Helm chart for Postgress monitoring
+type: application
+version: 0.2.0
+appVersion: v0.18.1
+dependencies:
+  - name: prometheus-postgres-exporter
+    alias: postgres-exporters
+    version: 7.3.0
+    repository: https://prometheus-community.github.io/helm-charts

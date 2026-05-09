@@ -1,0 +1,41 @@
+vm:  
+  victoria-metrics-operator:
+    enabled: false
+  prometheus-node-exporter:
+    enabled: false     
+  vmsingle:
+    enabled: false 
+  vmcluster:
+    enabled: false 
+  alertmanager:
+    enabled: false
+  vmalert:
+    enabled: false 
+  defaultScrapeService: {}
+  vmagent:
+    enabled: true 
+    additionalRemoteWrites:
+      - url: "https://vm.opstree.net/insert/0/prometheus/api/v1/write"
+    spec:
+      selectAllByDefault: false
+      serviceScrapeNamespaceSelector: {}
+      scrapeInterval: 30s
+      extraArgs:
+        promscrape.maxScrapeSize: 200MB
+        promscrape.dropOriginalLabels: "true"
+      useVMConfigReloader: true
+      resources: {}
+  kube-state-metrics:
+    enabled: false
+  grafana:
+    enabled: false 
+  defaultDashboards:
+    enabled: false
+  kubeApiServer:
+    enabled: false 
+  kubeControllerManager:
+    enabled: false 
+  defaultRules:
+    create: false 
+  prometheus-operator-crds:
+    enabled: false

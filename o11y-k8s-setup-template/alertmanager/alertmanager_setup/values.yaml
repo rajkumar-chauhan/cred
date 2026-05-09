@@ -1,0 +1,193 @@
+#-- If replica count is more than one we need to provide the all pod url details 
+#-- to vmalert to trigger that alert otherwise only on alertmanager pod will be used by the vmalert 
+#-- vmalert to alertmanager pod there should not be any loadbalancing 
+alertmanager:
+  replicaCount: 2
+  baseURL: "https://alertmanager.k8s.opstree.dev"
+  # resources:
+  #   requests:
+  #     cpu: "0.25"
+  #     memory: 250Mi
+  #   limits:
+  #     cpu: "0.35"
+  #     memory: 500Mi
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+  # nodeSelector:
+  #   kubernetes.io/hostname: worker4
+  # ingress:
+  #   enabled: true
+  #   className: "kong"
+  #   annotations: 
+  #     konghq.com/plugins: alertmanager-uri-rewrite
+  #   hosts:
+  #     - host: alertmanager.k8s.opstree.dev
+  #       paths:
+  #         - path: /
+  #           pathType: Prefix
+    tls: []
+  config:
+    enabled: true
+    global: {}
+      
+    route:
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 30m
+      group_by: ['alertname']
+      receiver: slack-observability
+      routes:
+        - match:
+            alert: kubernetes
+          receiver: slack-observability
+        - match:
+            alert: observability
+          receiver: slack-observability
+        - match:
+            alert: clusterobservability
+          receiver: slack-cluster-observability
+    receivers:
+      - name: slack-data-centre
+        slack_configs:
+          - channel: "#data-centre-incidents"
+            api_url: 'https:
+            send_resolved: true
+            color: '{{ template "slack.color" . }}'
+            title: '{{ template "slack.title" . }}'
+            text: '{{ template "slack.text" . }}'
+            actions:
+              - type: button
+                text: 'Runbook :green_book:'
+                url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+              - type: button
+                text: 'Query :mag:'
+                url: '{{ (index .Alerts 0).GeneratorURL }}'
+              - type: button
+                text: 'Dashboard :chart_with_upwards_trend:'
+                url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+              - type: button
+                text: 'Silence :no_bell:'
+                url: '{{ template "__alert_silence_link" . }}'
+      - name: slack-observability
+        slack_configs:
+        - actions:
+          - text: 'Runbook :green_book:'
+            type: button
+            url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+          - text: 'Query :mag:'
+            type: button
+            url: '{{ (index .Alerts 0).GeneratorURL }}'
+          - text: 'Dashboard :chart_with_upwards_trend:'
+            type: button
+            url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+          - text: 'Silence :no_bell:'
+            type: button
+            url: '{{ template "__alert_silence_link" . }}'
+          api_url: https
+          channel: ldc-infra-alert
+          color: '{{ template "slack.color" . }}'
+          send_resolved: true
+          text: '{{ template "slack.text" . }}'
+          title: '{{ template "slack.title" . }}'
+      - name: slack-cluster-observability
+        slack_configs:
+        - actions:
+          - text: 'Runbook :green_book:'
+            type: button
+            url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+          - text: 'Query :mag:'
+            type: button
+            url: '{{ (index .Alerts 0).GeneratorURL }}'
+          - text: 'Dashboard :chart_with_upwards_trend:'
+            type: button
+            url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+          - text: 'Silence :no_bell:'
+            type: button
+            url: '{{ template "__alert_silence_link" . }}'
+          api_url: https:
+          channel: ldc-k8s-alert
+          color: '{{ template "slack.color" . }}'
+          send_resolved: true
+          text: '{{ template "slack.text" . }}'
+          title: '{{ template "slack.title" . }}'    
+  templates:
+    opstree-alert-template.tmpl: |-
+      {{/* Alertmanager Silence link */}}
+      {{ define "__alert_silence_link" -}}
+        {{ .ExternalURL }}/#/silences/new?filter=%7B
+        {{- range .CommonLabels.SortedPairs -}}
+          {{- if ne .Name "alertname" -}}
+            {{- .Name }}%3D"{{- .Value | urlquery -}}"%2C%20
+          {{- end -}}
+        {{- end -}}
+        alertname%3D"{{- .CommonLabels.alertname -}}"%7D
+      {{- end }}
+      {{ define "__alert_severity" -}}
+          {{- if eq .CommonLabels.severity "critical" -}}
+          • *severity:* `critical`
+          {{- else if eq .CommonLabels.severity "warning" -}}
+          • *severity:* `warning`
+          {{- else if eq .CommonLabels.severity "info" -}}
+          • *severity:* `info`
+          {{- else -}}
+          • *severity:* :question: {{ .CommonLabels.severity }}
+          {{- end }}
+      {{- end }}
+      {{ define "__alert_severity_prefix_title" -}}
+          {{ if ne .Status "firing" -}}
+          :white_check_mark:
+          {{- else if eq .CommonLabels.severity "critical" -}}
+          :fire:
+          {{- else if eq .CommonLabels.severity "warning" -}}
+          :warning:
+          {{- else if eq .CommonLabels.severity "info" -}}
+          :information_source:
+          {{- else -}}
+          :question:
+          {{- end }}
+      {{- end }}
+      {{ define "slack.title" -}}
+        [{{ .Status | toUpper -}}
+        {{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{- end -}}
+        ] {{ template "__alert_severity_prefix_title" . }} {{ .CommonLabels.alertname }} | {{ .CommonLabels.env }}
+      {{- end }}
+      {{ define "slack.color" -}}
+        {{ if eq .Status "firing" -}}
+          {{ if eq .CommonLabels.severity "warning" -}}
+            warning
+          {{- else if eq .CommonLabels.severity "critical" -}}
+            danger
+          {{- else -}}
+            #439FE0
+          {{- end }}
+        {{ else -}}
+        good
+        {{- end }}
+      {{- end }}
+      {{ define "slack.text" -}}
+        {{ template "__alert_severity" . }}
+        {{- if (index .Alerts 0).Annotations.summary }}
+        • *summary:* `{{ (index .Alerts 0).Annotations.summary }}`
+        {{- end }}
+        {{- if (index .Alerts 0).Annotations.description }}
+        • *Status:* `{{ (index .Alerts 0).Annotations.description }}`
+        {{- end }}
+        {{- if .CommonLabels.namespace }}
+        • *namespace:* `{{ .CommonLabels.namespace }}`
+        {{- end }}
+        {{- if .CommonLabels.env }}
+        • *env:* `{{ .CommonLabels.env }}`
+        {{- end }}
+        {{- if .CommonLabels.container }}
+        • *service:* `{{ .CommonLabels.container }}`
+        {{- end }}
+        {{- if .CommonLabels.pod }}
+        • *pod:* `{{ .CommonLabels.pod }}`
+        {{- end }}
+        *Details:*
+        {{ range .CommonLabels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+        {{ end }}
+      {{- end }}

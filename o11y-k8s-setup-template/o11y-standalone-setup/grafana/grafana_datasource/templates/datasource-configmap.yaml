@@ -1,0 +1,14 @@
+{{- range $path, $bytes := .Files.Glob "datasources/*.yaml" }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana-custom-datasources.fullname" $ }}-{{ base $path | trimSuffix ".yaml" | lower }}
+  namespace: monitoring
+  labels:
+    {{- include "grafana-custom-datasources.labels" $ | nindent 4 }}
+    grafana_datasource: "1"
+data:
+  {{ base $path }}: |-
+{{ $.Files.Get $path | indent 4 }}
+{{- end }}

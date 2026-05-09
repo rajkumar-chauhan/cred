@@ -1,0 +1,181 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: service-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: Servicehealth.rules
+    rules:
+    - alert: ServicePodCrashLoopBackOff
+      annotations:
+        description: Pod {{ $labels.pod }} in namespace {{ $labels.namespace}} (service={{$labels.rems_service
+          }}, group={{ $labels.rems_application_group}}) is crashlooping.
+        summary: Pod is crashlooping
+      expr: |
+        (
+          kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"}
+          OR
+          kube_pod_init_container_status_waiting_reason{reason="CrashLoopBackOff"}
+        )
+        * on(pod) group_left(rems_application_group, rems_service, rems_technology, rems_environment)
+          (kube_pod_labels{rems_application_group!="", rems_service!="", rems_environment!="", rems_technology!=""})
+        > 0
+      for: 5m
+      labels:
+        alert: clusterobservability
+        rems_app_dev_owner: abhishek.dubey
+        rems_app_manager_owner: sandeep
+        rems_app_qa_owner: shwetabh.vats
+        rems_app_severity: critical
+        rems_application_group: '{{ $labels.rems_application_group }}'
+        rems_environment: '{{ $labels.rems_environment }}'
+        rems_service: '{{ $labels.rems_service }}'
+        rems_technology: '{{ $labels.rems_technology }}'
+        rems_type: '{{ $labels.rems_type }}'
+        severity: critical
+        team: coe
+    - alert: ServicePodRestarts
+      annotations:
+        description: Pod {{ $labels.pod}} in namespace {{ $labels.namespace}} is restarting
+          too frequently.
+        summary: Pod is restarting
+      expr: |
+        (rate(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[5m]) * 300)
+        * on(pod) group_left(rems_application_group, rems_service, rems_technology, rems_environment)
+          (kube_pod_labels{rems_application_group!="", rems_service!="", rems_environment!="", rems_technology!=""})
+        > 3
+      for: 10m
+      labels:
+        alert: clusterobservability
+        rems_app_dev_owner: abhishek.dubey
+        rems_app_manager_owner: sandeep
+        rems_app_qa_owner: shwetabh.vats
+        rems_app_severity: critical
+        rems_application_group: '{{ $labels.rems_application_group }}'
+        rems_environment: '{{ $labels.rems_environment }}'
+        rems_service: '{{ $labels.rems_service }}'
+        rems_technology: '{{ $labels.rems_technology }}'
+        rems_type: '{{$labels.rems_type }}'
+        severity: critical
+        team: coe
+    - alert: ServicePodNotReady
+      annotations:
+        description: Pod {{ $labels.pod }} in {{ $labels.namespace}} is stuck in Pending/Unknown
+          for >10m.
+        summary: Pod Pending/Unknown
+      expr: |
+        (
+          sum by(namespace, pod) (
+            max by(namespace, pod) (
+              kube_pod_status_phase{phase=~"Pending|Unknown"}
+            )
+            * on(pod) group_left(owner_kind) topk by(namespace, pod) (
+              1, max by(pod, owner_kind) (kube_pod_owner{owner_kind!="Job"})
+            )
+          )
+        )
+        * on(pod) group_left(rems_application_group, rems_service, rems_technology, rems_environment)
+          (kube_pod_labels{rems_application_group!="", rems_service!="", rems_environment!="", rems_technology!=""})
+        > 0
+      for: 10m
+      labels:
+        alert: clusterobservability
+        rems/category: Application
+        rems_app_dev_owner: abhishek.dubey
+        rems_app_manager_owner: sandeep
+        rems_app_qa_owner: shwetabh.vats
+        rems_app_severity: critical
+        rems_application_group: '{{$labels.rems_application_group }}'
+        rems_environment: '{{ $labels.rems_environment }}'
+        rems_service: '{{ $labels.rems_service }}'
+        rems_technology: '{{ $labels.rems_technology }}'
+        rems_type: '{{ $labels.rems_type }}'
+        severity: critical
+        team: coe
+    - alert: ServiceContainerWaiting
+      annotations:
+        description: Pod {{ $labels.pod }} in {{ $labels.namespace }} is stuck in
+          waiting state.
+        summary: Pod stuck in waiting state
+      expr: |
+        sum by(namespace, pod, container,rems_app_severity,rems_application_group,rems_environment,rems_service,rems_technology,rems_type,rems_app_dev_owner,rems_app_manager_owner,rems_app_qa_owner,rems_category) (
+          kube_pod_container_status_waiting_reason
+        )
+        * on(pod) group_left(rems_application_group, rems_service, rems_technology, rems_environment)
+          (kube_pod_labels{rems_application_group!="", rems_environment!="", rems_technology!="", rems_service!=""})
+        > 0
+      for: 5m
+      labels:
+        alert: clusterobservability
+        rems/category: Application
+        rems_app_dev_owner: abhishek.dubey
+        rems_app_manager_owner: sandeep
+        rems_app_qa_owner: shwetabh.vats
+        rems_app_severity: critical
+        rems_application_group: '{{ $labels.rems_application_group }}'
+        rems_environment: '{{ $labels.rems_environment }}'
+        rems_service: '{{ $labels.rems_service }}'
+        rems_technology: '{{ $labels.rems_technology }}'
+        rems_type: '{{ $labels.rems_type }}'
+        severity: critical
+        team: coe
+    - alert: Http500ErrorOccurred
+      annotations:
+        description: HTTP 5xx errors observed for service {{ $labels.service_name}}
+          at route {{ $labels.http_route}}.
+        summary: 500 HTTP Errors
+      expr: |
+        sum by(http_route, service_name,rems_app_severity,rems_application_group,rems_environment,rems_service,rems_technology,rems_type,rems_app_dev_owner,rems_app_manager_owner,rems_app_qa_owner,rems_category) (
+          increase(traces_span_metrics_duration_milliseconds_count{http_status_code=~"^5.*"}[5m])
+        ) > 0
+      labels:
+        alert: clusterobservability
+        rems/category: Application
+        rems_app_dev_owner: abhishek.dubey
+        rems_app_manager_owner: sandeep
+        rems_app_qa_owner: shwetabh.vats
+        rems_app_severity: critical
+        rems_application_group: '{{ $labels.rems_application_group }}'
+        rems_environment: '{{ $labels.rems_environment }}'
+        rems_service: '{{ $labels.rems_service }}'
+        rems_technology: '{{ $labels.rems_technology }}'
+        rems_type: '{{ $labels.rems_type }}'
+        severity: critical
+        team: coe
+    - alert: GrpcErrorOccurred
+      annotations:
+        description: gRPC error (code {{ $labels.rpc_grpc_status_code }}) occurred
+          in {{ $labels.service_name }}.
+        summary: gRPC Error
+      expr: |
+        sum by(rpc_grpc_status_code, service_name,rems_app_severity,rems_application_group,rems_environment,rems_service,rems_technology,rems_type,rems_app_dev_owner,rems_app_manager_owner,rems_app_qa_owner,rems_category) (
+          increase(traces_span_metrics_duration_milliseconds_count{rpc_grpc_status_code=~"13|14"}[5m])
+        ) > 0
+      for: 5m
+      labels:
+        alert: clusterobservability
+        rems/category: Application
+        rems_app_dev_owner: abhishek.dubey
+        rems_app_manager_owner: sandeep
+        rems_app_qa_owner: shwetabh.vats
+        rems_app_severity: critical
+        rems_application_group: '{{ $labels.rems_application_group }}'
+        rems_environment: '{{ $labels.rems_environment }}'
+        rems_service: '{{ $labels.rems_service }}'
+        rems_technology: '{{ $labels.rems_technology }}'
+        rems_type: '{{ $labels.rems_type }}'
+        severity: critical
+        team: coe
+status:
+  conditions:
+  - lastTransitionTime: "2025-12-01T09:10:06Z"
+    lastUpdateTime: "2026-01-28T08:03:56Z"
+    observedGeneration: 10
+    reason: ConfigParsedAndApplied
+    status: "True"
+    type: vm.monitoring.vmalert.victoriametrics.com/Applied
+  observedGeneration: 10
+  updateStatus: operational

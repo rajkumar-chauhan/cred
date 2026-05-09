@@ -1,0 +1,44 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: {{ .Values.appName }}-scrape
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: Helm
+spec:
+  jobName: {{ .Values.jobName }}
+  targetEndpoints:
+  {{- range .Values.targetEndpoints }}
+  - labels:
+      category: {{ .labels.category | quote }}
+      rems_app_dev_owner: {{ .labels.dev_owner | quote }}
+      rems_app_manager_owner: {{ .labels.manager_owner | quote }}
+      rems_app_qa_owner: {{ .labels.qa_owner | quote }}
+      rems_app_severity: {{ .labels.severity | quote }}
+      rems_application_group: {{ .labels.application_group | quote }}
+      rems_category: {{ .labels.rems_category | quote }}
+      rems_environment: {{ .labels.environment | quote }}
+      rems_service: {{ .labels.service | quote }}
+      rems_technology: {{ .labels.technology | quote }}
+      {{- if .labels.type }}
+      rems_type: {{ .labels.type | quote }}
+      {{- end }}
+    params:
+      module:
+      - http_2xx
+    path: /probe
+    relabelConfigs:
+    - sourceLabels:
+      - __address__
+      targetLabel: __param_target
+    - sourceLabels:
+      - __param_target
+      targetLabel: instance
+    - replacement: blackbox.monitoring.svc.cluster.local:9115
+      targetLabel: __address__
+    scheme: http
+    targets:
+    {{- range .targets }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}

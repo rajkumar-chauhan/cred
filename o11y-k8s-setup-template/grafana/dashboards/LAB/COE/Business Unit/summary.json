@@ -1,0 +1,269 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "fev3ruc1kcruoc"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "victoriametrics"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "Detail",
+                "url": "https://grafana.k8s.opstree.dev/d/fev2j5o7zwkqof/details?orgId=1\u0026var-business unit=${__data.fields.BU}\u0026\u0026from=${__from}\u0026to=${__to}"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "P95 latency"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "ms"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 1000
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 1000,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 10000
+                      },
+                      "type": "range"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error rate %"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "from": 0,
+                        "result": {
+                          "color": "green",
+                          "index": 0
+                        },
+                        "to": 10
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": 10,
+                        "result": {
+                          "color": "red",
+                          "index": 1
+                        },
+                        "to": 100
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "green",
+                          "index": 2,
+                          "text": "0%"
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-text"
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "P95 latency"
+            }
+          ]
+        },
+        "pluginVersion": "11.6.1",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "histogram_quantile(0.95, sum by(le, bu) (rate(traces_span_metrics_duration_milliseconds_bucket{span_kind=\"SPAN_KIND_SERVER\",org=\"coe\",bu!~\"^(|UNKNOWN)$\"}[5m])))",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{bu}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "victoriametrics"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "(sum(rate(traces_span_metrics_duration_milliseconds_count{http_status_code!~\"2.*|3.*|0|$\",bu!~\"^(|UNKNOWN)$\",org=\"coe\"}[5m])) by (bu)) / (sum(rate(traces_span_metrics_duration_milliseconds_count{http_status_code!=\"\",bu!~\"^(|UNKNOWN)$\",org=\"coe\"}[5m])) by (bu)) * 100",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "{{bu}}",
+            "range": false,
+            "refId": "B"
+          }
+        ],
+        "title": "Business Unit",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "Value": "Avg p95 latency",
+                "Value #A": "P95 latency",
+                "Value #B": "Error rate %",
+                "service_name": "Sevice Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Summary"
+  }
+}

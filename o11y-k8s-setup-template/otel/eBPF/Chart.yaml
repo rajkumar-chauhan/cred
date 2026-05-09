@@ -1,0 +1,20 @@
+apiVersion: v2
+name: otel-eBPF-instrumentation
+version: 0.1.0
+description: A Helm chart for OpenTelemetry eBPF Instrumentation
+type: application
+appVersion: v0.2.0
+dependencies:
+  - name: opentelemetry-ebpf-instrumentation
+    version: 0.6.0
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    alias: obi
+    tags:
+      - obi 
+
+  - name: opentelemetry-ebpf
+    version: 0.1.6
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    alias: ebpf
+    tags:
+      - ebpf

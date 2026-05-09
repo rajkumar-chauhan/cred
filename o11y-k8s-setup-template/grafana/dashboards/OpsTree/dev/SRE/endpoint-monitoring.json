@@ -1,0 +1,1233 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "detzji46auz9ca13-dev"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "The Endpoint Monitoring Dashboard provides real-time visibility into the availability, reliability, and performance of application endpoints across environments. It helps in proactively identifying failures, latency spikes, and unhealthy services before they impact end users.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/ot-client/o11y-k8s-setup-template/blob/main/grafana/dashboards/OpsTree/Dev/SRE/endpoint-monitoring.json"
+      }
+    ],
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Endpoints in current cluster",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": []
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "autoSizeColumns": true,
+          "autoSizePolygons": true,
+          "autoSizeRows": true,
+          "compositeConfig": {
+            "animationSpeed": "1500",
+            "composites": [
+              {
+                "isTemplated": true,
+                "name": "$namespace/$endpoint",
+                "pattern": ".*$endpoint.*"
+              }
+            ],
+            "enabled": true
+          },
+          "compositeGlobalAliasingEnabled": false,
+          "ellipseCharacters": 40,
+          "ellipseEnabled": true,
+          "globalAutoScaleFonts": true,
+          "globalClickthrough": "",
+          "globalClickthroughCustomTarget": "",
+          "globalClickthroughCustomTargetEnabled": false,
+          "globalClickthroughNewTabEnabled": true,
+          "globalClickthroughSanitizedEnabled": true,
+          "globalCompositeValueFontSize": 14,
+          "globalDecimals": 2,
+          "globalDisplayMode": "all",
+          "globalDisplayTextTriggeredEmpty": "No Endpoints",
+          "globalFillColor": "rgba(255, 140, 0, 1)",
+          "globalGradientsEnabled": true,
+          "globalLabelFontSize": 30,
+          "globalOperator": "mean",
+          "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+          "globalPolygonBorderSize": 5,
+          "globalPolygonSize": 200,
+          "globalRegexPattern": "",
+          "globalShape": "hexagon_pointed_top",
+          "globalShowTimestampEnabled": false,
+          "globalShowTimestampFontSize": 12,
+          "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+          "globalShowTimestampPosition": "below_value",
+          "globalShowTimestampYOffset": 0,
+          "globalShowTooltipColumnHeadersEnabled": true,
+          "globalShowValueEnabled": true,
+          "globalTextFontAutoColorEnabled": false,
+          "globalTextFontColor": "#000000",
+          "globalTextFontFamily": "Roboto",
+          "globalThresholdsConfig": [
+            {
+              "color": "#C4162A",
+              "state": 0,
+              "value": 0
+            },
+            {
+              "color": "#E0B400",
+              "state": 2,
+              "value": 80
+            },
+            {
+              "color": "#37872D",
+              "state": 1,
+              "value": 100
+            }
+          ],
+          "globalTooltipsEnabled": true,
+          "globalTooltipsFontFamily": "Roboto",
+          "globalTooltipsShowTimestampEnabled": true,
+          "globalTooltipsShowValueEnabled": true,
+          "globalUnitFormat": "percent",
+          "globalValueFontSize": 14,
+          "layoutDisplayLimit": 100,
+          "layoutNumColumns": 8,
+          "layoutNumRows": 8,
+          "overrideConfig": {
+            "overrides": []
+          },
+          "sortByDirection": 1,
+          "sortByField": "name",
+          "tooltipDisplayMode": "all",
+          "tooltipDisplayTextTriggeredEmpty": "OK",
+          "tooltipPrimarySortByField": "thresholdLevel",
+          "tooltipPrimarySortDirection": 1,
+          "tooltipSecondarySortByField": "value",
+          "tooltipSecondarySortDirection": 1
+        },
+        "pluginVersion": "2.1.16",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "avg_over_time(probe_success{rems_environment=\"$env\", rems_application_group=~\"$application_group\", rems_service=~\"$service\", instance=~\"$instance\"}[$__rate_interval]) * 100",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Endpoints Success Rate",
+        "type": "grafana-polystat-panel"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "Endpoint success rate",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 10
+        },
+        "id": 3,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true,
+            "sortBy": "Last *",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "avg_over_time(probe_success{rems_environment=\"$env\", rems_application_group=~\"$application_group\", rems_service=~\"$service\", instance=~\"$instance\"}[$__rate_interval]) * 100",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Endpoint Success Rate",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "HTTP Status",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 10
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true,
+            "sortBy": "Last *",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "probe_http_status_code{rems_environment=\"$env\", rems_application_group=~\"$application_group\", rems_service=~\"$service\", instance=~\"$instance\"}",
+            "legendFormat": "{{instance}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "HTTP Status",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DATASOURCE}"
+        },
+        "description": "\u003cp\u003e\u003cstrong\u003eInstance\u003c/strong\u003e – The endpoint URL being probed.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eStatus\u003c/strong\u003e – Indicates whether the probe is UP or DOWN.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eCode\u003c/strong\u003e – HTTP response code returned by the service.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eSSL\u003c/strong\u003e – Shows whether SSL/TLS is enabled and valid.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eTLS Version\u003c/strong\u003e – The TLS protocol version used for HTTPS.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eSSL Cert Expiry (days)\u003c/strong\u003e – Days remaining before the SSL certificate expires.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eSSL Cert Expiry Color Rules\u003c/strong\u003e – (-365 to 7 days → \u003cspan style='color:red;font-weight:bold;'\u003eRed\u003c/span\u003e, 8 to 15 days → \u003cspan style='color:#EAB839;font-weight:bold;'\u003eYellow\u003c/span\u003e, 16+ days → \u003cspan style='color:green;font-weight:bold;'\u003eGreen\u003c/span\u003e)\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eProbe Duration (s)\u003c/strong\u003e – Total time taken for the HTTP probe to complete.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eDNS Lookup Duration (s)\u003c/strong\u003e – Time taken for DNS resolution.\u003c/p\u003e",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "footer": {
+                "reducers": []
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "min": 0,
+            "noValue": "N/A",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "SSL Cert Expiry (days)"
+              },
+              "properties": [
+                {
+                  "id": "decimals",
+                  "value": 0
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "transparent",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": -365
+                      },
+                      {
+                        "color": "red",
+                        "value": 7
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 8
+                      },
+                      {
+                        "color": "green",
+                        "value": 16
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Probe Duration (s)"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "basic",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "min",
+                  "value": 0
+                },
+                {
+                  "id": "max",
+                  "value": 365
+                },
+                {
+                  "id": "custom.filterable",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Status"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "0": {
+                          "text": "DOWN"
+                        },
+                        "1": {
+                          "text": "UP"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": 0
+                      },
+                      {
+                        "color": "green",
+                        "value": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Code"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "rgba(0, 0, 0, 0)",
+                        "value": 0
+                      },
+                      {
+                        "color": "green",
+                        "value": 200
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 300
+                      },
+                      {
+                        "color": "red",
+                        "value": 500
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "0": {
+                          "text": ""
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 78
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "SSL"
+              },
+              "properties": [
+                {
+                  "id": "decimals",
+                  "value": 0
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "type": "color-background"
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "transparent",
+                          "index": 0,
+                          "text": "N/A"
+                        }
+                      },
+                      "type": "special"
+                    },
+                    {
+                      "options": {
+                        "from": 0.000001,
+                        "result": {
+                          "color": "green",
+                          "index": 1,
+                          "text": "OK"
+                        },
+                        "to": 1000
+                      },
+                      "type": "range"
+                    },
+                    {
+                      "options": {
+                        "from": -99999,
+                        "result": {
+                          "color": "red",
+                          "index": 2,
+                          "text": "NO"
+                        },
+                        "to": 0
+                      },
+                      "type": "range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Probe Duration (s)"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 0.8
+                      },
+                      {
+                        "color": "red",
+                        "value": 2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "basic",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "custom.filterable",
+                  "value": false
+                },
+                {
+                  "id": "decimals",
+                  "value": 2
+                },
+                {
+                  "id": "max",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "DNS Lookup Duration (s)"
+              },
+              "properties": [
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 0.1
+                      },
+                      {
+                        "color": "red",
+                        "value": 0.2
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "max",
+                  "value": 0.3
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "basic",
+                    "type": "gauge"
+                  }
+                },
+                {
+                  "id": "custom.filterable",
+                  "value": false
+                },
+                {
+                  "id": "decimals",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Endpoints"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "${__data.fields.Endpoints}",
+                      "url": "${__data.fields.Endpoints}"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 463
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "TLS Version"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 117
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "rems_application_group"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 272
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Endpoints"
+              },
+              "properties": [
+                {
+                  "id": "custom.align",
+                  "value": "left"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 19
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "SSL Cert Expiry (days)"
+            }
+          ]
+        },
+        "pluginVersion": "12.4.0-19913286788",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "max by (instance,rems_application_group, rems_service) (\n  probe_success{\n    rems_environment=\"$env\",\n    rems_application_group=~\"$application_group\",\n    rems_service=~\"$service\",\n    instance=~\"$instance\"\n  }\n)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "max by (instance, rems_application_group, rems_service) (\n  (probe_ssl_earliest_cert_expiry{\n    rems_environment=\"$env\",\n    rems_application_group=~\"$application_group\",\n    rems_service=~\"$service\",\n    instance=~\"$instance\"\n  } - time()) / 3600 / 24\n)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "max by (instance, rems_application_group, rems_service) (\n  (probe_ssl_earliest_cert_expiry{\n    rems_environment=\"$env\",\n    rems_application_group=~\"$application_group\",\n    rems_service=~\"$service\",\n    instance=~\"$instance\"\n  } - time()) / 3600 / 24\n)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "max by (instance, rems_application_group, rems_service) (\n  probe_http_status_code{\n    rems_environment=\"$env\",\n    rems_application_group=~\"$application_group\",\n    rems_service=~\"$service\",\n    instance=~\"$instance\"\n  }\n) \u003e 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "D"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "max by (instance, rems_application_group, rems_service) (\n  avg_over_time(\n    probe_duration_seconds{\n      rems_environment=\"$env\",\n      rems_application_group=~\"$application_group\",\n      rems_service=~\"$service\",\n      instance=~\"$instance\"\n    }[1m]\n  )\n)",
+            "format": "table",
+            "instant": false,
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "E"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "probe_tls_version_info{rems_environment=\"$env\", rems_application_group=~\"$application_group\", rems_service=~\"$service\", instance=~\"$instance\"}",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "F"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DATASOURCE}"
+            },
+            "editorMode": "code",
+            "expr": "max by (instance, rems_application_group, rems_service) (\n  avg_over_time(\n    probe_dns_lookup_time_seconds{\n      rems_environment=\"$env\",\n      rems_application_group=~\"$application_group\",\n      rems_service=~\"$service\",\n      instance=~\"$instance\"\n    }[1m]\n  )\n)",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "G"
+          }
+        ],
+        "title": "HTTP Probe Overview",
+        "transformations": [
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "instance"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Time 1": false,
+                "Time 2": false,
+                "Time 3": true,
+                "Time 4": true,
+                "Time 5": true,
+                "Time 6": true,
+                "Time 7": true,
+                "Time 8": true,
+                "Value": false,
+                "Value #A": false,
+                "Value #B": false,
+                "Value #F": true,
+                "__name__": true,
+                "__name__ 1": true,
+                "__name__ 2": true,
+                "__name__ 3": true,
+                "__name__ 4": true,
+                "__name__ 5": true,
+                "__name__ 6": true,
+                "__name__ 7": true,
+                "bp 1": true,
+                "bp 2": true,
+                "category": true,
+                "category 1": true,
+                "category 2": true,
+                "category 3": true,
+                "category 4": true,
+                "category 5": true,
+                "category 6": true,
+                "cluster": true,
+                "cluster 1": true,
+                "cluster 2": true,
+                "cluster 3": true,
+                "cluster 4": true,
+                "cluster 5": true,
+                "cluster 6": true,
+                "cluster 7": true,
+                "env": true,
+                "env 1": true,
+                "env 2": true,
+                "env 3": true,
+                "env 4": true,
+                "env 5": true,
+                "env 6": true,
+                "env 7": true,
+                "job": true,
+                "job 1": true,
+                "job 2": true,
+                "job 3": true,
+                "job 4": true,
+                "job 5": true,
+                "job 6": true,
+                "job 7": true,
+                "job 8": true,
+                "k8s_cluster 2": true,
+                "k8s_cluster 3": true,
+                "k8s_cluster 4": true,
+                "k8s_cluster 5": true,
+                "k8s_cluster 6": true,
+                "k8s_cluster 7": true,
+                "phase": true,
+                "prometheus": true,
+                "prometheus 1": true,
+                "prometheus 2": true,
+                "prometheus 3": true,
+                "prometheus 4": true,
+                "prometheus 5": true,
+                "prometheus 6": true,
+                "prometheus 7": true,
+                "rems_app_dev_owner": true,
+                "rems_app_dev_owner 1": true,
+                "rems_app_manager_owner": true,
+                "rems_app_manager_owner 1": true,
+                "rems_app_qa_owner": true,
+                "rems_app_qa_owner 1": true,
+                "rems_app_severity": true,
+                "rems_app_severity 1": true,
+                "rems_application_group 1": false,
+                "rems_application_group 2": true,
+                "rems_application_group 3": true,
+                "rems_application_group 4": true,
+                "rems_application_group 5": true,
+                "rems_application_group 6": true,
+                "rems_application_group 7": true,
+                "rems_category": true,
+                "rems_category 1": true,
+                "rems_environment": true,
+                "rems_environment 1": true,
+                "rems_service 1": false,
+                "rems_service 2": true,
+                "rems_service 3": true,
+                "rems_service 4": true,
+                "rems_service 5": true,
+                "rems_service 6": true,
+                "rems_service 7": true,
+                "rems_technology": true,
+                "rems_technology 1": true,
+                "rems_type": true,
+                "rems_type 1": true,
+                "type": true,
+                "type 1": true,
+                "type 2": true,
+                "type 3": true,
+                "type 4": true,
+                "type 5": true,
+                "type 6": true,
+                "type 7": true,
+                "type 8": true,
+                "version": false
+              },
+              "includeByName": {},
+              "indexByName": {
+                "Time 1": 9,
+                "Time 2": 13,
+                "Time 3": 17,
+                "Time 4": 20,
+                "Time 5": 24,
+                "Time 6": 28,
+                "Time 7": 32,
+                "Value #A": 1,
+                "Value #B": 3,
+                "Value #C": 5,
+                "Value #D": 2,
+                "Value #E": 6,
+                "Value #F": 8,
+                "Value #G": 7,
+                "__name__ 1": 10,
+                "__name__ 2": 14,
+                "__name__ 3": 21,
+                "__name__ 4": 25,
+                "__name__ 5": 29,
+                "instance": 0,
+                "job 1": 11,
+                "job 2": 15,
+                "job 3": 18,
+                "job 4": 22,
+                "job 5": 26,
+                "job 6": 30,
+                "type 1": 12,
+                "type 2": 16,
+                "type 3": 19,
+                "type 4": 23,
+                "type 5": 27,
+                "type 6": 31,
+                "version": 4
+              },
+              "renameByName": {
+                "Value": "Up",
+                "Value #A": "Status",
+                "Value #B": "SSL",
+                "Value #C": "SSL Cert Expiry (days)",
+                "Value #D": "HTTP Status ",
+                "Value #E": "Probe Duration (s)",
+                "Value #F": "",
+                "Value #G": "DNS Lookup Duration (s)",
+                "Value #H": "Probe IP",
+                "instance": "Endpoints",
+                "type 6": "",
+                "version": "TLS Version"
+              }
+            }
+          }
+        ],
+        "transparent": true,
+        "type": "table"
+      }
+    ],
+    "preload": true,
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "ot-dashboard",
+      "blackbox",
+      "endpoint monitoring"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "VictoriaMetrics",
+            "value": "cffghapzr3togd"
+          },
+          "hide": 2,
+          "name": "DATASOURCE",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "allValue": ".+",
+          "allowCustomValue": false,
+          "current": {
+            "text": "prod",
+            "value": "prod"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(probe_success,rems_environment)",
+          "includeAll": false,
+          "label": "Env",
+          "name": "env",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(probe_success,rems_environment)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": ".+",
+          "current": {
+            "text": "other",
+            "value": "other"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(probe_success{rems_environment=~\"$env\"},rems_application_group)",
+          "includeAll": true,
+          "label": "ApplicationGroup",
+          "name": "application_group",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(probe_success{rems_environment=~\"$env\"},rems_application_group)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": ".+",
+          "current": {
+            "text": "github",
+            "value": "github"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(probe_success{rems_environment=~\"$env\", rems_application_group=~\"$application_group\"},rems_service)",
+          "includeAll": true,
+          "label": "Service",
+          "name": "service",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(probe_success{rems_environment=~\"$env\", rems_application_group=~\"$application_group\"},rems_service)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "^(?!COE$|other$).*",
+          "type": "query"
+        },
+        {
+          "allValue": ".+",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DATASOURCE}"
+          },
+          "definition": "label_values(probe_success{rems_environment=~\"$env\", rems_application_group=~\"$application_group\", rems_service=~\"$service\"},instance)",
+          "includeAll": true,
+          "label": "Endpoints",
+          "name": "instance",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(probe_success{rems_environment=~\"$env\", rems_application_group=~\"$application_group\", rems_service=~\"$service\"},instance)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-5m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "15s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Endpoint Monitoring",
+    "uid": "endpoint-monitoring-dev"
+  }
+}

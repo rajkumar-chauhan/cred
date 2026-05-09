@@ -1,0 +1,34 @@
+
+folder('COE/k8s/deployment/middleware')
+folder('COE/k8s/deployment/database')
+folder('COE/k8s/deployment/webserver')
+
+def jobs = [
+    [name: 'redis', category: 'middleware', script: 'jenkins/redis-jenkinsfile'],
+
+    [name: 'postgresql', category: 'database', script: 'jenkins/postgres-jenkinsfile'],
+    [name: 'mysql', category: 'database', script: 'jenkins/mysql-jenkinsfile'],
+    [name: 'mongodb', category: 'database', script: 'jenkins/mongodb-jenkinsfile'],
+
+    [name: 'apache', category: 'webserver', script: 'jenkins/apache-jenkinsfile'],
+    [name: 'tomcat', category: 'webserver', script: 'jenkins/tomcat-jenkinsfile']
+]
+
+jobs.each { job ->
+    pipelineJob("COE/k8s/deployment/${job.category}/${job.name}") {
+        definition {
+            cpsScm {
+                scm {
+                    git {
+                        remote {
+                            url('https://github.com/ot-client/o11y-k8s-setup-template.git')
+                            credentials('O11y_http_ldc')
+                        }
+                        branch('main')
+                    }
+                    scriptPath(job.script)
+                }
+            }
+        }
+    }
+}

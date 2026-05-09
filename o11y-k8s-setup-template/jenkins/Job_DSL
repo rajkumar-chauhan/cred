@@ -1,0 +1,47 @@
+
+
+folder('COE')
+folder('COE/Observability') 
+folder('COE/Observability/O11y_Setup') {
+    displayName('o11y-setup')
+    description('Jobs related to Observability stack')
+}
+
+
+
+def jobs = [
+   
+    [name: 'tempo', script: 'jenkins/tempo-jenkinsfile'],
+    [name: 'loki', script: 'jenkins/loki-jenkinsfile'],
+    [name: 'VictoriaMetrics', script: 'jenkins/vm-jenkinsfile'],
+    [name: 'Grafana', script: 'jenkins/grafana-jenkinsfile'],
+    [name: 'otel-opertor', script: 'jenkins/otel_operator-jenkinsfile'],
+    [name: 'Grafana_dashboard', script: 'jenkins/dashboard-jenkinsfile'],
+    [name: 'Grafana_datasource', script: 'jenkins/datasource-jenkinsfile'],
+    [name: 'alertmanager', script: 'jenkins/alertmanager-jenkinsfile'],
+    [name: 'alerting_rules', script: 'jenkins/alertingrules-jenkinsfile'],
+    [name: 'otel-collector', script: 'jenkins/otel_collector-jenkinsfile'],
+    [name: 'Blackbox', script: 'jenkins/blackbox-jenkinsfile'],
+    [name: 'Endpoint', script: 'jenkins/endpoint-jenkinsfile']
+
+
+]
+
+jobs.each { job ->
+    pipelineJob("COE/Observability/O11y_Setup/${job.name}") {
+        definition {
+            cpsScm {
+                scm {
+                    git {
+                        remote {
+                            url('https://github.com/ot-client/o11y-k8s-setup-template.git')
+                            credentials('O11y_http_ldc')
+                        }
+                        branch('main')
+                    }
+                    scriptPath(job.script)
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+
+apiVersion: v2
+appVersion: 10.1.41
+dependencies:
+- alias: tomcat
+  name: tomcat
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.7.6
+description:  Helm chart to deploy tomcat.
+name: tomcat
+version: 0.0.1

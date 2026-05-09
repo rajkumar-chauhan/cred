@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 9.3.0
+dependencies:
+  - name: mysql
+    alias: mysql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 12.3.4
+description: Helm chart to deploy mysql.
+name: mysql
+version: 0.0.1

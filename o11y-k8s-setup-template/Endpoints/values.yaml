@@ -1,0 +1,420 @@
+# ── App Info ──────────────────────────────────────────────
+appName: endpoints
+namespace: monitoring
+jobName: blackbox
+
+# ── Target Endpoints ──────────────────────────────────────
+targetEndpoints:
+
+  # ─── OTHER ───────────────────────────────────────────────
+  - targets:
+      - https://jenkins.opstree.dev/login
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: jenkins
+      technology: react
+      type: backend
+
+  - targets:
+      - https://longhorn.k8s.opstree.dev
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: longhorn
+      technology: react
+      type: backend
+
+  - targets:
+      - https://vpn.opstree.dev
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: vpn
+      technology: react
+      type: backend
+
+  - targets:
+      - https://itms.opstree.dev/
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: itms
+      technology: react
+      type: backend
+
+  - targets:
+      - https://opstree.github.io/
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: github
+      technology: react
+      type: backend
+
+  - targets:
+      - https://rapple.opstree.dev/
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: rapple
+      technology: react
+      type: backend
+
+  # ─── Data Center ─────────────────────────────────────────
+  - targets:
+      - https://ashwathama.opstree.net:8006/
+      - https://hercules.opstree.net
+      - https://hanuman.opstree.net
+      - https://alertmanager.opstree.net
+    labels:
+      category: data center
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: Data Center
+      rems_category: application
+      environment: prod
+      service: ldc
+      technology: react
+      type: backend
+
+  # ─── COE ─────────────────────────────────────────────────
+  - targets:
+      - https://docs.opstree.dev/
+      - https://identity.opstree.dev/login
+    labels:
+      category: COE
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: COE
+      rems_category: application
+      environment: prod
+      service: docs
+      technology: react
+      type: backend
+
+  - targets:
+      - https://orchestrator.ldc.opstree.dev/auth/login
+    labels:
+      category: COE
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: COE
+      rems_category: application
+      environment: prod
+      service: orchestrator
+      technology: react
+      type: backend
+
+  - targets:
+      - https://sentryfuse.opstree.net/
+      - https://sentryfuse-api.opstree.net
+    labels:
+      category: COE
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: COE
+      rems_category: application
+      environment: prod
+      service: sentryfuse
+      technology: react
+      type: backend
+
+  # ─── AI ──────────────────────────────────────────────────
+  - targets:
+      - https://gen-bi.opstree.net/
+    labels:
+      category: AI
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: AI
+      rems_category: application
+      environment: prod
+      service: AI
+      technology: react
+      type: backend
+
+  # ─── OTHER (toolkit) ─────────────────────────────────────
+  - targets:
+      - https://toolkit.opstree.net
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: prod
+      service: toolkit-prod
+      technology: react
+      type: backend
+
+  # ─── IDP ─────────────────────────────────────────────────
+  - targets:
+      - https://app.buildpiper.io/
+      - https://bp.opstree.dev
+    labels:
+      category: IDP
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: IDP
+      rems_category: application
+      environment: prod
+      service: buildpiper
+      technology: react
+      type: frontend
+
+  - targets:
+      - https://api.buildpiper.io/api/v1/default/health/
+    labels:
+      category: IDP
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: IDP
+      rems_category: application
+      environment: prod
+      service: buildpiper
+      technology: react
+      type: backend
+
+  - targets:
+      - http://192.168.10.39:9125/health
+    labels:
+      category: IDP
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: IDP
+      rems_category: application
+      environment: prod
+      service: IDP
+      technology: react
+      type: agent
+
+  - targets:
+      - http://192.168.10.39:9124/health
+    labels:
+      category: IDP
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: IDP
+      rems_category: application
+      environment: prod
+      service: IDP
+      technology: react
+      type: deployapi
+
+  - targets:
+      - http://192.168.10.39:9123/health
+    labels:
+      category: IDP
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: IDP
+      rems_category: application
+      environment: prod
+      service: IDP
+      technology: react
+      type: scheduleapi
+
+  # ─── OTHER (uniteconpro) ──────────────────────────────────
+  - targets:
+      - https://uniteconpro-api.opstree.dev/docs
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: dev
+      service: uniteconpro-api-dev
+      technology: react
+      type: scheduleapi
+
+  - targets:
+      - https://uniteconpro.opstree.dev
+    labels:
+      category: other
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: other
+      rems_category: application
+      environment: dev
+      service: uniteconpro-dev
+      technology: react
+      type: scheduleapi
+
+  # ─── Container Images Registry ───────────────────────────
+  - targets:
+      - https://registry.ldc.opstree.dev/
+    labels:
+      category: Container Images registry
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: Container Images registry
+      rems_category: application
+      environment: prod
+      service: Container Images registry
+      technology: react
+      type: backend
+
+  # ─── Kubelift (prod) ─────────────────────────────────────
+  - targets:
+      - https://grafana.opstree.net/
+      - https://kubelift-api.opstree.net/docs
+      - https://kubelift-aws-consumer.opstree.net
+      - https://kubelift.opstree.net
+    labels:
+      category: kubelift
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: kubelift
+      rems_category: application
+      environment: prod
+      service: kubelift
+      technology: react
+      type: frontend
+
+  # ─── Kubelift (dev) ──────────────────────────────────────
+  - targets:
+      - https://kubelift-api.opstree.dev/docs
+      - https://kubelift-aws-consumer.opstree.dev
+      - https://kubelift.opstree.dev
+    labels:
+      category: kubelift
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: kubelift
+      rems_category: application
+      environment: dev
+      service: kubelift
+      technology: react
+      type: frontend
+
+  # ─── Observability ───────────────────────────────────────
+  - targets:
+      - loki.opstree.net
+    labels:
+      category: Observability
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: Observability
+      rems_category: application
+      environment: prod
+      service: loki
+      technology: react
+      type: frontend
+
+  - targets:
+      - vm.opstree.net
+      - vminsert.opstree.net
+    labels:
+      category: Observability
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: Observability
+      rems_category: application
+      environment: prod
+      service: VictoriaMetrics
+      technology: react
+      type: frontend
+
+  - targets:
+      - tempo.opstree.net
+    labels:
+      category: Observability
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: Observability
+      rems_category: application
+      environment: prod
+      service: tempo
+      technology: react
+      # no type — rems_type intentionally omitted
+
+  - targets:
+      - https://keycloak.opstree.dev/
+    labels:
+      category: Observability
+      dev_owner: abhishek.dubey
+      manager_owner: sandeep
+      qa_owner: shwetabh.vats
+      severity: critical
+      application_group: COE
+      rems_category: application
+      environment: prod
+      service: keycloak
+      technology: react
+      type: frontend

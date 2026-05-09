@@ -1,0 +1,7 @@
+
+apiVersion: v2
+name: alerting-rules
+description: A Helm chart for deploying alerting rules.
+type: application
+version: 0.1.0
+appVersion: "1.0"

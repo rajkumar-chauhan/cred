@@ -1,0 +1,165 @@
+alertmanager:
+  replicaCount: 1
+  baseURL: "https://alertmanager.k8s"
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: 250Mi
+    limits:
+      cpu: "0.35"
+      memory: 500Mi
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+  nodeSelector:
+    kubernetes.io/hostname: worker1
+  ingress:
+    enabled: true
+    className: "kong"
+    annotations: 
+      konghq.com/plugins: alertmanager-uri-rewrite
+    hosts:
+      - host: alertmanager.k8s
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+  config:
+    enabled: true
+    global: {}
+      
+    route:
+      group_wait: 30s
+      group_interval: 1m
+      repeat_interval: 15m
+      receiver: slack-dev
+      routes:
+        - match:
+            alert: kubernetes
+          receiver: slack-dev
+        - match:
+            alert: Blackbox
+          receiver: slack-test
+    receivers:
+      - name: slack-dev
+        slack_configs:
+          - channel: "#minikube"
+            api_url: 'https://hooks.slack.com/services/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1'
+            send_resolved: true
+            color: '{{ template "slack.color" . }}'
+            title: '{{ template "slack.title" . }}'
+            text: '{{ template "slack.text" . }}'
+            actions:
+              - type: button
+                text: 'Runbook :green_book:'
+                url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+              - type: button
+                text: 'Query :mag:'
+                url: '{{ (index .Alerts 0).GeneratorURL }}'
+              - type: button
+                text: 'Dashboard :chart_with_upwards_trend:'
+                url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+              - type: button
+                text: 'Silence :no_bell:'
+                url: '{{ template "__alert_silence_link" . }}'
+      - name: slack-test
+        slack_configs:
+          - channel: "#data-centre-incidents"
+            api_url: 'https://hooks.slack.com/services/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1'
+            send_resolved: true
+            color: '{{ template "slack.color" . }}'
+            title: '{{ template "slack.title" . }}'
+            text: '{{ template "slack.text" . }}'
+            actions:
+              - type: button
+                text: 'Runbook :green_book:'
+                url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+              - type: button
+                text: 'Query :mag:'
+                url: '{{ (index .Alerts 0).GeneratorURL }}'
+              - type: button
+                text: 'Dashboard :chart_with_upwards_trend:'
+                url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+              - type: button
+                text: 'Silence :no_bell:'
+                url: '{{ template "__alert_silence_link" . }}'
+  templates:
+    opstree-alert-template.tmpl: |-
+      {{/* Alertmanager Silence link */}}
+      {{ define "__alert_silence_link" -}}
+        {{ .ExternalURL }}/#/silences/new?filter=%7B
+        {{- range .CommonLabels.SortedPairs -}}
+          {{- if ne .Name "alertname" -}}
+            {{- .Name }}%3D"{{- .Value | urlquery -}}"%2C%20
+          {{- end -}}
+        {{- end -}}
+        alertname%3D"{{- .CommonLabels.alertname -}}"%7D
+      {{- end }}
+      {{ define "__alert_severity" -}}
+          {{- if eq .CommonLabels.severity "critical" -}}
+          • *severity:* `critical`
+          {{- else if eq .CommonLabels.severity "warning" -}}
+          • *severity:* `warning`
+          {{- else if eq .CommonLabels.severity "info" -}}
+          • *severity:* `info`
+          {{- else -}}
+          • *severity:* :question: {{ .CommonLabels.severity }}
+          {{- end }}
+      {{- end }}
+      {{ define "__alert_severity_prefix_title" -}}
+          {{ if ne .Status "firing" -}}
+          :white_check_mark:
+          {{- else if eq .CommonLabels.severity "critical" -}}
+          :fire:
+          {{- else if eq .CommonLabels.severity "warning" -}}
+          :warning:
+          {{- else if eq .CommonLabels.severity "info" -}}
+          :information_source:
+          {{- else -}}
+          :question:
+          {{- end }}
+      {{- end }}
+      {{ define "slack.title" -}}
+        [{{ .Status | toUpper -}}
+        {{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{- end -}}
+        ] {{ template "__alert_severity_prefix_title" . }} {{ .CommonLabels.alertname }} | {{ .CommonLabels.env }}
+      {{- end }}
+      {{ define "slack.color" -}}
+        {{ if eq .Status "firing" -}}
+          {{ if eq .CommonLabels.severity "warning" -}}
+            warning
+          {{- else if eq .CommonLabels.severity "critical" -}}
+            danger
+          {{- else -}}
+            #439FE0
+          {{- end }}
+        {{ else -}}
+        good
+        {{- end }}
+      {{- end }}
+      {{ define "slack.text" -}}
+        {{ template "__alert_severity" . }}
+        {{- if (index .Alerts 0).Annotations.summary }}
+        • *summary:* `{{ (index .Alerts 0).Annotations.summary }}`
+        {{- end }}
+        {{- if (index .Alerts 0).Annotations.description }}
+        • *Status:* `{{ (index .Alerts 0).Annotations.description }}`
+        {{- end }}
+        {{- if .CommonLabels.namespace }}
+        • *namespace:* `{{ .CommonLabels.namespace }}`
+        {{- end }}
+        {{- if .CommonLabels.env }}
+        • *env:* `{{ .CommonLabels.env }}`
+        {{- end }}
+        {{- if .CommonLabels.container }}
+        • *service:* `{{ .CommonLabels.container }}`
+        {{- end }}
+        {{- if .CommonLabels.pod }}
+        • *pod:* `{{ .CommonLabels.pod }}`
+        {{- end }}
+        *Details:*
+        {{ range .CommonLabels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+        {{ end }}
+      {{- end }}

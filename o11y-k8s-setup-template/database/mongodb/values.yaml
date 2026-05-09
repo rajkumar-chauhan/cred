@@ -1,0 +1,15 @@
+mongodb:
+  persistence:
+    size: 1Gi
+  resources:
+    requests:
+      cpu: "0.15"
+      memory: 300Mi
+    limits:
+      cpu: "0.25"
+      memory: 400Mi
+  tolerations:
+    - key: "kubernetes.io/hostname"
+      operator: "Equal"
+      value: "worker1"
+      effect: "NoSchedule"

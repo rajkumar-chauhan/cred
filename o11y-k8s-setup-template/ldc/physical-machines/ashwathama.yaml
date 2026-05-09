@@ -1,0 +1,21 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: ashwathama-node-metrics
+  namespace: monitoring
+  labels:
+    external: 'true'
+spec:
+  jobName: ashwathama
+  targetEndpoints:
+    - targets:
+        - 192.168.10.211:9100
+      labels:
+        env: prod
+        job: ashwathama
+        bare_metal: "true"
+        dc: ashwathama
+        k8s: "false"
+      scheme: http
+      path: /metrics
+      interval: 30s

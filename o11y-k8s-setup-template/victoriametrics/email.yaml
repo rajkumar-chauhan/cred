@@ -1,0 +1,35 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
+metadata:
+  name: email-alert-config
+  namespace: monitoring
+spec:
+  route:
+    group_by:
+    - job
+    - alertname
+    - severity
+    group_interval: 1m
+    group_wait: 30s
+    receiver: email-team
+    repeat_interval: 30m
+    routes:
+      - continue: true
+        group_wait: 10s
+        matchers:
+          - severity =~ "warning|critical"
+        receiver: email-team
+  receivers:
+    - name: "email-team"
+      email_configs:
+        - to: 'ashwani.singh@opstree.com'
+          from: 'vrkdevalerts@newgenbpmcloud.com'
+          smarthost: 'email-smtp.us-east-1.amazonaws.com:587'
+          require_tls: true
+          send_resolved: true
+          auth_username:
+            name: smtpauth
+            key: username
+          auth_password:
+            name: smtpauth
+            key: password

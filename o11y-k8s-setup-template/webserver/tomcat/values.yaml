@@ -1,0 +1,14 @@
+tomcat:
+  nodeSelector:
+    kubernetes.io/hostname: worker1
+  persistence:
+    size: 1Gi
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90 
+    periodSeconds: 10      
+    failureThreshold: 3
+    timeoutSeconds: 10      
+    successThreshold: 1
+  service:
+    type: NodePort

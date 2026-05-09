@@ -1,0 +1,21 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: hanuman-node-metrics
+  namespace: monitoring
+  labels:
+    external: 'true'
+spec:
+  jobName: hanuman
+  targetEndpoints:
+    - targets:
+        - 192.168.10.213:9100
+      labels:
+        env: prod
+        job: hanuman
+        bare_metal: "true"
+        dc: hanuman
+        k8s: "false"
+      scheme: http
+      path: /metrics
+      interval: 30s

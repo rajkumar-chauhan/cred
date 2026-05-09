@@ -1,0 +1,68 @@
+postgres-exporters:
+  image:
+    # repository: "prometheuscommunity/postgres-exporter"
+    # tag: "v0.18.1"
+    registry: "registry-1.docker.io"
+    repository: "ashwanisingh007/postgresql"
+    tag: "null-fix"
+
+  fullnameOverride: "rems-postgres-exporter"
+
+  config:
+    datasource:
+      host: aws-1-ap-south-1.pooler.supabase.com
+      user: 'postgres.wyicdujeqnirbknqbgla'
+      password: '0465f23ef34d9d076abe1540d27691e1'
+      port: '6543'
+      database: 'postgres'
+      sslmode: 'disable'
+      extraParams: 'binary_parameters=yes'
+    extraArgs:
+      - "--collector.stat_statements"
+      # - "--collector.long_running_transactions"
+      - "--collector.process_idle"
+      - "--collector.stat_wal_receiver"
+      - "--collector.statio_user_indexes"
+
+    # 🔹 Change extraArgs to disable risky default collectors
+    # extraArgs:
+      # - "--disable-default-metrics"           # Disable all default metrics which may fail
+      # - "--extend.query-path=/custom-queries.yaml"  # Point to custom safe queries file
+
+
+  # resources:
+  #   limits:
+  #     cpu: 250m
+  #     memory: 192Mi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 128Mi
+
+  serviceMonitor:
+    enabled: true
+    interval: 15s
+    scrapeTimeout: 10s
+    # namespace: observability
+    # targetLabels:
+    #   - app
+    metricRelabelings:
+      - action: replace
+        targetLabel: rems_application_group
+        replacement: "REMS"
+      - action: replace
+        targetLabel: rems_environment
+        replacement: "prod"
+      - action: replace
+        targetLabel: rems_service
+        replacement: "rems-db"
+
+      # - action: replace
+      #   targetLabel: rems_technology
+      #   replacement: "python"
+
+      # - action: replace
+      #   targetLabel: rems_type
+      #   replacement: "backend"
+    #   - sourceLabels: [pod]
+    #     targetLabel: instance
+    #     action: replace

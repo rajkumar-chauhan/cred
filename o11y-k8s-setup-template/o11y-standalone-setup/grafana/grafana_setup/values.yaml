@@ -1,0 +1,35 @@
+grafana:
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      labelValue: "1"
+  resources:
+    requests:
+      cpu: "0.6"
+      memory: 700Mi
+    limits:
+      cpu: "0.8"
+      memory: 800Mi
+  extraConfigmapMounts:
+    - name: grafana-provision-folders-config
+      mountPath: "/etc/grafana/provisioning/folders/opstree-folders.yaml"
+      subPath: folders.yaml
+      configMap: grafana-provision-folders-config   
+      readOnly: true
+    - name: grafana-folder-provider
+      mountPath: "/etc/grafana/provisioning/providers/folder-provider.yaml"
+      subPath: provider.yaml
+      configMap: grafana-folder-provider
+      readOnly: true
+  persistence:
+    enabled: true
+    type: sts
+    # storageClassName: ebs
+    accessModes:
+      - ReadWriteOnce
+    size: 4Gi
+    finalizers:
+      - kubernetes.io/pvc-protection

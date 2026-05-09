@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: v0.26.0
+name: blackbox
+version: 0.0.1
+dependencies:
+- alias: blackbox
+  condition: blackbox.enabled
+  name: prometheus-blackbox-exporter
+  repository: https://prometheus-community.github.io/helm-charts/
+  tags:
+  - blackbox
+  version: 9.4.0   

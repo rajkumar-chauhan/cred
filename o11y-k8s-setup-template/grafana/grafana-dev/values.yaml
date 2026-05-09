@@ -1,0 +1,94 @@
+grafana:
+  image:
+    tag: "12.4.0-19913286788-ubuntu"
+  grafana.ini:
+    auth.azuread:
+      enabled: true
+      name: Azure AD
+      client_id: "${GRAFANA_AZUREAD_CLIENT_ID}"
+      client_secret: "${GRAFANA_AZUREAD_CLIENT_SECRET}"
+      scopes: "openid email profile"
+      auth_url: "https://login.microsoftonline.com/${GRAFANA_AZUREAD_TENANT_ID}/oauth2/v2.0/authorize"
+      token_url: "https://login.microsoftonline.com/${GRAFANA_AZUREAD_TENANT_ID}/oauth2/v2.0/token"
+      # allowed_groups: "Azure AD Group ID 1,Azure AD Group ID 2" 
+      # role_attribute_path: "contains(groups[*], 'YOUR_GRAFANA_ADMIN_GROUP_ID') && 'Admin' || contains(groups[*], 'YOUR_GRAFANA_EDITOR_GROUP_ID') && 'Editor' || 'Viewer'"
+      org_mapping:
+         - "588a3265-a1c8-4031-a508-0b527f63de77:1:Admin"
+         - "709da048-0023-4666-968e-e3bf5b0c8935:2:Editor"
+        #  - "500f3a5a-a914-4bbf-a3fd-57b8a522dd59:1"
+      allowed_domains: "opstree.com mygurukulam.co"
+    server:
+      domain: grafana-dev.k8s.opstree.dev
+      root_url: https://%(domain)s/
+    feature_toggles:
+      provisioning: "true"
+      kubernetesDashboards: "true"
+
+  envValueFrom:
+    GRAFANA_AZUREAD_CLIENT_ID:
+      secretKeyRef:
+        name: grafana-azure-ad-creds
+        key: client-id
+    GRAFANA_AZUREAD_CLIENT_SECRET:
+      secretKeyRef:
+        name: grafana-azure-ad-creds
+        key: client-secret
+    GRAFANA_AZUREAD_TENANT_ID:
+      secretKeyRef:
+        name: grafana-azure-ad-creds
+        key: tenant-id
+
+  sidecar:
+    dashboards:
+      enabled: false
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      labelValue: "1"
+
+  # resources:
+  #   requests:
+  #     cpu: 1
+  #     memory: 1Gi
+  #   limits:
+  #     cpu: 1
+  #     memory: 1Gi
+
+  plugins: 
+    - grafana-polystat-panel
+    - grafana-clickhouse-datasource 
+
+  route: 
+    main: 
+      enabled: true
+      parentRefs:
+        - name: kong-gateway
+          namespace: kong
+          sectionName: https
+      hostnames:
+        - grafana-dev.k8s.opstree.dev
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: grafana
+          port: 80
+          weight: 100
+
+  persistence:
+    enabled: true
+    type: sts
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+  # tolerations:
+  #   - key: "team"
+  #     operator: "Equal"
+  #     value: "o11y"
+  #     effect: "NoSchedule"
+  # nodeSelector:
+  #   node-role.kubernetes.io/o11y: o11y
+

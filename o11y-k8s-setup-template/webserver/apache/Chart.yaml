@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 2.4.63
+dependencies:
+- alias: apache
+  name: apache
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.3.7
+description:  Helm chart to deploy apache.
+name: apache
+version: 0.0.1

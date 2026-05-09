@@ -1,0 +1,29 @@
+clickhouse:
+  shards: 1
+  replicaCount: 1
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/clickhouse
+    tag: 25.7.5-debian-12-r0
+  resourcesPreset: none
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 50m
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+
+  keeper:
+    enabled: true
+    image:
+      registry: docker.io
+      repository: bitnamilegacy/clickhouse-keeper
+      tag: 25.7.5-debian-12-r0
+    replicaCount: 1
+    resources:
+      requests:
+        memory: 50Mi
+        cpu: 50m

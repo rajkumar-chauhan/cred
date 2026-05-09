@@ -1,0 +1,43 @@
+
+folder('COE/Observability/o11y-standalone/o11y-standalone-setup') {
+    displayName('o11y-standalone-setup')
+    description('Jobs related to Standalone Observability stack')
+}
+
+def jobs = [
+   
+    [name: 'tempo-standalone', script: 'o11y-standalone-setup/jenkins/tempo-jenkinsfile'],
+    [name: 'loki-standalone', script: 'o11y-standalone-setup/jenkins/loki-jenkinsfile'],
+    [name: 'VictoriaMetrics-standalone', script: 'o11y-standalone-setup/jenkins/vm-jenkinsfile'],
+    [name: 'alerts', script: 'o11y-standalone-setup/jenkins/alerting-jenkinsfile'],
+    [name: 'alertmanager', script: 'o11y-standalone-setup/jenkins/alertmanager-jenkinsfile'],
+    [name: 'dashboard', script: 'o11y-standalone-setup/jenkins/dashboard-jenkinsfile'],
+    [name: 'datasource', script: 'o11y-standalone-setup/jenkins/datasource_jenkinsfile'],
+    [name: 'Endpoint', script: 'o11y-standalone-setup/jenkins/endpoint-jenkinsfile'],
+    [name: 'otel-collector', script: 'o11y-standalone-setup/jenkins/otel_collector-jenkinsfile'],
+    [name: 'otel-operator', script: 'o11y-standalone-setup/jenkins/otel_operator-jenkinsfile'],
+    [name: 'grafana', script: 'o11y-standalone-setup/jenkins/grafana-jenkinsfile'],
+    [name: 'Blackbox', script: 'o11y-standalone-setup/jenkins/blackbox-jenkinsfile']
+
+
+
+]
+
+jobs.each { job ->
+    pipelineJob("COE/Observability/o11y-standalone/o11y-standalone-setup/${job.name}") {
+        definition {
+            cpsScm {
+                scm {
+                    git {
+                        remote {
+                            url('https://github.com/ot-client/o11y-k8s-setup-template.git')
+                            credentials('O11y_http_ldc')
+                        }
+                        branch('main')
+                    }
+                    scriptPath(job.script)
+                }
+            }
+        }
+    }
+}

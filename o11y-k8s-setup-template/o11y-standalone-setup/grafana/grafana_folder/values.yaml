@@ -1,0 +1,20 @@
+configMapName: "grafana-provision-folders-config" 
+
+foldersConfig:
+  apiVersion: 1
+  folders:
+    - title: "Opstree"
+      uid: "opstree-parent-folder"
+      orgId: 1
+    - title: "Middleware"
+      uid: "opstree-middleware"
+      orgId: 1
+      parentUid: "opstree-parent-folder"
+    - title: "Database"
+      uid: "opstree-database"
+      orgId: 1
+      parentUid: "opstree-parent-folder"
+    - title: "Application"
+      uid: "opstree-application"
+      orgId: 1
+      parentUid: "opstree-parent-folder"

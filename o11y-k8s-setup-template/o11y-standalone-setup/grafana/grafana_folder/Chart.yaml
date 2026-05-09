@@ -1,0 +1,6 @@
+apiVersion: v2
+name: grafana-folders
+description: helm chart for grafana folder provision.
+type: application
+version: 0.1.0 
+appVersion: "1.0.0" 

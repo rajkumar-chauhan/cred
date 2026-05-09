@@ -1,0 +1,268 @@
+collector:
+  mode: deployment
+  podDisruptionBudget:
+    enabled: true
+  resources:
+    limits:
+      cpu: "0.4"
+      memory: 600Mi
+    requests:
+      cpu: "0.15"
+      memory: 500Mi
+  image:
+    repository: "otel/opentelemetry-collector-contrib"
+    pullPolicy: IfNotPresent
+    tag: "0.123.0"
+
+  extraEnvs:
+    - name: MYSQL_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: mysql-username
+    - name: MYSQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: mysql-password
+    - name: POSTGRES_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: postgres-username
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: postgres-password
+    - name: REDIS_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: redis-password
+    - name: MONGODB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: mongodb-username
+    - name: MONGODB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: collector-db-creds
+          key: mongodb-password
+
+  config:
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+
+    exporters:
+      debug:
+        verbosity: detailed
+      otlp:
+        endpoint: tempo-distributor:4317
+        tls:
+          insecure: true
+        sending_queue:
+          enabled: true
+          num_consumers: 10
+          queue_size: 5000
+        retry_on_failure:
+          enabled: true
+        compression: snappy
+        timeout: 30s
+      prometheusremotewrite:
+        endpoint: "http://vminsert-vm.monitoring.svc:8480/insert/0/prometheus/api/v1/write"
+        max_batch_size_bytes: 3000000
+        remote_write_queue:
+          enabled: true
+          queue_size: 100000
+        retry_on_failure:
+          enabled: true
+          initial_interval: 5s
+          max_elapsed_time: 300s
+          max_interval: 30s
+        timeout: 300s
+        tls:
+          insecure_skip_verify: true
+
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 70
+        spike_limit_percentage: 10
+      tail_sampling:
+        decision_wait: 60s
+        policies:
+          - name: error-policy
+            status_code:
+              status_codes: [ERROR]
+            type: status_code
+          - name: latency-policy
+            latency:
+              threshold_ms: 500
+            type: latency
+          - name: probabilistic
+            probabilistic:
+              sampling_percentage: 10
+            type: probabilistic
+      batch:
+        send_batch_max_size: 0
+        send_batch_size: 3000000
+        timeout: 15s
+      batch/tempo:
+        send_batch_max_size: 128
+        send_batch_size: 64
+        timeout: 1s
+      transform/add_db_labels:
+        metric_statements:
+          - context: resource
+            statements:
+              - set(attributes["job"], "mysql_metrics") where attributes["mysql.instance.endpoint"] == "mysql.database.svc.cluster.local:3306"
+              - set(attributes["instance"], "mysql.database.svc.cluster.local:3306") where attributes["mysql.instance.endpoint"] == "mysql.database.svc.cluster.local:3306"
+              - set(attributes["receiver"], "mysql") where attributes["mysql.instance.endpoint"] == "mysql.database.svc.cluster.local:3306"
+              - set(attributes["job"], "postgresql_metrics") where attributes["receiver"] == "postgresql"
+              - set(attributes["instance"], "postgres.database.svc.cluster.local:5432") where attributes["receiver"] == "postgresql"
+              - set(attributes["receiver"], "postgresql") where attributes["receiver"] == "postgresql"
+              - set(attributes["job"], "redis_metrics") where attributes["receiver"] == "redis"
+              - set(attributes["instance"], "redis-master.middleware.svc.cluster.local:6379") where attributes["receiver"] == "redis"
+              - set(attributes["receiver"], "redis") where attributes["receiver"] == "redis"
+              - set(attributes["job"], "mongodb_metrics") where attributes["receiver"] == "mongodb"
+              - set(attributes["instance"], "mongodb.database.svc.cluster.local:27017") where attributes["receiver"] == "mongodb"
+              - set(attributes["receiver"], "mongodb") where attributes["receiver"] == "mongodb"
+              - set(attributes["job"], "apache_metrics") where attributes["receiver"] == "apache"
+              - set(attributes["instance"], "apache.webserver.svc.cluster.local:80") where attributes["receiver"] == "apache"
+              - set(attributes["receiver"], "apache") where attributes["receiver"] == "apache"
+
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+            keepalive:
+              server_parameters:
+                max_connection_age: 5m
+                max_connection_age_grace: 5m
+                max_connection_idle: 1m
+                time: 3m
+                timeout: 5m
+          http:
+            endpoint: 0.0.0.0:4318
+
+      apache:
+        endpoint: "http://apache.webserver.svc.cluster.local:80/server-status?auto"
+
+      postgresql:
+        endpoint: postgres.database.svc.cluster.local:5432
+        transport: tcp
+        username: ${POSTGRES_USERNAME}
+        password: ${POSTGRES_PASSWORD}
+        databases: [postgres]
+        collection_interval: 10s
+        tls:
+          insecure: true
+
+      redis:
+        endpoint: redis-master.middleware.svc.cluster.local:6379
+        password: ${REDIS_PASSWORD}
+        collection_interval: 10s
+
+      mongodb:
+        hosts:
+          - endpoint: mongodb.database.svc.cluster.local:27017
+        username: ${MONGODB_USERNAME}
+        password: ${MONGODB_PASSWORD}
+        collection_interval: 60s
+        initial_delay: 1s
+        tls:
+          insecure: true
+          insecure_skip_verify: true
+
+      mysql:
+        endpoint: mysql.database.svc.cluster.local:3306
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+        database: my_database
+        collection_interval: 10s
+        initial_delay: 1s
+        statement_events:
+          digest_text_limit: 120
+          time_limit: 24h
+          limit: 250
+
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: app-otelcol-metrics
+              scrape_interval: 10s
+              static_configs:
+                - targets: [127.0.0.1:8889]
+
+    service:
+      extensions: [health_check]
+      pipelines:
+        metrics/o11ymetrics:
+          exporters: [prometheusremotewrite, debug]
+          processors: [memory_limiter, batch, transform/add_db_labels]
+          receivers: [otlp, prometheus, apache, postgresql, redis, mongodb, mysql]
+        traces/o11ymetrics:
+          exporters: [otlp]
+          processors: [memory_limiter, batch]
+          receivers: [otlp]
+        traces/o11ytraces:
+          exporters: [otlp]
+          processors: [memory_limiter, tail_sampling, batch/tempo]
+          receivers: [otlp]
+      telemetry:
+        metrics:
+          level: detailed
+          readers:
+            - pull:
+                exporter:
+                  prometheus:
+                    host: 127.0.0.1
+                    port: 8889
+
+
+  extraManifests:
+   
+    - apiVersion: opentelemetry.io/v1alpha1
+      kind: Instrumentation
+      metadata:
+        name: otel-instrumentation
+        namespace: observability
+      spec:
+        exporter:
+          endpoint: http://opentelemetry-collector.observability.svc.cluster.local:4317
+        propagators: [tracecontext, baggage, b3]
+        sampler:
+          type: parentbased_traceidratio
+          argument: "0.10"
+        python:
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://opentelemetry-collector.observability.svc.cluster.local:4318
+        dotnet:
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://opentelemetry-collector.observability.svc.cluster.local:4318
+        go:
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://opentelemetry-collector.observability.svc.cluster.local:4318
+
+# Refer these secrets in another yaml file ex secrets.yaml and include that file in helm command along with main file so that secrets.yaml cannot p pushed on github for security purpose 
+secrets:
+  mysql:
+    username: root
+    password: QLeaUfExju
+  postgres:
+    username: postgres
+    password: s1YKAtfl48
+  redis:
+    password: LVjh5b8uX4
+  mongodb:
+    username: root
+    password: K12Dm7FsG7
+
+

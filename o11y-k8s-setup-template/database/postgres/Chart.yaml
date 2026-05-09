@@ -1,0 +1,11 @@
+
+apiVersion: v2
+appVersion: 17.6.0
+dependencies:
+- alias: postgres
+  name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.7.27
+description:  Helm chart for postgres
+name: postgresql
+version: 0.0.1

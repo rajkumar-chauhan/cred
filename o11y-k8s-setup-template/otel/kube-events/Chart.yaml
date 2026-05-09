@@ -1,0 +1,14 @@
+apiVersion: v2
+name: otel-kube-events-collector
+description: A Helm chart for deploying OpenTelemetry Collector for faro
+type: application
+version: 0.1.0
+appVersion: 0.138.0
+dependencies:
+  - name: opentelemetry-kube-stack
+    version: 0.12.4
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    condition: kube-events.enabled
+    alias: kube-events
+    tags:
+      - kube-events

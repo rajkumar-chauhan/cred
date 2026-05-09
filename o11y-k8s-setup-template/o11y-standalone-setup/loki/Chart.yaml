@@ -1,0 +1,20 @@
+apiVersion: v2
+appVersion: 1.0.0
+dependencies:
+# - alias: fluentbit
+#   name: fluent-bit
+#   repository: https://fluent.github.io/helm-charts
+#   version: 0.48.10
+#   tags:
+#     - logging
+- alias: standalone
+  condition: standalone.enabled
+  name: loki
+  repository: https://grafana.github.io/helm-charts
+  tags:
+  - logging
+  version: 6.29.0
+description: A Helm chart for loki
+name: loki
+type: application
+version: 1.0.1

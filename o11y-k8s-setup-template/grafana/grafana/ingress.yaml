@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rems-ingress
+  namespace: dev
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: rems.k8s.opstree.dev  
+    http:
+      paths:
+      - backend:
+          service:
+            name: rems-frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: rems-api.k8s.opstree.dev  
+    http:
+      paths:
+      - backend:
+          service:
+            name:  rems-api-server
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: rems-mcp.k8s.opstree.dev 
+    http:
+      paths:
+      - backend:
+          service:
+            name: rems-mcp
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: rems-chat-engine.k8s.opstree.dev
+    http:
+      paths:
+      - backend:
+          service:
+            name: rems-chat-engine
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - rems.k8s.opstree.dev
+    - rems-api.k8s.opstree.dev  
+    - rems-mcp.k8s.opstree.dev 
+    - rems-chat-engine.k8s.opstree.dev   
+    secretName: ssl-cert

@@ -1,0 +1,38 @@
+redis:
+  master:
+    persistence:
+      size: 1Gi
+    # nodeSelector:
+    #   kubernetes.io/hostname: worker4
+    resources:
+      requests:
+        cpu: 50m  
+        memory: 128Mi
+    tolerations:
+      - key: "kubernetes.io/hostname"
+        operator: "Equal"
+        value: "worker1"
+        effect: "NoSchedule"
+  replica:
+    replicaCount: 1
+    persistence:
+      size: 1Gi
+    # nodeSelector:
+    #   kubernetes.io/hostname: worker4
+    resources:
+      requests:
+        cpu: 50m  
+        memory: 128Mi
+    tolerations:
+      - key: "kubernetes.io/hostname"
+        operator: "Equal"
+        value: "worker1"
+        effect: "NoSchedule"
+
+  networkPolicy:
+    enabled: false
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false

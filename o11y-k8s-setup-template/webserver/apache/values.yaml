@@ -1,0 +1,14 @@
+apache:
+  readinessProbe:
+    enabled: true
+    path: "/"
+    port: http
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 6
+    successThreshold: 1
+  service:
+    type: NodePort
+  httpdConfConfigMap: apache-status-config
+

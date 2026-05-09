@@ -1,0 +1,87 @@
+postgres-exporters:
+  image:
+    repository: "prometheuscommunity/postgres-exporter"
+    # tag: "v0.17.1"
+
+  fullnameOverride: "otel-demo-postgres"
+
+  config:
+    datasource:
+      host: otel-demo-postgres-hl.otel-demo.svc.cluster.local
+      user: 'postgres'
+      password: 'postgres'
+      port: '5432'
+      database: 'postgres'
+      sslmode: 'disable'
+      extraParams: 'binary_parameters=yes'
+    extraArgs:
+      - "--collector.stat_statements"
+      # - "--collector.long_running_transactions"
+      - "--collector.process_idle"
+      - "--collector.stat_wal_receiver"
+      - "--collector.statio_user_indexes"
+
+    # 🔹 Change extraArgs to disable risky default collectors
+    # extraArgs:
+      # - "--disable-default-metrics"           # Disable all default metrics which may fail
+      # - "--extend.query-path=/custom-queries.yaml"  # Point to custom safe queries file
+
+
+  # resources:
+  #   limits:
+  #     cpu: 250m
+  #     memory: 192Mi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 128Mi
+
+  serviceMonitor:
+    enabled: true
+    interval: 15s
+    scrapeTimeout: 10s
+    # namespace: observability
+    # targetLabels:
+    #   - app
+    metricRelabelings:
+      - action: replace
+        targetLabel: rems_app_dev_owner
+        replacement: "abhishek.dubey"
+
+      - action: replace
+        targetLabel: rems_app_manager_owner
+        replacement: "sandeep"
+
+      - action: replace
+        targetLabel: rems_app_qa_owner
+        replacement: "shwetabh.vats"
+
+      - action: replace
+        targetLabel: rems_app_severity
+        replacement: "critical"
+
+      - action: replace
+        targetLabel: rems_application_group
+        replacement: "AstronomyEcom"
+
+      - action: replace
+        targetLabel: rems_category
+        replacement: "application"
+
+      - action: replace
+        targetLabel: rems_environment
+        replacement: "prod"
+
+      - action: replace
+        targetLabel: rems_service
+        replacement: "accounting"
+
+      # - action: replace
+      #   targetLabel: rems_technology
+      #   replacement: "python"
+
+      # - action: replace
+      #   targetLabel: rems_type
+      #   replacement: "backend"
+    #   - sourceLabels: [pod]
+    #     targetLabel: instance
+    #     action: replace

@@ -1,0 +1,2369 @@
+{
+  "apiVersion": "dashboard.grafana.app/v0alpha1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "a60903a7-5aab-4524-8ae2-2f91e3de1deb"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Visualize your AWS spends and estimated AWS charges per AWS resource (EC2, ELB, ...). Monthly and daily spend can be seen.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlBl"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 0,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 1,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Average"
+          },
+          {
+            "alias": "{{ServiceName}}",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "*"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "${PROP('Dim.ServiceName')}",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlBl"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 4,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 5,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Average"
+          },
+          {
+            "alias": "{{ServiceName}}",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "AmazonEC2"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "${PROP('Dim.ServiceName')}",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "title": "Total Cost This Month",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 8,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 6,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Average"
+          },
+          {
+            "alias": "{{ServiceName}}",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "AmazonEC2"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "${PROP('Dim.ServiceName')}",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "title": "EC2 Cost This Month",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 12,
+          "y": 0
+        },
+        "hideTimeOverride": true,
+        "id": 7,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Average"
+          },
+          {
+            "alias": "{{ServiceName}}",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "AWSELB"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "${PROP('Dim.ServiceName')}",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "title": "ELB Cost This Month",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 16,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m1",
+            "item": {
+              "filter": ""
+            },
+            "label": "",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "RATE(m1) * PERIOD(m1)",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m2",
+            "item": {
+              "filter": ""
+            },
+            "label": "",
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "Total estimated daily charge",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "IF(m2\u003e0, m2)",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m3",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total estimated daily charge",
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "C",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "title": "Estimated total daily charges",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-YlRd"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 20,
+          "y": 0
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "AmazonEC2"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m1",
+            "item": {
+              "filter": ""
+            },
+            "label": "",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "RATE(m1) * PERIOD(m1)",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m2",
+            "item": {
+              "filter": ""
+            },
+            "label": "",
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "Total estimated daily charge",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "IF(m2\u003e0, m2)",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m3",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total estimated daily charge",
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "C",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "title": "EC2 daily charges",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 12,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "443370711941"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month Varta-uat account",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 5,
+          "x": 6,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 13,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "536697248651"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month Varta-dev-uat",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 11,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 14,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "443370689909"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month PayerAccount-FCI",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 17,
+          "y": 5
+        },
+        "hideTimeOverride": true,
+        "id": 15,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "522814715762"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month Equitas",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 9,
+          "x": 0,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 17,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "508972673398"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month observability account",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 9,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 16,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "901784689067"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month Equitas",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 9,
+          "x": 15,
+          "y": 10
+        },
+        "hideTimeOverride": true,
+        "id": 18,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "LinkedAccount": "361439434085"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1M",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sql": {
+              "select": {
+                "name": "AVG",
+                "type": "function"
+              }
+            },
+            "statistic": "Maximum"
+          }
+        ],
+        "timeFrom": "now-1M/M",
+        "timeShift": "1M/M",
+        "title": "Total Cost Last Month Smartbox - FCI",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "bars",
+              "fillOpacity": 100,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "normal"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 15
+        },
+        "id": 10,
+        "links": [
+          {
+            "targetBlank": true,
+            "title": "daily cost",
+            "url": "https://observability.fci-ccm.com/grafana/d/i_KLxZyVz/aws-billing?orgId=1\u0026from=2025-06-04T12:01:37.540Z\u0026to=2025-07-04T12:01:37.540Z\u0026timezone=browser\u0026var-datasource=eeq0gb3jgcr28a\u0026showCategory=Panel%20links\u0026viewPanel=panel-11"
+          },
+          {
+            "targetBlank": true,
+            "title": "test link ",
+            "url": "https://jen.fci-ccm.com/job/SBI/job/PROD/job/CCM-SBI-PROD/job/sbi-prod-preprocessor/configure"
+          }
+        ],
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Last *",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "{{ServiceName}}",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "*"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "${PROP('Dim.ServiceName')}",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "1d",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "statistic": "Maximum"
+          }
+        ],
+        "title": "Estimated charges by Service",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "sortBy": "Last *",
+            "sortDesc": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "Total",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "{{ServiceName}}",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD",
+              "ServiceName": "*"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "",
+            "item": {
+              "filter": ""
+            },
+            "label": "${PROP('Dim.ServiceName')}",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "title": "Estimated charges per day",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "$datasource"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "links": [],
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 36
+        },
+        "id": 11,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "alias": "",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m1",
+            "item": {
+              "filter": ""
+            },
+            "label": "",
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "RATE(m1) * PERIOD(m1)",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": true,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m2",
+            "item": {
+              "filter": ""
+            },
+            "label": "",
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          },
+          {
+            "alias": "Total estimated daily charge",
+            "application": {
+              "filter": ""
+            },
+            "datasource": {
+              "uid": "$datasource"
+            },
+            "dimensions": {
+              "Currency": "USD"
+            },
+            "expression": "IF(m2\u003e0, m2)",
+            "functions": [],
+            "group": {
+              "filter": ""
+            },
+            "hide": false,
+            "highResolution": false,
+            "host": {
+              "filter": ""
+            },
+            "id": "m3",
+            "item": {
+              "filter": ""
+            },
+            "label": "Total estimated daily charge",
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "EstimatedCharges",
+            "metricQueryType": 0,
+            "mode": 0,
+            "namespace": "AWS/Billing",
+            "options": {
+              "showDisabledItems": false
+            },
+            "period": "86400",
+            "queryMode": "Metrics",
+            "refId": "C",
+            "region": "us-east-1",
+            "returnData": false,
+            "sqlExpression": "",
+            "statistic": "Average"
+          }
+        ],
+        "title": "Estimated daily charges",
+        "type": "timeseries"
+      },
+      {
+        "fieldConfig": {
+          "defaults": {},
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 24,
+          "x": 0,
+          "y": 46
+        },
+        "id": 2,
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "\u003ca href=\"http://www.monitoringartist.com\" target=\"_blank\" title=\"Dashboard maintained by Monitoring Artist - DevOps / Docker / Kubernetes / AWS ECS / Google GCP / Zabbix / Zenoss / Terraform / Monitoring\"\u003e\u003cimg src=\"https://monitoringartist.github.io/monitoring-artist-logo-grafana.png\" height=\"30px\" /\u003e\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/billing-metricscollected.html\"\u003eAWS CloudWatch billing documentation\u003c/a\u003e | \n\u003ca target=\"_blank\" href=\"https://grafana.com/dashboards/139\"\u003eInstalled from Grafana.com dashboards\u003c/a\u003e",
+          "mode": "html"
+        },
+        "pluginVersion": "12.0.2",
+        "title": "Documentation",
+        "type": "text"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 41,
+    "tags": [
+      "monitoringartist",
+      "cloudwatch",
+      "techpartner"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "cloudwatch",
+            "value": "eeq0gb3jgcr28a"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "label": "Datasource",
+          "name": "datasource",
+          "options": [],
+          "query": "cloudwatch",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "AWS Billing"
+  }
+}

@@ -1,0 +1,1763 @@
+{
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "ae3uc5jpzvawwa1"
+  },
+  "spec": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations \u0026 Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "A dashboard to visualize application's deployment.",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/ot-client/o11y-k8s-setup-template/blob/main/grafana/dashboards/OpsTree/Application/summary.json"
+      }
+    ],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 20,
+        "panels": [],
+        "title": "CPU Utilization ",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "CPU usage less than 40%",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": []
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "B"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "C"
+              },
+              "properties": []
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 13,
+          "w": 9,
+          "x": 0,
+          "y": 1
+        },
+        "id": 19,
+        "options": {
+          "autoSizeColumns": true,
+          "autoSizePolygons": true,
+          "autoSizeRows": true,
+          "compositeConfig": {
+            "animationSpeed": "1500",
+            "composites": [],
+            "enabled": true
+          },
+          "compositeGlobalAliasingEnabled": false,
+          "ellipseCharacters": 18,
+          "ellipseEnabled": false,
+          "globalAutoScaleFonts": true,
+          "globalClickthrough": "",
+          "globalClickthroughCustomTarget": "",
+          "globalClickthroughCustomTargetEnabled": false,
+          "globalClickthroughNewTabEnabled": true,
+          "globalClickthroughSanitizedEnabled": true,
+          "globalCompositeValueFontSize": 14,
+          "globalDecimals": 2,
+          "globalDisplayMode": "all",
+          "globalDisplayTextTriggeredEmpty": "OK",
+          "globalFillColor": "rgba(10, 85, 161, 1)",
+          "globalGradientsEnabled": true,
+          "globalLabelFontSize": 12,
+          "globalOperator": "mean",
+          "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+          "globalPolygonBorderSize": 2,
+          "globalPolygonSize": 25,
+          "globalRegexPattern": "",
+          "globalShape": "hexagon_pointed_top",
+          "globalShowTimestampEnabled": false,
+          "globalShowTimestampFontSize": 12,
+          "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+          "globalShowTimestampPosition": "below_value",
+          "globalShowTimestampYOffset": 0,
+          "globalShowTooltipColumnHeadersEnabled": true,
+          "globalShowValueEnabled": true,
+          "globalTextFontAutoColorEnabled": false,
+          "globalTextFontColor": "#000000",
+          "globalTextFontFamily": "Roboto",
+          "globalThresholdsConfig": [
+            {
+              "color": "#FFCB7D",
+              "state": 0,
+              "value": 0
+            },
+            {
+              "color": "#ed8128",
+              "state": 1,
+              "value": 15
+            },
+            {
+              "color": "#f53636",
+              "state": 2,
+              "value": 30
+            }
+          ],
+          "globalTooltipsEnabled": true,
+          "globalTooltipsFontFamily": "Roboto",
+          "globalTooltipsShowTimestampEnabled": true,
+          "globalTooltipsShowValueEnabled": true,
+          "globalUnitFormat": "percentunit",
+          "globalValueFontSize": 14,
+          "layoutDisplayLimit": 100,
+          "layoutNumColumns": 8,
+          "layoutNumRows": 8,
+          "overrideConfig": {
+            "overrides": []
+          },
+          "sortByDirection": 1,
+          "sortByField": "value",
+          "tooltipDisplayMode": "all",
+          "tooltipDisplayTextTriggeredEmpty": "OK",
+          "tooltipPrimarySortByField": "thresholdLevel",
+          "tooltipPrimarySortDirection": 1,
+          "tooltipSecondarySortByField": "value",
+          "tooltipSecondarySortDirection": 1
+        },
+        "pluginVersion": "2.1.15",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "avg by (replicaset, deployment) (\n    (\n        avg by (replicaset, namespace, cluster) (\n            label_replace(\n                rate(container_cpu_usage_seconds_total{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}[1m]),\n                \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\"\n            )\n        )\n    )\n    *\n    on(replicaset) group_left(deployment)\n    kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003c 0.4",
+            "interval": "10s",
+            "intervalFactor": 1,
+            "legendFormat": "{{{ deployment }}",
+            "metric": "container_cpu",
+            "range": true,
+            "refId": "A",
+            "step": 10
+          }
+        ],
+        "title": "Minimal Usage",
+        "type": "grafana-polystat-panel"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "CPU usage greater than 40% and  less than 75%",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": []
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "B"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "C"
+              },
+              "properties": []
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 13,
+          "w": 8,
+          "x": 9,
+          "y": 1
+        },
+        "id": 21,
+        "options": {
+          "autoSizeColumns": true,
+          "autoSizePolygons": true,
+          "autoSizeRows": true,
+          "compositeConfig": {
+            "animationSpeed": "1500",
+            "composites": [],
+            "enabled": true
+          },
+          "compositeGlobalAliasingEnabled": false,
+          "ellipseCharacters": 18,
+          "ellipseEnabled": false,
+          "globalAutoScaleFonts": true,
+          "globalClickthrough": "",
+          "globalClickthroughCustomTarget": "",
+          "globalClickthroughCustomTargetEnabled": false,
+          "globalClickthroughNewTabEnabled": true,
+          "globalClickthroughSanitizedEnabled": true,
+          "globalCompositeValueFontSize": 14,
+          "globalDecimals": 2,
+          "globalDisplayMode": "all",
+          "globalDisplayTextTriggeredEmpty": "OK",
+          "globalFillColor": "rgba(10, 85, 161, 1)",
+          "globalGradientsEnabled": true,
+          "globalLabelFontSize": 12,
+          "globalOperator": "mean",
+          "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+          "globalPolygonBorderSize": 2,
+          "globalPolygonSize": 25,
+          "globalRegexPattern": "",
+          "globalShape": "hexagon_pointed_top",
+          "globalShowTimestampEnabled": false,
+          "globalShowTimestampFontSize": 12,
+          "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+          "globalShowTimestampPosition": "below_value",
+          "globalShowTimestampYOffset": 0,
+          "globalShowTooltipColumnHeadersEnabled": true,
+          "globalShowValueEnabled": true,
+          "globalTextFontAutoColorEnabled": false,
+          "globalTextFontColor": "#000000",
+          "globalTextFontFamily": "Roboto",
+          "globalThresholdsConfig": [
+            {
+              "color": "#96D98D",
+              "state": 0,
+              "value": 0
+            }
+          ],
+          "globalTooltipsEnabled": true,
+          "globalTooltipsFontFamily": "Roboto",
+          "globalTooltipsShowTimestampEnabled": true,
+          "globalTooltipsShowValueEnabled": true,
+          "globalUnitFormat": "percentunit",
+          "globalValueFontSize": 14,
+          "layoutDisplayLimit": 100,
+          "layoutNumColumns": 8,
+          "layoutNumRows": 8,
+          "overrideConfig": {
+            "overrides": []
+          },
+          "sortByDirection": 1,
+          "sortByField": "value",
+          "tooltipDisplayMode": "all",
+          "tooltipDisplayTextTriggeredEmpty": "OK",
+          "tooltipPrimarySortByField": "thresholdLevel",
+          "tooltipPrimarySortDirection": 1,
+          "tooltipSecondarySortByField": "value",
+          "tooltipSecondarySortDirection": 1
+        },
+        "pluginVersion": "2.1.15",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "avg by (replicaset, deployment) (\n    (\n        avg by (replicaset, namespace, cluster) (\n            label_replace(\n                rate(container_cpu_usage_seconds_total{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}[1m]),\n                \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\"\n            )\n        )\n    )\n    *\n    on(replicaset) group_left(deployment)\n    kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003e 0.4\nand\navg by (replicaset, deployment) (\n    (\n        avg by (replicaset, namespace, cluster) (\n            label_replace(\n                rate(container_cpu_usage_seconds_total{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}[1m]),\n                \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\"\n            )\n        )\n    )\n    *\n    on(replicaset) group_left(deployment)\n    kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003c 0.75 ",
+            "interval": "10s",
+            "intervalFactor": 1,
+            "legendFormat": "{{{ deployment }}",
+            "metric": "container_cpu",
+            "range": true,
+            "refId": "A",
+            "step": 10
+          }
+        ],
+        "title": "Ideal Usage",
+        "type": "grafana-polystat-panel"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "description": "CPU usage greater than 75%",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": []
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "B"
+              },
+              "properties": []
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "C"
+              },
+              "properties": []
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 13,
+          "w": 7,
+          "x": 17,
+          "y": 1
+        },
+        "id": 27,
+        "options": {
+          "autoSizeColumns": true,
+          "autoSizePolygons": true,
+          "autoSizeRows": true,
+          "compositeConfig": {
+            "animationSpeed": "1500",
+            "composites": [],
+            "enabled": true
+          },
+          "compositeGlobalAliasingEnabled": false,
+          "ellipseCharacters": 18,
+          "ellipseEnabled": false,
+          "globalAutoScaleFonts": true,
+          "globalClickthrough": "",
+          "globalClickthroughCustomTarget": "",
+          "globalClickthroughCustomTargetEnabled": false,
+          "globalClickthroughNewTabEnabled": true,
+          "globalClickthroughSanitizedEnabled": true,
+          "globalCompositeValueFontSize": 14,
+          "globalDecimals": 2,
+          "globalDisplayMode": "all",
+          "globalDisplayTextTriggeredEmpty": "OK",
+          "globalFillColor": "rgba(10, 85, 161, 1)",
+          "globalGradientsEnabled": true,
+          "globalLabelFontSize": 12,
+          "globalOperator": "mean",
+          "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+          "globalPolygonBorderSize": 2,
+          "globalPolygonSize": 25,
+          "globalRegexPattern": "",
+          "globalShape": "hexagon_pointed_top",
+          "globalShowTimestampEnabled": false,
+          "globalShowTimestampFontSize": 12,
+          "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+          "globalShowTimestampPosition": "below_value",
+          "globalShowTimestampYOffset": 0,
+          "globalShowTooltipColumnHeadersEnabled": true,
+          "globalShowValueEnabled": true,
+          "globalTextFontAutoColorEnabled": false,
+          "globalTextFontColor": "#000000",
+          "globalTextFontFamily": "Roboto",
+          "globalThresholdsConfig": [
+            {
+              "color": "#F2495C",
+              "state": 2,
+              "value": 0
+            }
+          ],
+          "globalTooltipsEnabled": true,
+          "globalTooltipsFontFamily": "Roboto",
+          "globalTooltipsShowTimestampEnabled": true,
+          "globalTooltipsShowValueEnabled": true,
+          "globalUnitFormat": "percentunit",
+          "globalValueFontSize": 14,
+          "layoutDisplayLimit": 100,
+          "layoutNumColumns": 8,
+          "layoutNumRows": 8,
+          "overrideConfig": {
+            "overrides": []
+          },
+          "sortByDirection": 1,
+          "sortByField": "value",
+          "tooltipDisplayMode": "all",
+          "tooltipDisplayTextTriggeredEmpty": "OK",
+          "tooltipPrimarySortByField": "thresholdLevel",
+          "tooltipPrimarySortDirection": 1,
+          "tooltipSecondarySortByField": "value",
+          "tooltipSecondarySortDirection": 1
+        },
+        "pluginVersion": "2.1.15",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "editorMode": "code",
+            "expr": "avg by (replicaset, deployment) (\n    (\n        avg by (replicaset, namespace, cluster) (\n            label_replace(\n                rate(container_cpu_usage_seconds_total{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}[1m]),\n                \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\"\n            )\n        )\n    )\n    *\n    on(replicaset) group_left(deployment)\n    kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003e 0.75",
+            "interval": "10s",
+            "intervalFactor": 1,
+            "legendFormat": "{{{ deployment }}",
+            "metric": "container_cpu",
+            "range": true,
+            "refId": "A",
+            "step": 10
+          }
+        ],
+        "title": "Excessive Usage",
+        "type": "grafana-polystat-panel"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 14
+        },
+        "id": 23,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "memory usage less than 40%",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byFrameRefID",
+                    "options": "B"
+                  },
+                  "properties": []
+                },
+                {
+                  "matcher": {
+                    "id": "byFrameRefID",
+                    "options": "C"
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 9,
+              "x": 0,
+              "y": 28
+            },
+            "id": 24,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "light-orange",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "last",
+              "globalPolygonBorderColor": "light-orange",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [
+                {
+                  "color": "#FFCB7D",
+                  "state": 0,
+                  "value": 0
+                }
+              ],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "percent",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 8,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "(\n  avg by (replicaset, deployment) (\n    (\n      label_replace(container_memory_usage_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n      /\n      label_replace(container_spec_memory_limit_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n    ) * 100\n  )\n  *\n  on(replicaset) group_left(deployment)\n  kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003c 40\n",
+                "interval": "10s",
+                "intervalFactor": 1,
+                "legendFormat": "__auto",
+                "metric": "container_cpu",
+                "range": true,
+                "refId": "A",
+                "step": 10
+              }
+            ],
+            "title": "Minimal Usage",
+            "type": "grafana-polystat-panel"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "memory usage greater than 40% and less than 75%",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byFrameRefID",
+                    "options": "B"
+                  },
+                  "properties": []
+                },
+                {
+                  "matcher": {
+                    "id": "byFrameRefID",
+                    "options": "C"
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 8,
+              "x": 9,
+              "y": 28
+            },
+            "id": 25,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "#710f26",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "last",
+              "globalPolygonBorderColor": "light-green",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [
+                {
+                  "color": "#96D98D",
+                  "state": 0,
+                  "value": 0
+                }
+              ],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "percent",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 8,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "(\n  avg by (replicaset, deployment) (\n    (\n      label_replace(container_memory_usage_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n      /\n      label_replace(container_spec_memory_limit_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n    ) * 100\n  )\n  *\n  on(replicaset) group_left(deployment)\n  kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003e 40 and \n(\n  avg by (replicaset, deployment) (\n    (\n      label_replace(container_memory_usage_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n      /\n      label_replace(container_spec_memory_limit_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n    ) * 100\n  )\n  *\n  on(replicaset) group_left(deployment)\n  kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003c 75\n\n",
+                "interval": "10s",
+                "intervalFactor": 1,
+                "legendFormat": "__auto",
+                "metric": "container_cpu",
+                "range": true,
+                "refId": "A",
+                "step": 10
+              }
+            ],
+            "title": "Ideal Usage",
+            "type": "grafana-polystat-panel"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "memory usage greater than 75%",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byFrameRefID",
+                    "options": "B"
+                  },
+                  "properties": []
+                },
+                {
+                  "matcher": {
+                    "id": "byFrameRefID",
+                    "options": "C"
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 7,
+              "x": 17,
+              "y": 28
+            },
+            "id": 26,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "#710f26",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "last",
+              "globalPolygonBorderColor": "semi-dark-red",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [
+                {
+                  "color": "#F2495C",
+                  "state": 0,
+                  "value": 0
+                }
+              ],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "percent",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 8,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "(\n  avg by (replicaset, deployment) (\n    (\n      label_replace(container_memory_usage_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n      /\n      label_replace(container_spec_memory_limit_bytes{metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"$cluster\", image!=\"\", namespace=\"$namespace\"}, \"replicaset\", \"$1\", \"pod\", \"(.+)-[a-z0-9]+$\")\n    ) * 100\n  )\n  *\n  on(replicaset) group_left(deployment)\n  kube_replicaset_owner{namespace=\"$namespace\", owner_kind=\"Deployment\"}\n)\n\u003e 75\n",
+                "interval": "10s",
+                "intervalFactor": 1,
+                "legendFormat": "__auto",
+                "metric": "container_cpu",
+                "range": true,
+                "refId": "A",
+                "step": 10
+              }
+            ],
+            "title": "Excessive Usage",
+            "type": "grafana-polystat-panel"
+          }
+        ],
+        "title": "Memory Utilization",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 15
+        },
+        "id": 34,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "Show services  where request success rate is below 90%.",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Error Rate"
+                  },
+                  "properties": []
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Success Rate"
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 8,
+              "x": 0,
+              "y": 40
+            },
+            "id": 44,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "red",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "mean",
+              "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "percent",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 8,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "(\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", http_status_code=~\"^2.*|^3.*\"}\r\n  )\r\n  /\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\"}\r\n  )\r\n) * 100 \u003c 90\r\n",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "\u003c 90 Success Rate",
+            "type": "grafana-polystat-panel"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "Shows services where success rate is between 90% and 99.99%.\n\n\n\n\n\n\n\n\n\nAsk ChatGPT\n",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Error Rate"
+                  },
+                  "properties": []
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Success Rate"
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 8,
+              "x": 8,
+              "y": 40
+            },
+            "id": 43,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "super-light-orange",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "mean",
+              "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "percent",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 8,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "(\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", http_status_code=~\"^2.*|^3.*\"}\r\n  )\r\n  /\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\"}\r\n  )\r\n) * 100 \u003e 90\r\nand\r\n(\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\", http_status_code=~\"^2.*|^3.*\"}\r\n  )\r\n  /\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{span_kind=\"SPAN_KIND_SERVER\"}\r\n  )\r\n) * 100 \u003c= 99.99\r\n",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "\u003e 90 and \u003c 99.99 Success Rate",
+            "type": "grafana-polystat-panel"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "Shows services  with 100% request success rate",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Error Rate"
+                  },
+                  "properties": []
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Success Rate"
+                  },
+                  "properties": []
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 8,
+              "x": 16,
+              "y": 40
+            },
+            "id": 36,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "light-green",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "mean",
+              "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "percent",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 8,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "(\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{\r\n      span_kind=\"SPAN_KIND_SERVER\",\r\n      http_status_code=~\"^2.*|^3.*\"\r\n    }\r\n  )\r\n  /\r\n  sum by (service_name, pod) (\r\n    traces_span_metrics_duration_milliseconds_count{\r\n      span_kind=\"SPAN_KIND_SERVER\"\r\n    }\r\n  )\r\n) * 100 == 100\r\n",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "100% Success Rate",
+            "type": "grafana-polystat-panel"
+          }
+        ],
+        "title": " Success Rate",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 16
+        },
+        "id": 29,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "Shows services handling 1–10 requests per second",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 8,
+              "x": 0,
+              "y": 51
+            },
+            "id": 41,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "rgba(10, 85, 161, 1)",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "mean",
+              "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [
+                {
+                  "color": "#F2495C",
+                  "state": 0,
+                  "value": 0
+                }
+              ],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "reqpm",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 5,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "sum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n) \u003e 0\r\nand\r\nsum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n) \u003c= 10\r\n",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Inactive",
+            "type": "grafana-polystat-panel"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "Shows services handling 11 to 6000 requests per second.",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 8,
+              "x": 8,
+              "y": 51
+            },
+            "id": 38,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "rgba(10, 85, 161, 1)",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "mean",
+              "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [
+                {
+                  "color": "#FFCB7D",
+                  "state": 0,
+                  "value": 0
+                }
+              ],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "reqpm",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 5,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "sum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n) \u003e 10\r\nand\r\nsum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n) \u003c= 6000\r\n",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Moderately Active",
+            "type": "grafana-polystat-panel"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${datasource}"
+            },
+            "description": "Shows services handling 6001 to 60,000 requests per second.",
+            "fieldConfig": {
+              "defaults": {
+                "mappings": []
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 11,
+              "w": 8,
+              "x": 16,
+              "y": 51
+            },
+            "id": 42,
+            "options": {
+              "autoSizeColumns": true,
+              "autoSizePolygons": true,
+              "autoSizeRows": true,
+              "compositeConfig": {
+                "animationSpeed": "1500",
+                "composites": [],
+                "enabled": true
+              },
+              "compositeGlobalAliasingEnabled": false,
+              "ellipseCharacters": 18,
+              "ellipseEnabled": false,
+              "globalAutoScaleFonts": true,
+              "globalClickthrough": "",
+              "globalClickthroughCustomTarget": "",
+              "globalClickthroughCustomTargetEnabled": false,
+              "globalClickthroughNewTabEnabled": true,
+              "globalClickthroughSanitizedEnabled": true,
+              "globalCompositeValueFontSize": 14,
+              "globalDecimals": 2,
+              "globalDisplayMode": "all",
+              "globalDisplayTextTriggeredEmpty": "OK",
+              "globalFillColor": "rgba(10, 85, 161, 1)",
+              "globalGradientsEnabled": true,
+              "globalLabelFontSize": 12,
+              "globalOperator": "mean",
+              "globalPolygonBorderColor": "rgba(0, 0, 0, 0)",
+              "globalPolygonBorderSize": 2,
+              "globalPolygonSize": 25,
+              "globalRegexPattern": "",
+              "globalShape": "hexagon_pointed_top",
+              "globalShowTimestampEnabled": false,
+              "globalShowTimestampFontSize": 12,
+              "globalShowTimestampFormat": "YYYY-MM-DD HH:mm:ss",
+              "globalShowTimestampPosition": "below_value",
+              "globalShowTimestampYOffset": 0,
+              "globalShowTooltipColumnHeadersEnabled": true,
+              "globalShowValueEnabled": true,
+              "globalTextFontAutoColorEnabled": false,
+              "globalTextFontColor": "#000000",
+              "globalTextFontFamily": "Roboto",
+              "globalThresholdsConfig": [
+                {
+                  "color": "#96D98D",
+                  "state": 0,
+                  "value": 0
+                }
+              ],
+              "globalTooltipsEnabled": true,
+              "globalTooltipsFontFamily": "Roboto",
+              "globalTooltipsShowTimestampEnabled": true,
+              "globalTooltipsShowValueEnabled": true,
+              "globalUnitFormat": "reqpm",
+              "globalValueFontSize": 14,
+              "layoutDisplayLimit": 100,
+              "layoutNumColumns": 8,
+              "layoutNumRows": 5,
+              "overrideConfig": {
+                "overrides": []
+              },
+              "sortByDirection": 1,
+              "sortByField": "value",
+              "tooltipDisplayMode": "all",
+              "tooltipDisplayTextTriggeredEmpty": "OK",
+              "tooltipPrimarySortByField": "thresholdLevel",
+              "tooltipPrimarySortDirection": 1,
+              "tooltipSecondarySortByField": "value",
+              "tooltipSecondarySortDirection": 1
+            },
+            "pluginVersion": "2.1.15",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+                },
+                "editorMode": "code",
+                "expr": "sum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n) \u003e 6000\r\nand\r\nsum by(service_name) (\r\n  rate(traces_span_metrics_duration_milliseconds_count{service_name=~\".*\", span_kind=\"SPAN_KIND_SERVER\"}[1m])\r\n) \u003c= 60000\r\n",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Active",
+            "type": "grafana-polystat-panel"
+          }
+        ],
+        "title": "Request Rate",
+        "type": "row"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 42,
+    "tags": [
+      "ot-dashboard"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "VictoriaMetrics",
+            "value": "victoriametrics"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "label": "Data source",
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "coe-gke",
+            "value": "coe-gke"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values(cluster)",
+          "hide": 2,
+          "includeAll": false,
+          "label": "cluster",
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(cluster)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "accounting",
+            "value": "accounting"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values(kube_deployment_status_replicas_available{job=\"kube-state-metrics\", namespace=\"$namespace\", cluster=\"$cluster\"},deployment)",
+          "hide": 2,
+          "includeAll": false,
+          "label": "Deployment",
+          "name": "application",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_deployment_status_replicas_available{job=\"kube-state-metrics\", namespace=\"$namespace\", cluster=\"$cluster\"},deployment)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values(kube_pod_info{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"^$application.*$\"},pod)",
+          "hide": 2,
+          "includeAll": true,
+          "label": "Pod",
+          "multi": true,
+          "name": "pods",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_pod_info{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"^$application.*$\"},pod)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(kube_pod_container_info{job=\"kube-state-metrics\", namespace=\"$namespace\", pod=\"$pods\", cluster=\"$cluster\"},container)",
+          "hide": 2,
+          "includeAll": true,
+          "label": "Container",
+          "multi": true,
+          "name": "container",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_pod_container_info{job=\"kube-state-metrics\", namespace=\"$namespace\", pod=\"$pods\", cluster=\"$cluster\"},container)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "allValue": ".*",
+          "current": {
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "edwh2rb33tbswa"
+          },
+          "definition": "label_values({http_route!~\"\", service_name=\"$application\"},http_route)",
+          "hide": 2,
+          "includeAll": true,
+          "label": "Route",
+          "multi": true,
+          "name": "route",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values({http_route!~\"\", service_name=\"$application\"},http_route)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "///",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "",
+            "value": ""
+          },
+          "hide": 2,
+          "label": "Search",
+          "name": "search",
+          "options": [
+            {
+              "selected": true,
+              "text": "",
+              "value": ""
+            }
+          ],
+          "query": "",
+          "type": "textbox"
+        },
+        {
+          "current": {
+            "text": "logging",
+            "value": "logging"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "name": "logging",
+          "options": [],
+          "query": "loki",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "tempo",
+            "value": "tempo"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "name": "tempo",
+          "options": [],
+          "query": "tempo",
+          "refresh": 1,
+          "regex": "",
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "text": "otel-demo",
+            "value": "otel-demo"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "definition": "label_values(kube_deployment_status_replicas_available{job=\"kube-state-metrics\", namespace=~\"otel-demo\"},namespace)",
+          "hide": 2,
+          "label": "Namespace",
+          "name": "namespace",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_deployment_status_replicas_available{job=\"kube-state-metrics\", namespace=~\"otel-demo\"},namespace)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "Summary"
+  }
+}

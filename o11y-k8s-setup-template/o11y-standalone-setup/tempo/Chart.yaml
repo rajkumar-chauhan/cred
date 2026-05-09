@@ -1,0 +1,14 @@
+apiVersion: v2
+appVersion: 2.8.0
+dependencies:
+- alias: tempo
+  condition: tempo.enabled
+  name: tempo
+  repository: https://grafana.github.io/helm-charts
+  tags:
+  - tempo
+  version: 1.23.0
+description: A Helm chart for tempo standalone
+name: tempo-standalone
+type: application
+version: 1.0.0

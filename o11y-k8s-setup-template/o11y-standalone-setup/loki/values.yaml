@@ -1,0 +1,155 @@
+standalone:
+  global:
+    dnsService: "kube-dns"
+  loki:
+    storage:
+      type: filesystem
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    schemaConfig:
+      configs:
+        - from: 2024-04-01
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+    ingester:
+      chunk_encoding: snappy
+    tracing:
+      enabled: true
+    querier:
+      max_concurrent: 2
+
+  deploymentMode: SingleBinary
+  lokiCanary:
+    enabled: false
+  test:
+    enabled: false
+  singleBinary:
+    replicas: 1
+    resources:
+      limits:
+        cpu: "0.3"
+        memory: 400Mi
+      requests:
+        cpu: "0.2"
+        memory: 300Mi
+    persistence:
+      enabled: true
+      size: 2Gi
+    #nodeSelector:
+     # kubernetes.io/hostname: worker4
+    extraEnv:
+      - name: GOMEMLIMIT
+        value: 3750MiB
+
+  chunksCache:
+    writebackSizeLimit: 10MB
+    allocatedMemory: 250Mi
+  resultsCache:
+    allocatedMemory: 128Mi
+
+  # Enable minio for storage
+  minio:
+    enabled: true
+    persistence:
+      size: 1Gi
+
+  # Zero out replica counts of other deployment modes
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+
+  ingester:
+    replicas: 0
+  querier:
+    replicas: 0
+  queryFrontend:
+    replicas: 0
+  queryScheduler:
+    replicas: 0
+  distributor:
+    replicas: 0
+  compactor:
+    replicas: 0
+  indexGateway:
+    replicas: 0
+  bloomCompactor:
+    replicas: 0
+  bloomGateway:
+    replicas: 0
+
+#fluentbit:
+ # kind: DaemonSet
+  # image:
+  #   repository: cr.fluentbit.io/fluent/fluent-bit
+  #   tag: 3.2.10
+  #   pullPolicy: IfNotPresent
+  # serviceAccount:
+  #   create: true
+  # rbac:
+  #   create: true
+  # metricsPort: 2020
+  # service:
+  #   type: ClusterIP
+  # resources:
+  #   limits:
+  #     cpu: 100m
+  #     memory: 128Mi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 64Mi
+  # tolerations:
+  # - effect: NoExecute
+  #   operator: Exists
+  # - effect: NoSchedule
+  #   operator: Exists
+  # config:
+  #   service: |
+  #     [SERVICE]
+  #         Flush        1
+  #         Daemon       Off
+  #         Log_Level    info
+  #         Parsers_File parsers.conf
+  #         HTTP_Server  On
+  #         HTTP_Listen  0.0.0.0
+  #         HTTP_Port    2020
+
+  #   inputs: |
+  #     [INPUT]
+  #         Name             tail
+  #         Path             /var/log/containers/*.log
+  #         Parser           docker,cri
+  #         Tag              kube.*
+  #         Refresh_Interval 5
+  #         Rotate_Wait      30
+  #         Mem_Buf_Limit    5MB
+  #         Skip_Long_Lines  On
+  #         DB               /var/log/flb_kube.db
+  #         Ignore_Older     4h
+  #         multiline.parser docker,cri
+
+  #   filters: |
+  #     [FILTER]
+  #         Name                kubernetes
+  #         Match               kube.*
+  #         K8S-Logging.Parser  On
+  #         K8S-Logging.Exclude Off
+  #         Keep_Log            On
+  #         Merge_Log           On
+
+  #   outputs: |
+  #     [OUTPUT]
+  #         Name              loki
+  #         Match             *
+  #         host              loki-gateway.monitoring.svc.cluster.local
+  #         port              80
+  #         drop_single_key   on                                                                     
+  #         labels            namespace=$kubernetes['namespace_name'],container=$kubernetes['container_name'],service_name=$kubernetes['labels']['app']
+  #         remove_keys       kubernetes

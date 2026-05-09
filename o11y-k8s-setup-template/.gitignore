@@ -1,0 +1,9 @@
+# Helm specific ignores
+charts/        # Ignore unpacked chart dependencies (often managed by 'helm dependency update')
+.DS_Store      # macOS specific ignore
+**.tgz          # Ignore packaged chart archives
+*.prov   
+
+**/charts/*.tgz
+Chart.lock
+0.yaml

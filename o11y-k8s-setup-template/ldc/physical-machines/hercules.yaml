@@ -1,0 +1,21 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: hercules-node-metrics
+  namespace: monitoring
+  labels:
+    external: 'true'
+spec:
+  jobName: hercules
+  targetEndpoints:
+    - targets:
+        - 192.168.10.212:9100
+      labels:
+        env: prod
+        job: hercules
+        bare_metal: "true"
+        dc: hercules
+        k8s: "false"
+      scheme: http
+      path: /metrics
+      interval: 30s
